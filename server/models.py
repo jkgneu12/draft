@@ -82,7 +82,7 @@ class Draft(BaseModel):
     __tablename__ = 'draft'
     id = Column(Integer, primary_key=True)
 
-    round = Column(Integer)
+    round = Column(Integer, default=0)
 
     turn_id = Column(Integer, ForeignKey('team.id'))
     turn = relationship(Team)

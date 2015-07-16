@@ -1,5 +1,5 @@
 import tornado
-from engine import Engine
+from models import Draft, Team, Player
 
 CORS_REQUEST_HEADERS = 'Access-Control-Request-Headers'
 CORS_ALLOW_HEADERS = 'Access-Control-Allow-Headers'
@@ -19,6 +19,10 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def options(self, *args, **kwargs):
         pass
+
+    @property
+    def db(self):
+        return self.application.db
 
     @property
     def request_body_json(self):
@@ -84,70 +88,60 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class DraftsHandler(BaseHandler):
     def _get(self, args):
-        draft = self.application.engine.draft
+        id = args[0] if len(args) > 0 else None
 
-        return {
-            'teams': [t for t in draft.other_teams],
-            'settings': draft.settings.to_dict()
-        }
+        q = self.db.query(Draft)
+        if id is not None:
+            draft = q.filter(Draft.id == int(id)).first()
+            return draft.to_dict()
+        else:
+            drafts = q.all()
+            return {'drafts': [d.to_dict() for d in drafts]}
 
     def _create(self, args):
-        self.application.engine = Engine()
+        draft = Draft()
+        self.db.add(draft)
+
+        return draft.to_dict()
 
 
 class TeamsHandler(BaseHandler):
     def _get(self, args):
-        draft = self.application.engine.draft
+        id = args[0] if len(args) > 0 else None
 
-        if len(args) > 0:
-            return draft.other_teams[args[0]].to_dict()
+        q = self.db.query(Team)
+        if id is not None:
+            team = q.filter(Team.id == int(id)).first()
+            return team.to_dict()
         else:
-            ret = {}
-            for name in draft.other_teams:
-                ret[name] = draft.other_teams[name].to_dict()
-
-            return ret
+            teams = q.all()
+            return {'teams': [t.to_dict() for t in teams]}
 
     def _create(self, args):
         name = self.request_body_json['name']
-        self.application.engine.add_other_team(name)
-        return {
-            'name': name
-        }
+
+        team = Team(name=name)
+        self.db.add(team)
+
+        return team.to_dict()
 
 
 class PlayersHandler(BaseHandler):
     def _get(self, args):
-        draft = self.application.engine.draft
+        id = args[0] if len(args) > 0 else None
 
-        if len(args) > 0:
-            name = args[0]
-            if name in draft.remaining_players:
-                ret = draft.remaining_players[args[0]].to_dict()
-                ret['available'] = True
-            else:
-                for team_name in draft.other_teams:
-                    if name in draft.other_teams[team_name].players:
-                        ret = draft.other_teams[team_name].players[name].to_dict()
-                        ret['available'] = True
-                        ret['owned'] = False
-                        return ret
-                if name in draft.team.players:
-                    ret = draft.team.players[name].to_dict()
-                    ret['available'] = True
-                    ret['owned'] = True
-                    return ret
+        q = self.db.query(Player)
+        if id is not None:
+            player = q.filter(Player.id == int(id)).first()
+            return player.to_dict()
         else:
-            ret = {
-            }
-            for name in draft.remaining_players:
-                ret[name] = draft.remaining_players[name].players
-
-            return ret
+            players = q.all()
+            return {'players': [p.to_dict() for p in players]}
 
     def _create(self, args):
         name = self.request_body_json['name']
-        self.application.engine.add_other_team(name)
-        return {
-            'name': name
-        }
+
+        player = Player(name=name)
+        self.db.add(player)
+
+        return player.to_dict()
