@@ -49,6 +49,17 @@ class BaseModel(Base):
         return ret
 
 
+class Team(BaseModel):
+    __tablename__ = 'team'
+    id = Column(Integer, primary_key=True)
+
+    name = Column(String(128))
+    money = Column(Integer)
+    is_owner = Column(Boolean)
+
+    players = relationship('Player')
+
+
 class Player(BaseModel):
     __tablename__ = 'player'
     id = Column(Integer, primary_key=True)
@@ -65,17 +76,6 @@ class Player(BaseModel):
 
     team_id = Column(Integer, ForeignKey('team.id'))
     team = relationship(Team)
-
-
-class Team(BaseModel):
-    __tablename__ = 'team'
-    id = Column(Integer, primary_key=True)
-
-    name = Column(String(128))
-    money = Column(Integer)
-    is_owner = Column(Boolean)
-
-    players = relationship('Player')
 
 
 class Draft(BaseModel):
