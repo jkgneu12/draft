@@ -85,6 +85,12 @@ class BaseHandler(tornado.web.RequestHandler):
             return args[:-1]
         return args
 
+    @staticmethod
+    def _update_fields(obj, data):
+        for prop, value in data.items():
+            if hasattr(obj, prop):
+                setattr(obj, prop, value)
+
 
 class DraftsHandler(BaseHandler):
     def _get(self, args):
@@ -101,6 +107,19 @@ class DraftsHandler(BaseHandler):
     def _create(self, args):
         draft = Draft()
         self.db.add(draft)
+        self.db.commit()
+
+        return draft.to_dict()
+
+    def _update(self, args):
+        id = args[0]
+
+        draft = self.db.query(Draft).filter(Draft.id == int(id)).first()
+
+        self._update_fields(draft, self.request_body_json)
+
+        self.db.add(draft)
+        self.db.commit()
 
         return draft.to_dict()
 
@@ -112,18 +131,31 @@ class TeamsHandler(BaseHandler):
         q = self.db.query(Team)
         if id is not None:
             team = q.filter(Team.id == int(id)).first()
-            return team.to_dict()
+            return team.to_dict(['players'])
         else:
             teams = q.all()
-            return {'teams': [t.to_dict() for t in teams]}
+            return {'teams': [t.to_dict(['players']) for t in teams]}
 
     def _create(self, args):
         name = self.request_body_json['name']
 
         team = Team(name=name)
         self.db.add(team)
+        self.db.commit()
 
-        return team.to_dict()
+        return team.to_dict(['players'])
+
+    def _update(self, args):
+        id = args[0]
+
+        team = self.db.query(Team).filter(Team.id == int(id)).first()
+
+        self._update_fields(team, self.request_body_json)
+
+        self.db.add(team)
+        self.db.commit()
+
+        return team.to_dict(['players'])
 
 
 class PlayersHandler(BaseHandler):
@@ -143,5 +175,18 @@ class PlayersHandler(BaseHandler):
 
         player = Player(name=name)
         self.db.add(player)
+        self.db.commit()
+
+        return player.to_dict()
+
+    def _update(self, args):
+        id = args[0]
+
+        player = self.db.query(Player).filter(Player.id == int(id)).first()
+
+        self._update_fields(player, self.request_body_json)
+
+        self.db.add(player)
+        self.db.commit()
 
         return player.to_dict()
