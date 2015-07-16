@@ -1,92 +1,91 @@
+import datetime
+from sqlalchemy import Column, String, ForeignKey, Boolean
+from sqlalchemy import Integer
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 
-class Player:
-    def __init__(self):
-        self.value = 0
-        self.amount_paid = -1
-        self.name = None
-        self.team = None
-        self.position = None
-
-    def to_dict(self):
-        return {
-            'value': self.value,
-            'amount_paid': self.amount_paid,
-            'name': self.name,
-            'team': self.team,
-            'position': self.position
-        }
+Base = declarative_base()
 
 
-class PlayerSet:
-    def __init__(self):
-        self.players = {
-            "QB":[],
-            "RB":[],
-            "WR":[],
-            "TE":[],
-            "K":[],
-            "D":[]
-        }
+class BaseModel(Base):
+    __abstract__ = True
+
+    def to_dict(self, deep_fields=[]):
+        ret = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        for key in ret:
+            if isinstance(ret[key], datetime.date):
+                ret[key] = ret[key].isoformat() + "Z"
+        for key in deep_fields:
+            val = getattr(self, key) if hasattr(self, key) else None
+            if val is not None:
+                if isinstance(val, list):
+                    l = []
+                    for item in val:
+                        if hasattr(item, "to_dict"):
+                            l.append(item.to_dict(deep_fields))
+                    ret[key] = l
+                else:
+                    ret[key] = val.to_dict(deep_fields)
+        return ret
+
+    def clone(self, data, deep=True):
+        ret = type(self)()
+        for c in self.__table__.columns:
+            if c.name != 'id':
+                if c.name in data:
+                    setattr(ret, c.name, data[c.name])
+                else:
+                    setattr(ret, c.name, getattr(self, c.name))
+        if deep:
+            for key in vars(self):
+                val = getattr(self, key) if hasattr(self, key) else None
+                if val is not None and isinstance(val, list):
+                    l = []
+                    for item in val:
+                        if hasattr(item, "clone"):
+                            l.append(item.clone(True))
+                    if len(l) > 0:
+                        ret[key] = l
+        return ret
 
 
-class Team:
-    def __init__(self):
-        self.remaining_money = 200
-        self.players = PlayerSet()
+class Player(BaseModel):
+    __tablename__ = 'player'
+    id = Column(Integer, primary_key=True)
 
-    def to_dict(self):
-        return {
-            'remaining_money': self.remaining_money,
-            'players': self.players.players
-        }
+    name = Column(String(128))
+    position = Column(String(4))
+    team_name = Column(String(128))
 
+    min_price = Column(Integer)
+    max_price = Column(Integer)
+    target_price = Column(Integer)
 
-class MyTeam:
-    def __init__(self):
-        self.remaining_money = 200
-        self.starters = PlayerSet()
-        self.bench = PlayerSet()
+    paid_price = Column(Integer)
 
-    def to_dict(self):
-        return {
-            'remaining_money': self.remaining_money,
-            'starters': self.starters.players,
-            'bench': self.bench.players
-        }
+    team_id = Column(Integer, ForeignKey('team.id'))
+    team = relationship(Team)
 
 
-class Settings:
-    def __init__(self):
-        self.starting_positions = {
-            "QB":1,
-            "RB":3,
-            "WR":2,
-            "TE":1,
-            "K":1,
-            "D":1
-        }
-        self.bench_positions = {
-            "QB":1,
-            "RB":2,
-            "WR":2,
-            "TE":1,
-            "K":0,
-            "D":0
-        }
+class Team(BaseModel):
+    __tablename__ = 'team'
+    id = Column(Integer, primary_key=True)
 
-    def to_dict(self):
-        return {
-            'starting_positions': self.starting_positions,
-            'bench_positions': self.bench_positions
-        }
+    name = Column(String(128))
+    money = Column(Integer)
+    is_owner = Column(Boolean)
+
+    players = relationship('Player')
 
 
-class Draft:
-    def __init__(self):
-        self.team = MyTeam()
-        self.other_teams = {}
-        self.remaining_players = PlayerSet()
-        self.settings = None
+class Draft(BaseModel):
+    __tablename__ = 'draft'
+    id = Column(Integer, primary_key=True)
+
+    round = Column(Integer)
+
+    turn_id = Column(Integer, ForeignKey('team.id'))
+    turn = relationship(Team)
 
 
 
