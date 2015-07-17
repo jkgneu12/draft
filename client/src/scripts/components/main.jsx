@@ -12,13 +12,13 @@ var { Route, DefaultRoute } = Router;
 
 
 var App = require('./handlers/App');
-var DummyPage = require('./handlers/DummyPage');
-var DummysPage = require('./handlers/DummysPage');
+var CreatePage = require('./handlers/CreatePage');
+var DraftPage = require('./handlers/DraftPage');
 
 var routes = (
     <Route name="home" path="/" handler={App}>
-        <Route name="dummy" path="/dummys/:dummyId" handler={DummyPage} />
-        <DefaultRoute handler={DummysPage} />
+        <Route name="draft" path="/draft/:draftId" handler={DraftPage} />
+        <DefaultRoute handler={CreatePage} />
     </Route>
 );
 

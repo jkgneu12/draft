@@ -3,7 +3,9 @@
 var BASE_URL = 'http://127.0.0.1:9000';
 
 var Urls = {
-    dummys: '/dummys'
+    drafts: '/drafts',
+    players: '/drafts/:draftId/players',
+    teams: '/drafts/:draftId/teams'
 };
 
 Object.keys(Urls).forEach(function(key){Urls[key] = BASE_URL + Urls[key]; });

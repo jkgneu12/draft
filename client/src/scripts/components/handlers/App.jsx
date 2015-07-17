@@ -11,8 +11,6 @@ var Footer = require('../scaffold/Footer');
 var Header = require('../scaffold/Header');
 var NavigatorListener = require('../nav/NavigatorListener');
 
-var DummyStore = require('../../stores/DummyStore');
-
 /*global window*/
 (window !== window.top ? window.top : window).React = React;
 
@@ -23,11 +21,6 @@ require('../../../styles/main.scss');
 
 var App = React.createClass({
     displayName: 'App',
-    statics: {
-        willTransitionTo() {
-            DummyStore.loadAll();
-        }
-    },
 
     render() {
         return (
