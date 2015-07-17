@@ -177,10 +177,10 @@ class PlayersHandler(BaseHandler):
         q = self.db.query(Player)
         if id is not None:
             player = q.filter(Player.id == int(id)).first()
-            return player.to_dict()
+            return player.to_dict(['core'])
         else:
             players = q.filter(Player.draft_id == int(draft_id)).all()
-            return {'players': [p.to_dict() for p in players]}
+            return {'players': [p.to_dict(['core']) for p in players]}
 
     def _update(self, args):
         id = args[1]
@@ -192,7 +192,7 @@ class PlayersHandler(BaseHandler):
         self.db.add(player)
         self.db.commit()
 
-        return player.to_dict()
+        return player.to_dict(['core'])
 
 
 class CorePlayersHandler(BaseHandler):

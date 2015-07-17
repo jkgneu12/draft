@@ -6,8 +6,10 @@ var React = require('react');
 
 var DraftStore = require('../../stores/DraftStore');
 var TeamStore = require('../../stores/TeamStore');
+var PlayerStore = require('../../stores/PlayerStore');
 
 var TeamsList = require('../details/TeamsList');
+var FilterBar = require('../details/FilterBar');
 
 var DraftPage = React.createClass({
     displayName: 'DraftPage',
@@ -15,6 +17,7 @@ var DraftPage = React.createClass({
         willTransitionTo(transition, params) {
             DraftStore.setCurrent(params.draftId);
             TeamStore.loadAll({draftId: params.draftId});
+            PlayerStore.loadAll({draftId: params.draftId});
         },
         willTransitionFrom() {
             DraftStore.setCurrent(-1);
@@ -47,6 +50,7 @@ var DraftPage = React.createClass({
                 <div className="row">
                     <div className="col-xs-8">
                         <div>{this.state.draft.get('round')} / {this.state.draft.get('rounds')}</div>
+                        <FilterBar />
                     </div>
                     <div className="col-xs-4">
                         <TeamsList />
