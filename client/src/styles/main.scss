@@ -1,0 +1,80 @@
+@import './constants';
+
+
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import "../../node_modules/font-awesome/scss/font-awesome";
+
+
+* {
+    border-radius: 0 !important;
+    font-family:$font-family;
+}
+.btn {
+    border-radius: 4px !important;
+}
+.btn-lg {
+    border-radius: 0 !important;
+}
+.btn:focus {outline:0;}
+.CodeMirror * {
+    font-family: monospace !important;
+}
+
+html, .fill-height {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    color: $text-color;
+}
+
+#content {
+    height: 100%;
+}
+
+
+#header {
+    background-color: $header-color;
+    border: thin solid $soft-border-color;
+    color: $header-text-color;
+    height: $header-height;
+    font-size: 18px;
+    line-height: 35px;
+    padding: 2px 5px;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    background-color: $footer-color;
+    border: thin solid $soft-border-color;
+    color: $footer-text-color;
+    height: $footer-height;
+    font-size: 12px;
+    line-height: 35px;
+    padding: 2px 5px;
+    width: 100%;
+    text-align: right;
+}
+
+#main-content {
+    @include calc(height, unquote("100% - #{$header-height} - #{$footer-height}"));
+}
+
+.dropdown {
+    text-align: center;
+    .btn {
+        width: 100%;
+    }
+    .dropdown-menu {
+        width: 100%;
+        .choice {
+            cursor: pointer;
+        }
+        .choice:hover {
+            background-color: $soft-border-color;
+        }
+    }
+}
+
