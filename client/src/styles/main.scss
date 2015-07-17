@@ -70,6 +70,9 @@ body {
         border: solid thin $soft-border-color;
         height: 60px;
     }
+    .teams-list-item.droppable {
+        border: solid thin $brand-primary;
+    }
 }
 
 .filter-bar {

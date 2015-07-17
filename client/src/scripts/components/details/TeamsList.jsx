@@ -18,6 +18,7 @@ var TeamsList = React.createClass({
     },
 
     componentDidMount() {
+        TeamStore.addChangeCurrentListener(this.onTeamsChange);
         TeamStore.addChangeAllListener(this.onTeamsChange);
     },
     componentWillUnmount() {

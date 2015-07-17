@@ -2,6 +2,8 @@ var EventEmitter = require('events').EventEmitter;
 
 var assign = require('object-assign');
 
+var PlayerStore = require('./PlayerStore');
+
 var _draggedItem = null;
 var _draggedType = null;
 
@@ -23,7 +25,11 @@ var DragDropStore = assign({}, EventEmitter.prototype, {
             var team = item.team;
             var player = this.getDraggedItem().player;
 
-            player.save({team_id: team.get('id')});
+            player.save({team_id: team.get('id'), paid_price: PlayerStore.getValue()}, {
+                success: function() {
+                    team.fetch();
+                }
+            });
         }
     }
 });

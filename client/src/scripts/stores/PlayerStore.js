@@ -10,7 +10,16 @@ var Players = require('../models/player').Players;
 var PlayerStore = assign({}, BaseStore, {
     _name: 'PlayerStore',
     _modelClass: Player,
-    _collectionClass: Players
+    _collectionClass: Players,
+
+    _value: 0,
+
+    setValue: function(value) {
+        this._value = value;
+    },
+    getValue: function() {
+        return this._value;
+    }
 });
 
 module.exports = PlayerStore;

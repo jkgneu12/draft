@@ -44,7 +44,7 @@ var TeamListItem = React.createClass({
         return "teamListItem";
     },
     canDrop(type, item) {
-        return type === "filterBar";
+        return type === "filterBar" && parseInt(PlayerStore.getValue()) > 0 && item.player.get('id') > 0;
     },
 
     render() {
@@ -65,8 +65,13 @@ var TeamListItem = React.createClass({
            return <span key={key}>{key + ":" + positions[key] + " "}</span>;
         });
 
+        var className = "teams-list-item";
+        if(this.state.canDrop) {
+            className += " droppable";
+        }
+
         return (
-            <div className="teams-list-item"
+            <div className={className}
                  onDragStart={this.onDrag}
                  onDragOver={this.onDragOver}
                  onDragLeave={this.onDragLeave}

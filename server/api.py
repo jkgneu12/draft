@@ -189,6 +189,9 @@ class PlayersHandler(BaseHandler):
 
         self._update_fields(player, self.request_body_json)
 
+        if 'paid_price' in self.request_body_json:
+            player.team.money -= int(self.request_body_json['paid_price'])
+
         self.db.add(player)
         self.db.commit()
 

@@ -18,6 +18,7 @@ var FilterBar = React.createClass({
     getInitialState() {
         return {
             filter: PlayerStore.getCurrent().get('core').get('name'),
+            value: PlayerStore.getValue(),
             player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
@@ -53,6 +54,14 @@ var FilterBar = React.createClass({
         });
     },
 
+    updateValue(text) {
+        this.setState({
+            value: text
+        });
+
+        PlayerStore.setValue(text);
+    },
+
     selectPlayer(core) {
         var player = PlayerStore.getAll().findWhere({core_id: core.get('id')});
         PlayerStore.setCurrent(player.get('id'));
@@ -74,11 +83,21 @@ var FilterBar = React.createClass({
                  onDragOver={this.onDragOver}
                  onDragLeave={this.onDragLeave}
                  onDrop={this.onDrop}>
-                <Input value={this.state.filter}
-                       onChange={this.updateFilter}
-                       onSelected={this.selectPlayer}
-                       autocompletes={this.state.cores}
-                       autocompleteKey="name" />
+
+                <div className="row">
+                    <div className="col-xs-10">
+                        <Input value={this.state.filter}
+                               onChange={this.updateFilter}
+                               onSelected={this.selectPlayer}
+                               autocompletes={this.state.cores}
+                               autocompleteKey="name" />
+                    </div>
+                    <div className="col-xs-2">
+                        <Input value={this.state.value}
+                               onChange={this.updateValue}/>
+                    </div>
+                </div>
+
             </div>
         );
     }
