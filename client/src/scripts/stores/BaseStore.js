@@ -135,7 +135,7 @@ var BaseStore = assign({}, EventEmitter.prototype, {
     _createModel: function(data, urlParams) {
         var model = new this._modelClass(data);
         model.collection = this.getAll();
-        model.urlParams = _.extend(urlParams, this.getAll().urlParams);
+        model.urlParams = _.extend(this.getAll().urlParams, urlParams);
 
         var self = this;
         model.on('change', function(){

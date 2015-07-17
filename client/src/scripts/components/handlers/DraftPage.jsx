@@ -5,12 +5,16 @@
 var React = require('react');
 
 var DraftStore = require('../../stores/DraftStore');
+var TeamStore = require('../../stores/TeamStore');
+
+var TeamsList = require('../details/TeamsList');
 
 var DraftPage = React.createClass({
     displayName: 'DraftPage',
     statics: {
         willTransitionTo(transition, params) {
             DraftStore.setCurrent(params.draftId);
+            TeamStore.loadAll({draftId: params.draftId});
         },
         willTransitionFrom() {
             DraftStore.setCurrent(-1);
@@ -24,13 +28,13 @@ var DraftPage = React.createClass({
     },
 
     componentDidMount() {
-        DraftStore.addChangeCurrentListener(this.onDummyChange);
+        DraftStore.addChangeCurrentListener(this.onDraftChange);
     },
     componentWillUnmount() {
-        DraftStore.removeChangeListener(this.onDummyChange);
+        DraftStore.removeChangeListener(this.onDraftChange);
     },
 
-    onDummyChange() {
+    onDraftChange() {
         this.setState({
             draft: DraftStore.getCurrent()
         });
@@ -40,7 +44,17 @@ var DraftPage = React.createClass({
 
         return (
             <div className="fill-height">
-                <div>{this.state.draft.get('name')}</div>
+                <div className="row">
+                    <div className="col-xs-8">
+                        <div>{this.state.draft.get('round')} / {this.state.draft.get('rounds')}</div>
+                    </div>
+                    <div className="col-xs-4">
+                        <TeamsList />
+                    </div>
+                </div>
+
+
+
             </div>
         );
     }

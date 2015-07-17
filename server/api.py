@@ -105,9 +105,10 @@ class DraftsHandler(BaseHandler):
             return {'drafts': [d.to_dict() for d in drafts]}
 
     def _create(self, args):
-        name = self.request_body_json['name']
+        draft = Draft()
 
-        draft = Draft(name=name)
+        self._update_fields(draft, self.request_body_json)
+
         self.db.add(draft)
 
         core_players = self.db.query(PlayerCore).all()
@@ -147,9 +148,9 @@ class TeamsHandler(BaseHandler):
 
     def _create(self, args):
         draft_id = args[0]
-        name = self.request_body_json['name']
 
-        team = Team(name=name, draft_id=draft_id)
+        team = Team(draft_id=draft_id)
+        self._update_fields(team, self.request_body_json)
         self.db.add(team)
         self.db.commit()
 

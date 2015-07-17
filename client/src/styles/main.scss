@@ -64,3 +64,11 @@ body {
     }
 }
 
+.teams-list {
+    border-left: solid thin $soft-border-color;
+    .teams-list-item {
+        border: solid thin $soft-border-color;
+        height: 60px;
+    }
+}
+
