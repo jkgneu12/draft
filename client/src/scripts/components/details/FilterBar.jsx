@@ -13,17 +13,25 @@ var FilterBar = React.createClass({
 
     getInitialState() {
         return {
-            filter: '',
+            filter: PlayerStore.getCurrent().get('core').get('name'),
             players: PlayerStore.getAll(),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
         };
     },
 
-    componentDidMount() {
+       componentDidMount() {
+        PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
     },
     componentWillUnmount() {
+        PlayerStore.removeChangeListener(this.onPlayerChange);
         PlayerStore.removeChangeListener(this.onPlayersChange);
+    },
+
+    onPlayerChange() {
+        this.setState({
+            filter: PlayerStore.getCurrent().get('core').get('name')
+        });
     },
 
     onPlayersChange() {

@@ -37,15 +37,22 @@ var PlayersList = React.createClass({
         });
     },
 
+    selectPlayer(player) {
+        PlayerStore.setCurrent(player.get('id'));
+    },
+
     render() {
         var self = this;
         var players = this.state.players.map(function(player, index){
+            var selectPlayer = function(){
+                self.selectPlayer(player);
+            };
             var cls = '';
             if(self.state.player.get('id') === player.get('id')) {
                 cls = 'success';
             }
             return (
-                <tr key={index} className={cls}>
+                <tr key={index} className={cls} onClick={selectPlayer}>
                     <td>{player.get('owner')}</td>
                     <td>{player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('position_rank')}</td>
