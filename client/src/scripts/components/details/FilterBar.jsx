@@ -37,14 +37,22 @@ var FilterBar = React.createClass({
         this.setState({
             filter: text
         });
-        PlayerStore.setFilter(text);
+    },
+
+    selectPlayer(core) {
+        var player = PlayerStore.getAll().findWhere({core_id: core.get('id')});
+        PlayerStore.setCurrent(player.get('id'));
     },
 
     render() {
 
         return (
             <div className="filter-bar">
-                <Input value={this.state.filter} onChange={this.updateFilter} autocompletes={this.state.cores} autocompleteKey="name" />
+                <Input value={this.state.filter}
+                       onChange={this.updateFilter}
+                       onSelected={this.selectPlayer}
+                       autocompletes={this.state.cores}
+                       autocompleteKey="name" />
             </div>
         );
     }

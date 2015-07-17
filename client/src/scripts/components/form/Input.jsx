@@ -83,6 +83,7 @@ var Input = React.createClass({
     },
     typeaheadSelected(event, suggestion, dataset) {
         this.props.onChange(suggestion.get(this.props.autocompleteKey));
+        this.props.onSelected(suggestion);
     },
     typeaheadCompleted(event, suggestion, dataset) {
         this.props.onChange(suggestion.get(this.props.autocompleteKey));

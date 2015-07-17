@@ -10,6 +10,7 @@ var PlayerStore = require('../../stores/PlayerStore');
 
 var TeamsList = require('../details/TeamsList');
 var FilterBar = require('../details/FilterBar');
+var PlayerDetails = require('../details/PlayerDetails');
 
 var DraftPage = React.createClass({
     displayName: 'DraftPage',
@@ -51,6 +52,7 @@ var DraftPage = React.createClass({
                     <div className="col-xs-8">
                         <div>{this.state.draft.get('round')} / {this.state.draft.get('rounds')}</div>
                         <FilterBar />
+                        <PlayerDetails />
                     </div>
                     <div className="col-xs-4">
                         <TeamsList />

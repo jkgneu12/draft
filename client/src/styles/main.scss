@@ -72,6 +72,19 @@ body {
     }
 }
 
+.player-details {
+    .col-xs-4 {
+        padding: 0;
+    }
+    .panel {
+        margin: 0;
+        text-align: center;
+        .panel-body {
+            font-weight: bold;
+        }
+    }
+}
+
 
 
 .twitter-typeahead {

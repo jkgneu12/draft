@@ -44,6 +44,8 @@ var BaseStore = assign({}, EventEmitter.prototype, {
                         self.getAll().add(self._currentModel);
                     }
                 });
+            } else {
+                this.emitChangeCurrent();
             }
         } else {
             this._currentModel = undefined;
