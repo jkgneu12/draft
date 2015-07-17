@@ -68,6 +68,7 @@ class Draft(BaseModel):
 
     name = Column(String(128))
     round = Column(Integer, default=0)
+    rounds = Column(Integer)
 
     teams = relationship('Team')
 

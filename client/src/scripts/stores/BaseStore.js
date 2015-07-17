@@ -2,12 +2,11 @@
 
 var EventEmitter = require('events').EventEmitter;
 
-var merge = require('merge');
-
 var _ = require('underscore');
 
+var assign = require('object-assign');
 
-var BaseStore = merge(EventEmitter.prototype, {
+var BaseStore = assign({}, EventEmitter.prototype, {
 
     _modelClass: undefined,
     _collectionClass: undefined,

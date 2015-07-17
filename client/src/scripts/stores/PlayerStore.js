@@ -2,12 +2,12 @@
 
 var BaseStore = require('./BaseStore');
 
-var merge = require('merge');
+var assign = require('object-assign');
 
 var Player = require('../models/player').Player;
 var Players = require('../models/player').Players;
 
-var PlayerStore = merge(BaseStore, {
+var PlayerStore = assign({}, BaseStore, {
     _name: 'PlayerStore',
     _modelClass: Player,
     _collectionClass: Players

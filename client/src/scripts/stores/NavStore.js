@@ -1,11 +1,11 @@
 'use strict';
 
-var merge = require('merge');
-
 var EventEmitter = require('events').EventEmitter;
 
+var assign = require('object-assign');
 
-var NavStore = merge(EventEmitter.prototype, {
+
+var NavStore = assign({}, EventEmitter.prototype, {
 
     addNavigateListener: function(callback) {
         this.on('NAVIGATE', callback);

@@ -31,9 +31,9 @@ class App(tornado.web.Application):
         Base.metadata.create_all(engine)
 
         handlers = []
-        handlers.append((r"%s/drafts/?(.*)" % options.proxy, DraftsHandler))
         handlers.append((r"%s/drafts/(.*)/teams/?(.*)" % options.proxy, TeamsHandler))
         handlers.append((r"%s/drafts/(.*)/players/?(.*)" % options.proxy, PlayersHandler))
+        handlers.append((r"%s/drafts/?(.*)" % options.proxy, DraftsHandler))
 
         #handlers.append((r"%s/players/?(.*)" % options.proxy, CorePlayersHandler))
 

@@ -2,12 +2,12 @@
 
 var BaseStore = require('./BaseStore');
 
-var merge = require('merge');
+var assign = require('object-assign');
 
 var Team = require('../models/team').Team;
 var Teams = require('../models/team').Teams;
 
-var TeamStore = merge(BaseStore, {
+var TeamStore = assign({}, BaseStore, {
     _name: 'TeamStore',
     _modelClass: Team,
     _collectionClass: Teams
