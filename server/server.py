@@ -9,7 +9,7 @@ import tornado.options
 import tornado.web
 
 from tornado.options import define, options
-from api import DraftsHandler, TeamsHandler, PlayersHandler
+from api import DraftsHandler, TeamsHandler, PlayersHandler, CorePlayersHandler
 from models import Base
 
 define("port", default=9000, help="run on the given port", type=int)
@@ -35,7 +35,7 @@ class App(tornado.web.Application):
         handlers.append((r"%s/drafts/(.*)/players/?(.*)" % options.proxy, PlayersHandler))
         handlers.append((r"%s/drafts/?(.*)" % options.proxy, DraftsHandler))
 
-        #handlers.append((r"%s/players/?(.*)" % options.proxy, CorePlayersHandler))
+        handlers.append((r"%s/players/?(.*)" % options.proxy, CorePlayersHandler))
 
         settings = {
             'debug': True if 'debug' in options and options.debug == 1 else False

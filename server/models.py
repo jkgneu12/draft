@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, String, ForeignKey, Boolean
+from sqlalchemy import Column, String, ForeignKey, Boolean, Float
 from sqlalchemy import Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -60,6 +60,12 @@ class PlayerCore(BaseModel):
     min_price = Column(Integer)
     max_price = Column(Integer)
     target_price = Column(Integer)
+
+    rank = Column(Integer)
+    position_rank = Column(Integer)
+    risk = Column(String(128))
+    fire_points = Column(Float)
+    fire_factor = Column(Float)
 
 
 class Draft(BaseModel):
