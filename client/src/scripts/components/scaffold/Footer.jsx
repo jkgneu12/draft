@@ -9,7 +9,7 @@ var Footer = React.createClass({
     render() {
         return (
             <footer id="footer">
-            @ 2015 Nuance Communications Inc.
+            @ 2015 Jim George
             </footer>
         );
     }

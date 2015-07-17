@@ -29,12 +29,10 @@ var PlayerDetails = React.createClass({
     },
 
     render() {
-        if(this.state.player.get('id') == null) {return null;}
-
-        var core = this.state.player.get('core');
-
-        return (
-            <div className="player-details">
+        var content = null;
+        if(this.state.player.get('id')) {
+            var core = this.state.player.get('core');
+            content = (
                 <div className="row">
                     <div className="col-xs-4">
                         <div className="panel panel-success">
@@ -68,7 +66,6 @@ var PlayerDetails = React.createClass({
                     </div>
 
 
-
                     <div className="col-xs-4">
                         <div className="panel panel-default">
                             <div className="panel-heading">
@@ -100,6 +97,11 @@ var PlayerDetails = React.createClass({
                         </div>
                     </div>
                 </div>
+            );
+        }
+        return (
+            <div className="player-details">
+                {content}
             </div>
         );
     }

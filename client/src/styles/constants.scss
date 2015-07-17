@@ -27,6 +27,11 @@ $text-color: #333;
 
 $bg-color: rgba(100,100,100,.1);
 
+
+$filterBarHeight: 20%;
+$playerDetailsHeight: 35%;
+$playersListHeight: 45%;
+
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;
     #{$property}: -o-calc(#{$expression}) $important;

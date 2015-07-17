@@ -72,7 +72,12 @@ body {
     }
 }
 
+.filter-bar {
+    height: $filterBarHeight;
+}
+
 .player-details {
+    height: $playerDetailsHeight;
     .col-xs-4 {
         padding: 0;
     }
@@ -85,6 +90,14 @@ body {
     }
 }
 
+.players-list {
+    height: $playersListHeight;
+    overflow: scroll;
+    text-align: center !important;
+    th {
+        text-align: center !important;
+    }
+}
 
 
 .twitter-typeahead {
