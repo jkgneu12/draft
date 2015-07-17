@@ -49,19 +49,8 @@ class BaseModel(Base):
         return ret
 
 
-class Team(BaseModel):
-    __tablename__ = 'team'
-    id = Column(Integer, primary_key=True)
-
-    name = Column(String(128))
-    money = Column(Integer)
-    is_owner = Column(Boolean)
-
-    players = relationship('Player')
-
-
-class Player(BaseModel):
-    __tablename__ = 'player'
+class PlayerCore(BaseModel):
+    __tablename__ = 'player_core'
     id = Column(Integer, primary_key=True)
 
     name = Column(String(128))
@@ -72,21 +61,44 @@ class Player(BaseModel):
     max_price = Column(Integer)
     target_price = Column(Integer)
 
-    paid_price = Column(Integer)
-
-    team_id = Column(Integer, ForeignKey('team.id'))
-    team = relationship(Team)
-
 
 class Draft(BaseModel):
     __tablename__ = 'draft'
     id = Column(Integer, primary_key=True)
 
+    name = Column(String(128))
     round = Column(Integer, default=0)
 
-    turn_id = Column(Integer, ForeignKey('team.id'))
-    turn = relationship(Team)
+    teams = relationship('Team')
 
 
+class Team(BaseModel):
+    __tablename__ = 'team'
+    id = Column(Integer, primary_key=True)
+
+    name = Column(String(128))
+    money = Column(Integer)
+    is_owner = Column(Boolean)
+    is_turn = Column(Boolean)
+    order = Column(Integer)
+
+    draft_id = Column(Integer, ForeignKey('draft.id'))
+    draft = relationship(Draft)
+
+    players = relationship('Player')
 
 
+class Player(BaseModel):
+    __tablename__ = 'player'
+    id = Column(Integer, primary_key=True)
+
+    paid_price = Column(Integer)
+
+    core_id = Column(Integer, ForeignKey('player_core.id'))
+    core = relationship(PlayerCore)
+
+    draft_id = Column(Integer, ForeignKey('draft.id'))
+    draft = relationship(Draft)
+
+    team_id = Column(Integer, ForeignKey('team.id'))
+    team = relationship(Team)

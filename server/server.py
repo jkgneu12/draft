@@ -32,8 +32,10 @@ class App(tornado.web.Application):
 
         handlers = []
         handlers.append((r"%s/drafts/?(.*)" % options.proxy, DraftsHandler))
-        handlers.append((r"%s/players/?(.*)" % options.proxy, PlayersHandler))
-        handlers.append((r"%s/teams/?(.*)" % options.proxy, TeamsHandler))
+        handlers.append((r"%s/drafts/(.*)/teams/?(.*)" % options.proxy, TeamsHandler))
+        handlers.append((r"%s/drafts/(.*)/players/?(.*)" % options.proxy, PlayersHandler))
+
+        #handlers.append((r"%s/players/?(.*)" % options.proxy, CorePlayersHandler))
 
         settings = {
             'debug': True if 'debug' in options and options.debug == 1 else False

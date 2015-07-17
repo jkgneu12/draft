@@ -1,5 +1,5 @@
 import tornado
-from models import Draft, Team, Player
+from models import Draft, Team, Player, PlayerCore
 
 CORS_REQUEST_HEADERS = 'Access-Control-Request-Headers'
 CORS_ALLOW_HEADERS = 'Access-Control-Allow-Headers'
@@ -105,8 +105,16 @@ class DraftsHandler(BaseHandler):
             return {'drafts': [d.to_dict() for d in drafts]}
 
     def _create(self, args):
-        draft = Draft()
+        name = self.request_body_json['name']
+
+        draft = Draft(name=name)
         self.db.add(draft)
+
+        core_players = self.db.query(PlayerCore).all()
+        for core_player in core_players:
+            player = Player(core=core_player, draft=draft)
+            self.db.add(player)
+
         self.db.commit()
 
         return draft.to_dict()
@@ -126,27 +134,29 @@ class DraftsHandler(BaseHandler):
 
 class TeamsHandler(BaseHandler):
     def _get(self, args):
-        id = args[0] if len(args) > 0 else None
+        draft_id = args[0]
+        id = args[1] if len(args) > 1 else None
 
         q = self.db.query(Team)
         if id is not None:
             team = q.filter(Team.id == int(id)).first()
             return team.to_dict(['players'])
         else:
-            teams = q.all()
+            teams = q.filter(Team.draft_id == int(draft_id)).all()
             return {'teams': [t.to_dict(['players']) for t in teams]}
 
     def _create(self, args):
+        draft_id = args[0]
         name = self.request_body_json['name']
 
-        team = Team(name=name)
+        team = Team(name=name, draft_id=draft_id)
         self.db.add(team)
         self.db.commit()
 
         return team.to_dict(['players'])
 
     def _update(self, args):
-        id = args[0]
+        id = args[1]
 
         team = self.db.query(Team).filter(Team.id == int(id)).first()
 
@@ -160,27 +170,19 @@ class TeamsHandler(BaseHandler):
 
 class PlayersHandler(BaseHandler):
     def _get(self, args):
-        id = args[0] if len(args) > 0 else None
+        draft_id = args[0]
+        id = args[1] if len(args) > 1 else None
 
         q = self.db.query(Player)
         if id is not None:
             player = q.filter(Player.id == int(id)).first()
             return player.to_dict()
         else:
-            players = q.all()
+            players = q.filter(Player.draft_id == int(draft_id)).all()
             return {'players': [p.to_dict() for p in players]}
 
-    def _create(self, args):
-        name = self.request_body_json['name']
-
-        player = Player(name=name)
-        self.db.add(player)
-        self.db.commit()
-
-        return player.to_dict()
-
     def _update(self, args):
-        id = args[0]
+        id = args[1]
 
         player = self.db.query(Player).filter(Player.id == int(id)).first()
 
