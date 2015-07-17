@@ -1,23 +1,16 @@
 @import './constants';
 
 
-@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
-@import "../../node_modules/font-awesome/scss/font-awesome";
-
-
 * {
     border-radius: 0 !important;
     font-family:$font-family;
 }
-.btn {
-    border-radius: 4px !important;
-}
-.btn-lg {
-    border-radius: 0 !important;
-}
 .btn:focus {outline:0;}
 .CodeMirror * {
     font-family: monospace !important;
+}
+a {
+    cursor: pointer;
 }
 
 html, .fill-height {
@@ -62,19 +55,12 @@ body {
     @include calc(height, unquote("100% - #{$header-height} - #{$footer-height}"));
 }
 
-.dropdown {
-    text-align: center;
-    .btn {
-        width: 100%;
-    }
-    .dropdown-menu {
-        width: 100%;
-        .choice {
-            cursor: pointer;
-        }
-        .choice:hover {
-            background-color: $soft-border-color;
-        }
+.create {
+    .create-body {
+        margin: 0 auto;
+        padding: 30px 20px;
+        width: 600px;
+        background-color: $bg-color;
     }
 }
 

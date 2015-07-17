@@ -1,11 +1,15 @@
 $icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "../../node_modules/font-awesome/fonts";
+//
+//$brand-primary:         rgb(75,125,165) !default;
+//$brand-success:         rgb(107,191,184) !default;
+//$brand-info:            rgb(216,233,246) !default;
+//$brand-warning:         rgb(235,173,40) !default;
+//$brand-danger:          rgb(191,63,42) !default;
 
-$brand-primary:         rgb(75,125,165) !default;
-$brand-success:         rgb(107,191,184) !default;
-$brand-info:            rgb(216,233,246) !default;
-$brand-warning:         rgb(235,173,40) !default;
-$brand-danger:          rgb(191,63,42) !default;
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import "../../node_modules/font-awesome/scss/font-awesome";
+
 
 $font-family:'Roboto',arial,sans-serif;
 
@@ -20,6 +24,8 @@ $footer-text-color: black;
 $soft-border-color: rgb(231, 231, 231);
 
 $text-color: #333;
+
+$bg-color: rgba(100,100,100,.1);
 
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;

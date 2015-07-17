@@ -9,6 +9,7 @@ var TeamStore = require('../../stores/TeamStore');
 var NavStore = require('../../stores/NavStore');
 
 var Input = require('../form/Input');
+var Checkbox = require('../form/Checkbox');
 
 var CreatePage = React.createClass({
     displayName: 'CreatePage',
@@ -51,6 +52,7 @@ var CreatePage = React.createClass({
                     team.order = index;
                     TeamStore.create(team, {draftId: draft.get('id')});
                 });
+                self.gotoDraft(draft.get('id'));
             }
         });
     },
@@ -76,6 +78,18 @@ var CreatePage = React.createClass({
         });
     },
 
+    setOwner: function(index, checked) {
+        this.state.teams.forEach(function(team, idx){
+            if(checked || idx === index) {
+                team.is_owner = idx === index && checked;
+            }
+        });
+
+        this.setState({
+            teams: this.state.teams
+        });
+    },
+
     updateTempTeamName(name) {
         this.setState({
             teamName: name
@@ -88,7 +102,8 @@ var CreatePage = React.createClass({
             is_owner: false
         });
         this.setState({
-            teams: this.state.teams
+            teams: this.state.teams,
+            teamName: ""
         });
     },
 
@@ -105,62 +120,84 @@ var CreatePage = React.createClass({
             var deleteTeam = function() {
                 self.deleteTeam(index);
             };
+            var setOwner = function(checked) {
+                self.setOwner(index, checked);
+            };
             return (
                 <tr key={index}>
                     <td className="col-xs-2">{index}</td>
                     <td className="col-xs-8">{team.name}</td>
-                    <td className="col-xs-2">{team.is_owner}</td>
-                    <td className="col-xs-2"><button className="btn btn-danger btn-sm" onClick={deleteTeam}>Delete</button></td>
+                    <td className="col-xs-2"><Checkbox checked={team.is_owner} onChange={setOwner}/></td>
+                    <td className="col-xs-2"><button className="btn btn-danger btn-sm" onClick={deleteTeam}><i className="fa fa-close"></i></button></td>
                 </tr>
             );
         });
 
-        return (
-            <div className="fill-height">
-                <div className="row">
-                    <div className="col-xs-12">
-                        {drafts}
-                    </div>
-                </div>
-                <hr/>
-                <div className="row">
-                    <div className="col-xs-10">
-                        Name
-                        <Input value={this.state.draft.name} onChange={this.updateDraftName} />
-                    </div>
-                    <div className="col-xs-2">
-                        Rounds
-                        <Input value={this.state.draft.rounds} onChange={this.updateDraftRounds} />
-                    </div>
-                </div>
-                <hr/>
-                Team
-                <div className="row">
-                    <div className="col-xs-10">
-                        <Input value={this.state.teamName} onChange={this.updateTempTeamName} />
-                    </div>
-                    <div className="col-xs-2">
-                        <button className="btn btn-success" onClick={this.addTeam}>New Team</button>
-                    </div>
-                </div>
+        var canCreate = teams.length > 1 && this.state.draft.name && this.state.draft.rounds;
 
-                <div className="row">
-                    <div className="col-xs-12">
-                        <table>
-                            <thead>
-                                <th className="col-xs-2">Order</th>
-                                <th className="col-xs-8">Name</th>
-                                <th className="col-xs-2">Is Owner</th>
-                                <th className="col-xs-2">Delete</th>
-                            </thead>
-                            <tbody>
-                                {teams}
-                            </tbody>
-                        </table>
+        if(teams.length === 0) {
+            teams = <tr><td><small>No teams</small></td></tr>;
+        }
+
+        return (
+            <div className="create fill-height">
+                <div className="create-body">
+                    <h2>Start a Draft</h2>
+                    <h3>Draft</h3>
+                    <div className="row">
+                        <div className="col-xs-10">
+                            Name
+                            <Input value={this.state.draft.name} onChange={this.updateDraftName} />
+                        </div>
+                        <div className="col-xs-2">
+                            # Rounds
+                            <Input value={this.state.draft.rounds} onChange={this.updateDraftRounds} />
+                        </div>
+                    </div>
+                    <hr/>
+                    <h3>Teams</h3>
+                    <div className="row">
+                        <div className="col-xs-10">
+                            Name
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <Input value={this.state.teamName} onChange={this.updateTempTeamName} onEnter={this.addTeam}/>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <table className="table">
+                                <thead>
+                                    <th className="col-xs-2">Order</th>
+                                    <th className="col-xs-8">Name</th>
+                                    <th className="col-xs-2">Is Owner</th>
+                                    <th className="col-xs-2">Delete</th>
+                                </thead>
+                                <tbody>
+                                    {teams}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            <button className="btn btn-primary btn-lg pull-right" onClick={this.createDraft} disabled={!canCreate}>Start <i className="fa fa-check"></i></button>
+                        </div>
                     </div>
                 </div>
-                <hr/>
-                <button className="btn btn-success btn-lg" onClick={this.createDraft}>Start</button>
+                <br/>
+                <div className="create-body">
+                    <h2>Continue a Draft</h2>
+                    <div className="row">
+                        <div className="col-xs-12">
+                            {drafts}
+                        </div>
+                    </div>
+
+                </div>
             </div>
         );
     }
