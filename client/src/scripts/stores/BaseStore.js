@@ -131,6 +131,9 @@ var BaseStore = assign({}, EventEmitter.prototype, {
         collection.on('add remove sort', function(){
             self.emitChangeAll();
         });
+        collection.on('change', function(){
+            self.emitChangeCurrent();
+        });
         return collection;
     },
 

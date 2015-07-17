@@ -8,12 +8,17 @@ var PlayerStore = require('../../stores/PlayerStore');
 
 var Input = require('../form/Input');
 
+var DragDrop = require('../mixins/DragDrop');
+
 var FilterBar = React.createClass({
     displayName: 'FilterBar',
+
+    mixins: [DragDrop],
 
     getInitialState() {
         return {
             filter: PlayerStore.getCurrent().get('core').get('name'),
+            player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
         };
@@ -30,6 +35,7 @@ var FilterBar = React.createClass({
 
     onPlayerChange() {
         this.setState({
+            player: PlayerStore.getCurrent(),
             filter: PlayerStore.getCurrent().get('core').get('name')
         });
     },
@@ -52,10 +58,22 @@ var FilterBar = React.createClass({
         PlayerStore.setCurrent(player.get('id'));
     },
 
+    getType() {
+        return "filterBar";
+    },
+    canDrop(type, item) {
+        return false;
+    },
+
     render() {
 
         return (
-            <div className="filter-bar">
+            <div className="filter-bar"
+                 draggable="true"
+                 onDragStart={this.onDrag}
+                 onDragOver={this.onDragOver}
+                 onDragLeave={this.onDragLeave}
+                 onDrop={this.onDrop}>
                 <Input value={this.state.filter}
                        onChange={this.updateFilter}
                        onSelected={this.selectPlayer}

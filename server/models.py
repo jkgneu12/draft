@@ -84,7 +84,7 @@ class Team(BaseModel):
     id = Column(Integer, primary_key=True)
 
     name = Column(String(128))
-    money = Column(Integer)
+    money = Column(Integer, default=200)
     is_owner = Column(Boolean)
     is_turn = Column(Boolean)
     order = Column(Integer)

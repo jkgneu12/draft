@@ -4,12 +4,19 @@
 
 var React = require('react');
 
+var PlayerStore = require('../../stores/PlayerStore');
+
+var DragDrop = require('../mixins/DragDrop');
+
 var TeamListItem = React.createClass({
     displayName: 'TeamListItem',
 
+    mixins: [DragDrop],
+
     getInitialState() {
         return {
-            team: this.props.team
+            team: this.props.team,
+            players: PlayerStore.getAll()
         };
     },
 
@@ -19,10 +26,54 @@ var TeamListItem = React.createClass({
         });
     },
 
+    componentDidMount() {
+        PlayerStore.addChangeCurrentListener(this.onPlayerChange);
+        PlayerStore.addChangeAllListener(this.onPlayerChange);
+    },
+    componentWillUnmount() {
+        PlayerStore.removeChangeListener(this.onPlayerChange);
+    },
+
+    onPlayerChange() {
+        this.setState({
+            players: PlayerStore.getAll()
+        });
+    },
+
+    getType() {
+        return "teamListItem";
+    },
+    canDrop(type, item) {
+        return type === "filterBar";
+    },
+
     render() {
+        var positions = {
+            'QB': 0,
+            'RB': 0,
+            'WR': 0,
+            'TE': 0,
+            'D': 0,
+            'K': 0
+        };
+
+        this.state.players.where({team_id: this.state.team.get('id')}).forEach(function(player){
+            positions[player.get('core').get('position')]++;
+        });
+
+        positions = Object.keys(positions).map(function(key){
+           return <span key={key}>{key + ":" + positions[key] + " "}</span>;
+        });
+
         return (
-            <div className="teams-list-item">
-                {this.state.team.get('name')}
+            <div className="teams-list-item"
+                 onDragStart={this.onDrag}
+                 onDragOver={this.onDragOver}
+                 onDragLeave={this.onDragLeave}
+                 onDrop={this.onDrop}>
+                <span>{this.state.team.get('name')}</span>
+                <span className="pull-right">${this.state.team.get('money')}</span>
+                {positions}
             </div>
         );
     }

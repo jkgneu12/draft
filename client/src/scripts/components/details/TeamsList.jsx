@@ -32,8 +32,8 @@ var TeamsList = React.createClass({
 
     render() {
 
-        var teams = this.state.teams.map(function(team){
-           return <TeamListItem team={team} />;
+        var teams = this.state.teams.map(function(team, index){
+           return <TeamListItem key={index} team={team} />;
         });
 
         return (
