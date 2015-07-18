@@ -1,3 +1,4 @@
+from sqlalchemy.orm import joinedload
 import tornado
 from models import Draft, Team, Player, PlayerCore
 
@@ -141,20 +142,22 @@ class TeamsHandler(BaseHandler):
         q = self.db.query(Team)
         if id is not None:
             team = q.filter(Team.id == int(id)).first()
-            return team.to_dict(['players'])
+            return team.to_dict()
         else:
             teams = q.filter(Team.draft_id == int(draft_id)).all()
-            return {'teams': [t.to_dict(['players']) for t in teams]}
+            return {'teams': [t.to_dict() for t in teams]}
 
     def _create(self, args):
         draft_id = args[0]
 
         team = Team(draft_id=draft_id)
         self._update_fields(team, self.request_body_json)
+        if team.order == 0:
+            team.is_turn = True
         self.db.add(team)
         self.db.commit()
 
-        return team.to_dict(['players'])
+        return team.to_dict()
 
     def _update(self, args):
         id = args[1]
@@ -166,7 +169,7 @@ class TeamsHandler(BaseHandler):
         self.db.add(team)
         self.db.commit()
 
-        return team.to_dict(['players'])
+        return team.to_dict()
 
 
 class PlayersHandler(BaseHandler):
@@ -179,7 +182,7 @@ class PlayersHandler(BaseHandler):
             player = q.filter(Player.id == int(id)).first()
             return player.to_dict(['core'])
         else:
-            players = q.filter(Player.draft_id == int(draft_id)).all()
+            players = q.options(joinedload('core')).filter(Player.draft_id == int(draft_id)).all()
             return {'players': [p.to_dict(['core']) for p in players]}
 
     def _update(self, args):

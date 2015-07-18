@@ -44,7 +44,10 @@ var TeamListItem = React.createClass({
         return "teamListItem";
     },
     canDrop(type, item) {
-        return type === "filterBar" && parseInt(PlayerStore.getValue()) > 0 && item.player.get('id') > 0;
+        return type === "filterBar" &&
+            parseInt(PlayerStore.getValue()) > 0 &&
+            item.player.get('id') > 0 &&
+            !item.player.get('team_id');
     },
 
     render() {

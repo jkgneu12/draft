@@ -53,7 +53,7 @@ var PlayersList = React.createClass({
                 cls = 'warning';
             }
             if(self.state.player.get('id') === player.get('id')) {
-                cls = 'success';
+                cls = 'info';
             }
 
             var team = TeamStore.getAll().findWhere({id: player.get('team_id')});
@@ -72,14 +72,9 @@ var PlayersList = React.createClass({
             );
         });
 
-        var content = null;
-        if(players.length === 0) {
-            content = (
-                <i className="fa fa-spinner fa-spin"></i>
-            );
-        } else {
-            content = (
-                <table className="table table-striped table-bordered table-hover">
+        return (
+            <div className="players-list">
+                 <table className="table table-striped table-bordered table-hover">
                     <thead>
                     <th>Owner</th>
                     <th>Rank</th>
@@ -95,12 +90,6 @@ var PlayersList = React.createClass({
                     {players}
                     </tbody>
                 </table>
-            );
-        }
-
-        return (
-            <div className="players-list">
-                {content}
             </div>
         );
     }

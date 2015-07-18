@@ -2,7 +2,9 @@ var EventEmitter = require('events').EventEmitter;
 
 var assign = require('object-assign');
 
+var DraftStore = require('./DraftStore');
 var PlayerStore = require('./PlayerStore');
+var TeamStore = require('./TeamStore');
 
 var _draggedItem = null;
 var _draggedType = null;
@@ -27,7 +29,22 @@ var DragDropStore = assign({}, EventEmitter.prototype, {
 
             player.save({team_id: team.get('id'), paid_price: PlayerStore.getValue()}, {
                 success: function() {
-                    team.fetch();
+                    team.fetch({
+                        success: function() {
+                           var draft = DraftStore.getCurrent();
+
+                            var currentTeam = TeamStore.getAll().findWhere({is_turn: true});
+                            var nextOrder = currentTeam.get('order') + 1;
+                            if(nextOrder == draft.get('rounds')) {
+                                nextOrder = 0;
+                                draft.save({round: draft.get('round') + 1})
+                            }
+                            var nextTeam = TeamStore.getAll().findWhere({order: nextOrder});
+
+                            currentTeam.save({is_turn: false});
+                            nextTeam.save({is_turn: true});
+                        }
+                    });
                 }
             });
         }
