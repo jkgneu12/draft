@@ -10,6 +10,7 @@ var PlayerStore = require('../../stores/PlayerStore');
 
 var TeamsList = require('../details/TeamsList');
 var FilterBar = require('../details/FilterBar');
+var Roster = require('../details/Roster');
 var PlayerDetails = require('../details/PlayerDetails');
 var PlayersList = require('../details/PlayersList');
 
@@ -48,15 +49,16 @@ var DraftPage = React.createClass({
     render() {
 
         return (
-            <div className="fill-height">
+            <div className="draft fill-height">
                 <div className="row fill-height">
-                    <div className="col-xs-8 fill-height">
-                        <div>{this.state.draft.get('round')} / {this.state.draft.get('rounds')}</div>
+                    <div className="col-xs-8 left-side fill-height">
                         <FilterBar />
                         <PlayerDetails />
                         <PlayersList />
+                        <Roster />
                     </div>
-                    <div className="col-xs-4">
+                    <div className="col-xs-4 right-side fill-height">
+                        <h4 className="round-label">Round {this.state.draft.get('round')} / {this.state.draft.get('rounds')}</h4>
                         <TeamsList />
                     </div>
                 </div>

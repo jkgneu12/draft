@@ -53,9 +53,11 @@ body {
 
 #main-content {
     @include calc(height, unquote("100% - #{$header-height} - #{$footer-height}"));
+    overflow: hidden;
 }
 
 .create {
+    overflow-y: scroll;
     .create-body {
         margin: 0 auto;
         padding: 30px 20px;
@@ -64,11 +66,57 @@ body {
     }
 }
 
+.draft {
+    .left-side {
+        overflow: hidden;
+        padding-right: 0;
+    }
+    .right-side {
+        overflow: hidden;
+        padding-left: 0;
+    }
+}
+
+.round-label {
+    text-align: right;
+    padding-right: 6px;
+}
+
 .teams-list {
     border-left: solid thin $soft-border-color;
+    overflow: scroll;
+    @include calc(height, unquote("100% - 20px"));
+
+    .panel {
+        margin: 0;
+        .panel-heading {
+            padding: 0;
+            h4 {
+                padding-left: 6px;
+                padding-top: 3px;
+                margin: 1px;
+            }
+        }
+        .panel-body {
+            padding: 0;
+        }
+    }
+
     .teams-list-item {
         border: solid thin $soft-border-color;
-        height: 60px;
+        @extend .panel;
+
+
+        .label {
+            width: 46px;
+            @extend .pull-right;
+        }
+        .col-xs-2 {
+            padding: 0;
+            .panel {
+                text-align: center;
+            }
+        }
     }
     .teams-list-item.droppable {
         border: solid thin $brand-primary;
@@ -77,10 +125,18 @@ body {
 
 .filter-bar {
     height: $filterBarHeight;
+    border: solid thin $soft-border-color;
+
+    input {
+        font-size: 18px;
+        height:40px;
+    }
 }
 
 .player-details {
     height: $playerDetailsHeight;
+    border: solid thin $soft-border-color;
+    overflow: hidden;
     .col-xs-4 {
         padding: 0;
     }
@@ -93,14 +149,24 @@ body {
     }
 }
 
+
 .players-list {
-    height: $playersListHeight;
+    @include calc(height, unquote("#{$playersListHeight} - #{$filterBarHeight/2} - #{$playerDetailsHeight/2}"));
     overflow: scroll;
     text-align: center !important;
     th {
         text-align: center !important;
     }
+    .success {
+        font-weight: bold;
+    }
 }
+
+.roster {
+    @include calc(height, unquote("#{$rosterHeight} - #{$filterBarHeight/2} - #{$playerDetailsHeight/2}"));
+    overflow: scroll;
+}
+
 
 
 .twitter-typeahead {

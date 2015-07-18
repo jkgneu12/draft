@@ -5,6 +5,7 @@
 var React = require('react');
 
 var PlayerStore = require('../../stores/PlayerStore');
+var TeamStore = require('../../stores/TeamStore');
 
 var PlayersList = React.createClass({
     displayName: 'PlayersList',
@@ -48,20 +49,25 @@ var PlayersList = React.createClass({
                 self.selectPlayer(player);
             };
             var cls = '';
+             if(player.get('team_id')) {
+                cls = 'warning';
+            }
             if(self.state.player.get('id') === player.get('id')) {
                 cls = 'success';
             }
+
+            var team = TeamStore.getAll().findWhere({id: player.get('team_id')});
             return (
                 <tr key={index} className={cls} onClick={selectPlayer}>
-                    <td>{player.get('owner')}</td>
+                    <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
-                    <td>{player.get('core').get('position_rank')}</td>
-                    <td>{player.get('core').get('position')}</td>
+                    <td>#{player.get('core').get('position_rank')}</td>
+                    <td>#{player.get('core').get('position')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
-                    <td>{player.get('core').get('min_price')}</td>
-                    <td>{player.get('core').get('max_price')}</td>
-                    <td>{player.get('core').get('target_price')}</td>
+                    <td>${player.get('core').get('min_price')}</td>
+                    <td>${player.get('core').get('max_price')}</td>
+                    <td>${player.get('core').get('target_price')}</td>
                 </tr>
             );
         });

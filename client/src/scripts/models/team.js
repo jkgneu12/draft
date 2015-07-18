@@ -16,7 +16,9 @@ var Teams = BaseCollection.extend({
     model: Team,
     parse: function(response){
         return response.teams;
-    }
+    },
+
+    comparator: 'order'
 });
 
 module.exports.Team = Team;

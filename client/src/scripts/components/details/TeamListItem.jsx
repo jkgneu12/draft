@@ -57,17 +57,62 @@ var TeamListItem = React.createClass({
             'K': 0
         };
 
+        var needed = {
+            'QB': 2,
+            'RB': 4,
+            'WR': 4,
+            'TE': 1,
+            'D': 1,
+            'K': 1
+        };
+
         this.state.players.where({team_id: this.state.team.get('id')}).forEach(function(player){
             positions[player.get('core').get('position')]++;
         });
 
         positions = Object.keys(positions).map(function(key){
-           return <span key={key}>{key + ":" + positions[key] + " "}</span>;
+            var colorClass = "panel panel-";
+            if(positions[key] == 0) {
+                colorClass += 'danger';
+            } else if(positions[key] >= needed[key]) {
+                colorClass += 'success';
+            } else {
+                colorClass += 'warning';
+            }
+            return (
+                <div className="col-xs-2" key={key}>
+                    <div className={colorClass}>
+                        <div className="panel-heading">
+                            {key}
+                        </div>
+                        <div className="panel-body">
+                            {positions[key]}
+                        </div>
+                    </div>
+                </div>
+            );
         });
 
         var className = "teams-list-item";
         if(this.state.canDrop) {
             className += " droppable";
+        }
+        if(this.state.team.get('is_turn')) {
+            className += "  panel-info";
+        } else {
+            className += "  panel-default";
+        }
+
+        var money = parseInt(this.state.team.get('money'));
+        var moneyClass = 'label label-';
+        if(money > 160) {
+            moneyClass += 'success';
+        }else if(money > 100) {
+            moneyClass += 'info';
+        }else if(money > 20) {
+            moneyClass += 'warning';
+        }else {
+            moneyClass += 'danger';
         }
 
         return (
@@ -76,9 +121,16 @@ var TeamListItem = React.createClass({
                  onDragOver={this.onDragOver}
                  onDragLeave={this.onDragLeave}
                  onDrop={this.onDrop}>
-                <span>{this.state.team.get('name')}</span>
-                <span className="pull-right">${this.state.team.get('money')}</span>
-                {positions}
+
+                <div className="panel-heading">
+                    <h4>
+                        <span>{this.state.team.get('name')}</span>
+                        <span className={moneyClass}>${this.state.team.get('money')}</span>
+                    </h4>
+                </div>
+                <div className="panel-body">
+                    {positions}
+                </div>
             </div>
         );
     }

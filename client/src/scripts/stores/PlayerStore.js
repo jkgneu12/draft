@@ -21,5 +21,6 @@ var PlayerStore = assign({}, BaseStore, {
         return this._value;
     }
 });
+PlayerStore.setMaxListeners(200);
 
 module.exports = PlayerStore;

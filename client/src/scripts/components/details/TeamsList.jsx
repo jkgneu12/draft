@@ -38,7 +38,7 @@ var TeamsList = React.createClass({
         });
 
         return (
-            <div className="teams-list fill-height">
+            <div className="teams-list">
                 {teams}
             </div>
         );

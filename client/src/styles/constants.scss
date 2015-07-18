@@ -17,7 +17,7 @@ $header-height: 40px;
 $header-color: $brand-primary;
 $header-text-color: white;
 
-$footer-height: 40px;
+$footer-height: 30px;
 $footer-color: transparent;
 $footer-text-color: black;
 
@@ -28,9 +28,10 @@ $text-color: #333;
 $bg-color: rgba(100,100,100,.1);
 
 
-$filterBarHeight: 20%;
-$playerDetailsHeight: 35%;
-$playersListHeight: 45%;
+$filterBarHeight: 41px;
+$playerDetailsHeight: 184px;
+$playersListHeight: 70%;
+$rosterHeight: 30%;
 
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;
