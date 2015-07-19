@@ -37,5 +37,6 @@ var Players = BaseCollection.extend({
     }
 });
 
+module.exports.PlayerCore = PlayerCore;
 module.exports.Player = Player;
 module.exports.Players = Players;

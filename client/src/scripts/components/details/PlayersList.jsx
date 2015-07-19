@@ -61,13 +61,10 @@ var PlayersList = React.createClass({
                 <tr key={index} className={cls} onClick={selectPlayer}>
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
-                    <td>#{player.get('core').get('position_rank')}</td>
-                    <td>#{player.get('core').get('position')}</td>
+                    <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
-                    <td>${player.get('core').get('min_price')}</td>
-                    <td>${player.get('core').get('max_price')}</td>
-                    <td>${player.get('core').get('target_price')}</td>
+                    <td>${player.get('core').get('min_price') + "-" + player.get('core').get('target_price') + "-" + player.get('core').get('max_price')}</td>
                 </tr>
             );
         });
@@ -78,13 +75,10 @@ var PlayersList = React.createClass({
                     <thead>
                     <th>Owner</th>
                     <th>Rank</th>
-                    <th>Pos Rank</th>
                     <th>Position</th>
                     <th>Name</th>
                     <th>Team</th>
-                    <th>Min Price</th>
-                    <th>Max Price</th>
-                    <th>Target Price</th>
+                    <th>Price</th>
                     </thead>
                     <tbody>
                     {players}

@@ -4,71 +4,80 @@
 
 var React = require('react');
 
-var TeamStore = require('../../stores/TeamStore');
-var PlayerStore = require('../../stores/PlayerStore');
+var _ = require('underscore');
+
+var RosteredPlayerStore = require('../../stores/RosteredPlayerStore');
 
 var Roster = React.createClass({
     displayName: 'Roster',
 
     getInitialState() {
         return {
-            players: PlayerStore.getAll(),
-            ownerTeam: TeamStore.getAll().findWhere({is_owner: true})
+            positions: RosteredPlayerStore.getAll()
         };
     },
 
     componentDidMount() {
-        PlayerStore.addChangeCurrentListener(this.onPlayersChange);
-        PlayerStore.addChangeAllListener(this.onPlayersChange);
-        TeamStore.addChangeAllListener(this.onTeamsChange);
+        RosteredPlayerStore.addChangeAllListener(this.onPositionsChange);
     },
     componentWillUnmount() {
-        PlayerStore.removeChangeListener(this.onPlayersChange);
-        TeamStore.removeChangeListener(this.onTeamsChange);
+        RosteredPlayerStore.removeChangeListener(this.onPositionsChange);
     },
 
-    onPlayersChange() {
+    onPositionsChange() {
         this.setState({
-            players: PlayerStore.getAll()
-        });
-    },
-    onTeamsChange() {
-        this.setState({
-            ownerTeam: TeamStore.getAll().findWhere({is_owner: true})
+            positions: RosteredPlayerStore.getAll()
         });
     },
 
     render() {
-        var roster = [];
-        if(this.state.ownerTeam) {
-            var teamId = this.state.ownerTeam.get('id');
-            roster = this.state.players.where({team_id: teamId}).map(function(player, index){
+
+
+        var roster = this.state.positions.map(function(position, index) {
+            var player = position.get('player');
+
+            if (player.get('id') > 0) {
                 var cls = '';
-                 if(player.get('paid_price') > player.get('core').get('target_price')) {
+                if (player.get('paid_price') > player.get('core').get('target_price')) {
                     cls = 'danger';
                 }
-                if(player.get('paid_price') < player.get('core').get('target_price')) {
+                if (player.get('paid_price') < player.get('core').get('target_price')) {
                     cls = 'success';
                 }
                 return (
                     <tr key={index} className={cls}>
+                        <td>{index+1}</td>
+                        <td>{position.get('position') + position.get('slot')}</td>
                         <td>{player.get('core').get('rank')}</td>
-                        <td>#{player.get('core').get('position_rank')}</td>
-                        <td>#{player.get('core').get('position')}</td>
+                        <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
                         <td>${player.get('paid_price')}</td>
                         <td>${player.get('core').get('target_price')}</td>
                     </tr>
                 );
-            });
-        }
+            } else {
+                return (
+                    <tr key={index}>
+                        <td>{index+1}</td>
+                        <td>{position.get('position') + position.get('slot')}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                );
+            }
+        });
         return (
             <div className="roster">
                 <table className="table table-striped table-bordered table-hover">
                     <thead>
+                        <th></th>
+                        <th>Slot</th>
                         <th>Rank</th>
-                        <th>Pos Rank</th>
                         <th>Position</th>
                         <th>Name</th>
                         <th>Team</th>

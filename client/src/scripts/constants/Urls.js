@@ -6,6 +6,7 @@ var Urls = {
     drafts: '/drafts',
     players: '/drafts/:draftId/players',
     teams: '/drafts/:draftId/teams',
+    rostered_players: '/drafts/:draftId/rostered_players',
     player_cores: '/players'
 };
 

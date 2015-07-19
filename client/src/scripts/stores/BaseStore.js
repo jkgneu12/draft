@@ -66,6 +66,7 @@ var BaseStore = assign({}, EventEmitter.prototype, {
         options.success = function(collection) {
             self._currentModel = collection.findWhere({id: self.getCurrentId()});
             self.emitChangeCurrent();
+            self.emitChangeAll();
             if(_success) {
                 _success(collection);
             }

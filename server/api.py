@@ -1,3 +1,5 @@
+import math
+from sqlalchemy import and_
 from sqlalchemy.orm import joinedload
 import tornado
 from models import Draft, Team, Player, PlayerCore
@@ -213,3 +215,117 @@ class CorePlayersHandler(BaseHandler):
     def _delete(self, args):
         self.db.query(PlayerCore).delete()
         self.db.commit()
+
+
+class RosteredPlayersHandler(BaseHandler):
+
+    position_importance = {
+        'QB': [
+            0.135,
+            0.0001,
+            0.0001
+        ],
+        'RB': [
+            0.275,
+            0.15,
+            0.02,
+            0.015,
+            0.005,
+            0.0001,
+            0.0001
+        ],
+        'WR': [
+            0.2,
+            0.1,
+            0.02,
+            0.005,
+            0.0001,
+            0.0001
+        ],
+        'TE': [
+            0.05,
+            0.0001,
+            0.0001
+        ],
+        'D': [
+            0.01,
+            0.0001,
+            0.0001
+        ],
+        'K': [
+            0.01,
+            0.0001,
+            0.0001
+        ]
+    }
+
+    def _get(self, args):
+        draft_id = args[0]
+        owner_team = self.db.query(Team).filter(and_(Team.is_owner == True),
+                                                     Team.draft_id == int(draft_id)).first()
+
+        team_id = owner_team.id
+        owned_players = self.db.query(Player).filter(Player.team_id == int(team_id)).all()
+
+        positions = {
+            'QB': [
+                None,
+                None,
+                None
+            ],
+            'RB': [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None
+            ],
+            'WR': [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None
+            ],
+            'TE': [
+                None,
+                None,
+                None
+            ],
+            'D': [
+                None,
+                None,
+                None
+            ],
+            'K': [
+                None,
+                None,
+                None
+            ]
+        }
+
+        for player in owned_players:
+            position = player.core.position
+            pos_rank = player.core.position_rank
+
+            slot = min(math.floor(pos_rank / 12), len(self.position_importance[position])-1)
+
+            while slot < len(self.position_importance[position]):
+                if positions[position][slot] == None:
+                    positions[position][slot] = player
+                    break
+                slot+=1
+
+        flattend_positions = []
+        for position, importances in self.position_importance.items():
+            for index, importance in enumerate(importances):
+                player = positions[position][index]
+                flattend_positions.append({
+                    'position': position, 'importance': importance, 'slot': index+1, 'player': player.to_dict(['core']) if player else None
+                })
+
+        flattend_positions = sorted(flattend_positions, key=lambda pos: pos['importance'], reverse=True)
+        return {'rostered_players': flattend_positions}
