@@ -4,8 +4,12 @@
 
 var React = require('react');
 
+var _ = require('underscore');
+
 var PlayerStore = require('../../stores/PlayerStore');
 var TeamStore = require('../../stores/TeamStore');
+
+var Checkbox = require('../form/Checkbox');
 
 var PlayersList = React.createClass({
     displayName: 'PlayersList',
@@ -13,7 +17,15 @@ var PlayersList = React.createClass({
     getInitialState() {
         return {
             player: PlayerStore.getCurrent(),
-            players: PlayerStore.getAll()
+            players: PlayerStore.getAll(),
+            filters: {
+                QB: true,
+                RB: true,
+                WR: true,
+                TE: true,
+                D: true,
+                K: true
+            }
         };
     },
 
@@ -42,14 +54,23 @@ var PlayersList = React.createClass({
         PlayerStore.setCurrent(player.get('id'));
     },
 
+    toggleFilter(filter, val) {
+        this.state.filters[filter] = val;
+        this.setState({
+            filters: this.state.filters
+        });
+    },
+
     render() {
         var self = this;
-        var players = this.state.players.map(function(player, index){
+        var players = this.state.players.filter(function(player){
+            return self.state.filters[player.get('core').get('position')];
+        }).map(function(player, index){
             var selectPlayer = function(){
                 self.selectPlayer(player);
             };
             var cls = '';
-             if(player.get('team_id')) {
+            if(player.get('team_id')) {
                 cls = 'warning';
             }
             if(self.state.player.get('id') === player.get('id')) {
@@ -69,9 +90,19 @@ var PlayersList = React.createClass({
             );
         });
 
+        var filters = Object.keys(this.state.filters).map(function(filter) {
+            var onChange = function(val) {
+                self.toggleFilter(filter, val);
+            };
+            return <span className="filter-checkbox"><Checkbox checked={self.state.filters[filter]} onChange={onChange}/> {filter}</span>;
+        });
+
         return (
             <div className="players-list">
-                 <table className="table table-striped table-bordered table-hover">
+                <div>
+                    {filters}
+                </div>
+                <table className="table table-bordered table-hover">
                     <thead>
                     <th>Owner</th>
                     <th>Rank</th>

@@ -1,5 +1,5 @@
 import datetime
-from sqlalchemy import Column, String, ForeignKey, Boolean, Float
+from sqlalchemy import Column, String, ForeignKey, Boolean, Float, Text
 from sqlalchemy import Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -53,6 +53,8 @@ class PlayerCore(BaseModel):
     __tablename__ = 'player_core'
     id = Column(Integer, primary_key=True)
 
+    notes = Column(Text)
+
     name = Column(String(128))
     position = Column(String(4))
     team_name = Column(String(128))
@@ -74,7 +76,6 @@ class Draft(BaseModel):
 
     name = Column(String(128))
     round = Column(Integer, default=0)
-    rounds = Column(Integer)
 
     teams = relationship('Team')
 

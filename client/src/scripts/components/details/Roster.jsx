@@ -75,7 +75,7 @@ var Roster = React.createClass({
         });
         return (
             <div className="roster">
-                <table className="table table-striped table-bordered table-hover">
+                <table className="table table-bordered table-hover">
                     <thead>
                         <th></th>
                         <th>Slot</th>

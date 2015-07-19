@@ -19,6 +19,7 @@ var Player = BaseModel.extend({
     },
     parse: function(response) {
         response.core = new PlayerCore(response.core);
+        response.core.urlParams = this.urlParams || this.collection.urlParams;
         return response
     },
     toJSON: function(options) {

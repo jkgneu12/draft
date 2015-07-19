@@ -60,7 +60,7 @@ var DraftPage = React.createClass({
                         <Roster />
                     </div>
                     <div className="col-xs-4 right-side fill-height">
-                        <h4 className="round-label">Round {this.state.draft.get('round')} / {this.state.draft.get('rounds')}</h4>
+                        <h4 className="round-label">Round {this.state.draft.get('round') + 1}</h4>
                         <TeamsList />
                     </div>
                 </div>

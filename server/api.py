@@ -205,16 +205,27 @@ class PlayersHandler(BaseHandler):
 
 class CorePlayersHandler(BaseHandler):
     def _create(self, args):
-        player = PlayerCore()
+        player_name = self.request_body_json['name']
+        player = self.db.query(PlayerCore).filter(PlayerCore.name == player_name).first()
+        if player is None:
+            player = PlayerCore()
         self._update_fields(player, self.request_body_json)
         self.db.add(player)
         self.db.commit()
 
-        return player.to_dict(['players'])
+        return player.to_dict()
 
-    def _delete(self, args):
-        self.db.query(PlayerCore).delete()
+    def _update(self, args):
+        id = args[0]
+
+        player = self.db.query(PlayerCore).filter(PlayerCore.id == int(id)).first()
+
+        self._update_fields(player, self.request_body_json)
+
+        self.db.add(player)
         self.db.commit()
+
+        return player.to_dict()
 
 
 class RosteredPlayersHandler(BaseHandler):

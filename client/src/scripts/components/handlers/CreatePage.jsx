@@ -64,13 +64,6 @@ var CreatePage = React.createClass({
         });
     },
 
-    updateDraftRounds(rounds) {
-        this.state.draft.rounds = rounds;
-        this.setState({
-            draft: this.state.draft
-        });
-    },
-
     deleteTeam: function(index) {
         this.state.teams.splice(index, 1);
         this.setState({
@@ -133,7 +126,7 @@ var CreatePage = React.createClass({
             );
         });
 
-        var canCreate = teams.length > 1 && this.state.draft.name && this.state.draft.rounds;
+        var canCreate = teams.length > 1 && this.state.draft.name;
 
         if(teams.length === 0) {
             teams = <tr><td><small>No teams</small></td></tr>;
@@ -145,13 +138,9 @@ var CreatePage = React.createClass({
                     <h2>Start a Draft</h2>
                     <h3>Draft</h3>
                     <div className="row">
-                        <div className="col-xs-10">
+                        <div className="col-xs-12">
                             Name
                             <Input value={this.state.draft.name} onChange={this.updateDraftName} />
-                        </div>
-                        <div className="col-xs-2">
-                            # Rounds
-                            <Input value={this.state.draft.rounds} onChange={this.updateDraftRounds} />
                         </div>
                     </div>
                     <hr/>
