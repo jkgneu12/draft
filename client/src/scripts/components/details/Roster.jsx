@@ -38,10 +38,10 @@ var Roster = React.createClass({
 
             if (player.get('id') > 0) {
                 var cls = '';
-                if (player.get('paid_price') > player.get('core').get('target_price')) {
+                if (player.get('paid_price') > position.get('target_price')) {
                     cls = 'danger';
                 }
-                if (player.get('paid_price') < player.get('core').get('target_price')) {
+                if (player.get('paid_price') <= position.get('target_price')) {
                     cls = 'success';
                 }
                 return (
@@ -53,7 +53,8 @@ var Roster = React.createClass({
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
                         <td>${player.get('paid_price')}</td>
-                        <td>${player.get('core').get('target_price')}</td>
+                        <td>${position.get('target_price')}</td>
+                        <td>{Math.round(position.get('importance') * 100)}%</td>
                     </tr>
                 );
             } else {
@@ -66,7 +67,8 @@ var Roster = React.createClass({
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
-                        <td>-</td>
+                        <td>${position.get('target_price')}</td>
+                        <td>{Math.round(position.get('importance') * 100)}%</td>
                     </tr>
                 );
             }
@@ -83,6 +85,7 @@ var Roster = React.createClass({
                         <th>Team</th>
                         <th>Price Paid</th>
                         <th>Target Price</th>
+                        <th>Importance</th>
                     </thead>
                     <tbody>
                         {roster}

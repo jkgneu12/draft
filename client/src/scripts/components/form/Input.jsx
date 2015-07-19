@@ -4,6 +4,7 @@ var React = require('react');
 
 var $ = require('jquery');
 var typeahead = require('typeahead.js');
+require('jquery-mousewheel');
 
 var Input = React.createClass({
 
@@ -27,6 +28,14 @@ var Input = React.createClass({
                 limit: 20
             }
         );
+        if(this.props.onScroll) {
+            var self = this;
+            $(this.getDOMNode()).mousewheel(function(event) {
+                console.log(event.deltaX, event.deltaY, event.deltaFactor);
+                self.props.onScroll(event.deltaX, event.deltaY, event.deltaFactor);
+            });
+        }
+
     },
     componentWillUnmount() {
         $(this.getDOMNode()).typeahead('destroy');

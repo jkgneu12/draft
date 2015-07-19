@@ -22,6 +22,11 @@ body {
     color: $text-color;
 }
 
+td, th {
+    padding: 2px !important;
+    text-align: center !important;
+}
+
 #content {
     height: 100%;
 }
@@ -85,7 +90,7 @@ body {
 .teams-list {
     border-left: solid thin $soft-border-color;
     overflow: scroll;
-    @include calc(height, unquote("100% - 20px"));
+    @include calc(height, unquote("100% - 40px"));
 
     .panel {
         margin: 0;
@@ -103,7 +108,7 @@ body {
     }
 
     .teams-list-item {
-        border: solid thin $soft-border-color;
+        border: solid thin $hard-border-color;
         @extend .panel;
 
 
@@ -151,19 +156,16 @@ body {
 
 
 .players-list {
-    @include calc(height, unquote("#{$playersListHeight} - #{$filterBarHeight/2} - #{$playerDetailsHeight/2}"));
+    @include calc(height, unquote("#{$playersListHeight} - #{$playerDetailsHeight/2}"));
     overflow: scroll;
     text-align: center !important;
-    th {
-        text-align: center !important;
-    }
     .success {
         font-weight: bold;
     }
 }
 
 .roster {
-    @include calc(height, unquote("#{$rosterHeight} - #{$filterBarHeight/2} - #{$playerDetailsHeight/2}"));
+    @include calc(height, unquote("#{$rosterHeight} - #{$playerDetailsHeight/2}"));
     overflow: scroll;
 }
 

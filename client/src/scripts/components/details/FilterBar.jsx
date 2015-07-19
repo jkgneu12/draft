@@ -25,7 +25,7 @@ var FilterBar = React.createClass({
         };
     },
 
-       componentDidMount() {
+   componentDidMount() {
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
     },
@@ -62,6 +62,18 @@ var FilterBar = React.createClass({
         PlayerStore.setValue(text);
     },
 
+    scrollValue(deltaX, deltaY, deltaFactor) {
+        if(deltaY === 0) return;
+
+        deltaY = Math.sqrt(Math.abs(deltaY)) * (deltaY / Math.abs(deltaY));
+        var value = Math.round(Math.min(Math.max(1, parseInt(this.state.value) + deltaY), 200));
+        this.setState({
+            value: value
+        });
+
+        PlayerStore.setValue(value);
+    },
+
     selectPlayer(core) {
         var player = PlayerStore.getAll().findWhere({core_id: core.get('id')});
         PlayerStore.setCurrent(player.get('id'));
@@ -94,7 +106,8 @@ var FilterBar = React.createClass({
                     </div>
                     <div className="col-xs-2">
                         <Input value={this.state.value}
-                               onChange={this.updateValue}/>
+                               onChange={this.updateValue}
+                               onScroll={this.scrollValue}/>
                     </div>
                 </div>
 
