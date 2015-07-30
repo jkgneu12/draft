@@ -19,14 +19,34 @@ var Roster = React.createClass({
 
     componentDidMount() {
         RosteredPlayerStore.addChangeAllListener(this.onPositionsChange);
+       $(window).resize(this.resize).resize();
     },
     componentWillUnmount() {
         RosteredPlayerStore.removeChangeListener(this.onPositionsChange);
     },
 
+    componentDidUpdate() {
+        this.resize();
+    },
+
     onPositionsChange() {
         this.setState({
             positions: RosteredPlayerStore.getAll()
+        });
+    },
+
+    resize() {
+        var $tableHead = $(this.getDOMNode()).find('.table-head');
+        var $tableBody = $(this.getDOMNode()).find('.table-body');
+        var $headCells = $tableHead.find('thead tr:first').children();
+        var $bodyCells = $tableBody.find('thead tr:first').children();
+
+        var colWidth = $bodyCells.map(function() {
+            return $(this).width();
+        }).get();
+
+        $headCells.each(function(i, v) {
+            $(v).width(colWidth[i]);
         });
     },
 
@@ -79,24 +99,44 @@ var Roster = React.createClass({
         });
         return (
             <div className="roster">
-                <table className="table table-bordered table-hover">
-                    <thead>
-                        <th></th>
-                        <th>Slot</th>
-                        <th>Rank</th>
-                        <th>Position</th>
-                        <th>Name</th>
-                        <th>Team</th>
-                        <th>Price Paid</th>
-                        <th>Target Price</th>
-                        <th>Adj Target Price</th>
-                        <th>Importance</th>
-                        <th>Bye</th>
-                    </thead>
-                    <tbody>
-                        {roster}
-                    </tbody>
-                </table>
+                <div className="table-body">
+                    <table className="table table-bordered table-hover">
+                        <thead>
+                            <th></th>
+                            <th>Slot</th>
+                            <th>Rank</th>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>Team</th>
+                            <th>Price Paid</th>
+                            <th>Target Price</th>
+                            <th>Adj Target Price</th>
+                            <th>Importance</th>
+                            <th>Bye</th>
+                        </thead>
+                        <tbody>
+                            {roster}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="table-head">
+                    <table className="table table-bordered table-hover">
+                        <thead>
+                            <th></th>
+                            <th>Slot</th>
+                            <th>Rank</th>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>Team</th>
+                            <th>Price Paid</th>
+                            <th>Target Price</th>
+                            <th>Adj Target Price</th>
+                            <th>Importance</th>
+                            <th>Bye</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         );
     }

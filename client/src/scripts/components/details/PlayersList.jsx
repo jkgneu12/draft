@@ -37,11 +37,18 @@ var PlayersList = React.createClass({
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
         RosteredPlayerStore.addChangeAllListener(this.onPositionsChange);
+
+
+        $(window).resize(this.resize).resize();
     },
     componentWillUnmount() {
         PlayerStore.removeChangeListener(this.onPlayerChange);
         PlayerStore.removeChangeListener(this.onPlayersChange);
         RosteredPlayerStore.removeChangeListener(this.onPositionsChange);
+    },
+
+    componentDidUpdate() {
+        this.resize();
     },
 
     onPlayerChange() {
@@ -70,6 +77,21 @@ var PlayersList = React.createClass({
         this.state.filters[filter] = val;
         this.setState({
             filters: this.state.filters
+        });
+    },
+
+    resize() {
+        var $tableHead = $(this.getDOMNode()).find('.table-head');
+        var $tableBody = $(this.getDOMNode()).find('.table-body');
+        var $headCells = $tableHead.find('thead tr:first').children();
+        var $bodyCells = $tableBody.find('thead tr:first').children();
+
+        var colWidth = $bodyCells.map(function() {
+            return $(this).width();
+        }).get();
+
+        $headCells.each(function(i, v) {
+            $(v).width(colWidth[i]);
         });
     },
 
@@ -146,30 +168,57 @@ var PlayersList = React.createClass({
 
         return (
             <div className="players-list">
-                <div>
+                <div className="table-body">
+                    <table className="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Like</th>
+                                <th>Owner</th>
+                                <th>Rank</th>
+                                <th>ADP</th>
+                                <th>Value</th>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Team</th>
+                                <th>Price</th>
+                                <th>Target</th>
+                                <th>Adj Tar</th>
+                                <th>Dropoff</th>
+                                <th>Risk</th>
+                                <th>Bye</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {players}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="filters">
                     {filters}
                 </div>
-                <table className="table table-bordered table-hover">
-                    <thead>
-                    <th>Like</th>
-                    <th>Owner</th>
-                    <th>Rank</th>
-                    <th>ADP</th>
-                    <th>Value</th>
-                    <th>Position</th>
-                    <th>Name</th>
-                    <th>Team</th>
-                    <th>Price</th>
-                    <th>Target</th>
-                    <th>Adj Tar</th>
-                    <th>Dropoff</th>
-                    <th>Risk</th>
-                    <th>Bye</th>
-                    </thead>
-                    <tbody>
-                    {players}
-                    </tbody>
-                </table>
+                <div className="table-head">
+                    <table className="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Like</th>
+                                <th>Owner</th>
+                                <th>Rank</th>
+                                <th>ADP</th>
+                                <th>Value</th>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Team</th>
+                                <th>Price</th>
+                                <th>Target</th>
+                                <th>Adj Tar</th>
+                                <th>Dropoff</th>
+                                <th>Risk</th>
+                                <th>Bye</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         );
     }

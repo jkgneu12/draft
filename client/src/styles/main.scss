@@ -157,26 +157,64 @@ td, th {
 
 .players-list {
     @include calc(height, unquote("#{$playersListHeight} - #{$playerDetailsHeight/2}"));
-    overflow: scroll;
+    overflow: hidden;
     text-align: center !important;
+    position: relative;
+
     .success {
         font-weight: bold;
     }
-    .filter-checkbox {
-        margin: 0 20px;
+    .filters {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        background: white;
+        .filter-checkbox {
+            margin: 0 20px;
+        }
     }
+
     .fa-star {
         color: goldenrod;
+    }
+    .table-head {
+        top: 19px;
+    }
+    .table-body {
+        top: 20px;
+        @include calc(height, unquote("100% - 39px"));
     }
 }
 
 .roster {
-    @include calc(height, unquote("#{$rosterHeight} - #{$playerDetailsHeight/2}"));
-    overflow: scroll;
+    @include calc(height, unquote("#{$rosterHeight} - #{$playerDetailsHeight}"));
+    overflow: hidden;
+    position: relative;
+
+    .table-head {
+        top: 0;
+    }
+    .table-body {
+        height: 100%;
+    }
 }
 
 
-
+.table-head {
+    overflow-y: scroll;
+    position: absolute;
+    background-color: white;
+    table {
+        margin-bottom: 0;
+    }
+}
+.table-body {
+    position: relative;
+    overflow-y: scroll;
+    thead {
+        visibility: hidden;
+    }
+}
 
 
 .twitter-typeahead {
