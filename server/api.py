@@ -232,39 +232,40 @@ class RosteredPlayersHandler(BaseHandler):
 
     position_importance = {
         'QB': [
-            0.135,
-            0.005,
-            0.0001
+            0.1,
+            0.00001,
+            0.00001
         ],
         'RB': [
-            0.275,
-            0.14,
+            0.285,
+            0.19,
             0.02,
-            0.015,
             0.005,
             0.005,
-            0.0001
+            0.005,
+            0.00001
         ],
         'WR': [
             0.2,
-            0.1,
-            0.02,
+            0.15,
             0.005,
             0.005,
-            0.0001
+            0.005,
+            0.005,
+            0.00001
         ],
         'TE': [
-            0.05,
-            0.001,
-            0.0001
-        ],
-        'D': [
             0.01,
             0.00001,
             0.00001
         ],
+        'D': [
+            0.005,
+            0.00001,
+            0.00001
+        ],
         'K': [
-            0.01,
+            0.005,
             0.00001,
             0.00001
         ]
@@ -294,6 +295,7 @@ class RosteredPlayersHandler(BaseHandler):
                 None
             ],
             'WR': [
+                None,
                 None,
                 None,
                 None,
@@ -345,10 +347,9 @@ class RosteredPlayersHandler(BaseHandler):
         flattend_positions = sorted(flattend_positions, key=lambda pos: pos['importance'], reverse=True)
 
         for position in flattend_positions:
+            position['target_price'] = position['adjusted_target_price'] = math.floor(position['importance'] * 200)
             if position['player'] is None:
-                position['importance'] = position['importance'] / (1 - total_importance_gathered)
-                position['target_price'] = math.floor(position['importance'] * owner_team.money)
-            else:
-                position['target_price'] = math.floor(position['importance'] * 200)
+                position['importance'] = position['importance'] / ((1 - total_importance_gathered) + .0001)
+                position['adjusted_target_price'] = math.floor(position['importance'] * owner_team.money)
 
         return {'rostered_players': flattend_positions}

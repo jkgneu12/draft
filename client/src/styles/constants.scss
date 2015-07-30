@@ -13,7 +13,7 @@ $fa-font-path: "../../node_modules/font-awesome/fonts";
 
 $font-family:'Roboto',arial,sans-serif;
 
-$header-height: 40px;
+$header-height: 20px;
 $header-color: $brand-primary;
 $header-text-color: white;
 
@@ -30,9 +30,9 @@ $bg-color: rgba(100,100,100,.1);
 
 
 $filterBarHeight: 41px;
-$playerDetailsHeight: 184px;
-$playersListHeight: 70%;
-$rosterHeight: 30%;
+$playerDetailsHeight: 100px;
+$playersListHeight: 60%;
+$rosterHeight: 40%;
 
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;

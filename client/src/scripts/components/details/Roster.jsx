@@ -54,7 +54,9 @@ var Roster = React.createClass({
                         <td>{player.get('core').get('team_name')}</td>
                         <td>${player.get('paid_price')}</td>
                         <td>${position.get('target_price')}</td>
+                        <td>${position.get('adjusted_target_price')}</td>
                         <td>{Math.round(position.get('importance') * 100)}%</td>
+                        <td>{player.get('core').get('bye')}</td>
                     </tr>
                 );
             } else {
@@ -68,7 +70,9 @@ var Roster = React.createClass({
                         <td>-</td>
                         <td>-</td>
                         <td>${position.get('target_price')}</td>
+                        <td>${position.get('adjusted_target_price')}</td>
                         <td>{Math.round(position.get('importance') * 100)}%</td>
+                        <td>-</td>
                     </tr>
                 );
             }
@@ -85,7 +89,9 @@ var Roster = React.createClass({
                         <th>Team</th>
                         <th>Price Paid</th>
                         <th>Target Price</th>
+                        <th>Adj Target Price</th>
                         <th>Importance</th>
+                        <th>Bye</th>
                     </thead>
                     <tbody>
                         {roster}

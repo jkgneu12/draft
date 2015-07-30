@@ -59,15 +59,17 @@ class PlayerCore(BaseModel):
     position = Column(String(4))
     team_name = Column(String(128))
 
-    min_price = Column(Integer)
-    max_price = Column(Integer)
     target_price = Column(Integer)
 
     rank = Column(Integer)
+    adp = Column(Integer)
+    tier = Column(Integer)
     position_rank = Column(Integer)
-    risk = Column(String(128))
-    fire_points = Column(Float)
-    fire_factor = Column(Float)
+    likes = Column(Boolean)
+    dropoff = Column(Integer)
+    risk = Column(Integer)
+
+    bye = Column(Integer)
 
 
 class Draft(BaseModel):

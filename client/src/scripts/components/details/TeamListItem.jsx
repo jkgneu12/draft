@@ -61,7 +61,7 @@ var TeamListItem = React.createClass({
         };
 
         var needed = {
-            'QB': 2,
+            'QB': 1,
             'RB': 4,
             'WR': 4,
             'TE': 1,
@@ -69,8 +69,10 @@ var TeamListItem = React.createClass({
             'K': 1
         };
 
+        var playerCount = 0;
         this.state.players.where({team_id: this.state.team.get('id')}).forEach(function(player){
             positions[player.get('core').get('position')]++;
+            playerCount++;
         });
 
         positions = Object.keys(positions).map(function(key){
@@ -118,6 +120,8 @@ var TeamListItem = React.createClass({
             moneyClass += 'danger';
         }
 
+        var maxBid = this.state.team.get('money') - (15-playerCount);
+
         return (
             <div className={className}
                  onDragStart={this.onDrag}
@@ -128,7 +132,7 @@ var TeamListItem = React.createClass({
                 <div className="panel-heading">
                     <h4>
                         <span>{this.state.team.get('name')}</span>
-                        <span className={moneyClass}>${this.state.team.get('money')}</span>
+                        <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>
                 <div className="panel-body">
