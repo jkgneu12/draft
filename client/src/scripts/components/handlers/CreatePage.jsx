@@ -11,6 +11,8 @@ var NavStore = require('../../stores/NavStore');
 var Input = require('../form/Input');
 var Checkbox = require('../form/Checkbox');
 
+var Q = require('Q');
+
 var CreatePage = React.createClass({
     displayName: 'CreatePage',
     statics: {
@@ -48,11 +50,18 @@ var CreatePage = React.createClass({
         var self = this;
         DraftStore.create(this.state.draft, {}, {
             success: function(draft) {
-                self.state.teams.forEach(function(team, index){
+                Q.all(self.state.teams.map(function(team, index){
                     team.order = index;
-                    TeamStore.create(team, {draftId: draft.get('id')});
+                    var def = Q.defer();
+                    TeamStore.create(team, {draftId: draft.get('id')}, {
+                        success:function(){
+                            def.resolve();
+                        }
+                    });
+                    return def.promise;
+                })).then(function(){
+                    self.gotoDraft(draft.get('id'));
                 });
-                self.gotoDraft(draft.get('id'));
             }
         });
     },
