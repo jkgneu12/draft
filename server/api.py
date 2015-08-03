@@ -221,6 +221,8 @@ class CorePlayersHandler(BaseHandler):
         self.db.add(player)
         self.db.commit()
 
+        optimizer.cache = optimizer.manager.dict()
+
         return player.to_dict()
 
     def _update(self, args):
@@ -232,6 +234,8 @@ class CorePlayersHandler(BaseHandler):
 
         self.db.add(player)
         self.db.commit()
+
+        optimizer.cache = optimizer.manager.dict()
 
         return player.to_dict()
 
@@ -248,17 +252,9 @@ class RostersHandler(BaseHandler):
         owned_players = self.db.query(Player).join(Player.core).filter(Player.team_id == int(team_id)).order_by(PlayerCore.rank).all()
 
         starters = [None]*len(constants.required_positions)
-        defs = []
-        kickers = []
         bench = []
 
         def place_player(player):
-            if player.core.position == 'D':
-                defs.append(player)
-                return True
-            if player.core.position == 'K':
-                kickers.append(player)
-                return True
             idx = 0
             while idx < len(starters):
                 if player.core.position in constants.required_positions[idx]:
@@ -277,34 +273,10 @@ class RostersHandler(BaseHandler):
         for player in owned_players:
             place_player(player)
 
-        optimal_roster = optimizer.optimize_roster(self.db, draft_id, starters, owner_team.money - (16 - len(owned_players)))
+        optimal_roster = optimizer.optimize_roster(self.db, draft_id, starters, owner_team.money - (7 - len(bench)))
 
         for player in optimal_roster:
             place_player(player)
-
-        if len(defs) == 0:
-            starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
-                                                                               PlayerCore.position == 'D',
-                                                                               PlayerCore.rank != None,
-                                                                               PlayerCore.target_price != None,
-                                                                               PlayerCore.target_price <= 1,
-                                                                               Player.team_id == None)).order_by(PlayerCore.rank).first())
-        else:
-            starters.append(defs.pop(0))
-            while len(defs) > 0:
-                bench.append(defs.pop(0))
-
-        if len(kickers) == 0:
-            starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
-                                                                               PlayerCore.position == 'K',
-                                                                               PlayerCore.rank != None,
-                                                                               PlayerCore.target_price != None,
-                                                                               PlayerCore.target_price <= 1,
-                                                                               Player.team_id == None)).order_by(PlayerCore.rank).first())
-        else:
-            starters.append(kickers.pop(0))
-            while len(kickers) > 0:
-                bench.append(kickers.pop(0))
 
         bench_fill = self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
                                                                         PlayerCore.position.in_(['RB','WR','TE']),
@@ -316,14 +288,12 @@ class RostersHandler(BaseHandler):
         while len(bench) < 16-len(starters) and len(bench_fill) > 0:
             bench.append(bench_fill.pop(0))
 
-        starters = [p.to_dict(['core']) for p in starters]
+        starters = [p.to_dict(['core']) for p in starters if p is not None]
         bench = [p.to_dict(['core']) for p in bench]
 
         for p in starters:
             del p['id']
         for p in bench:
             del p['id']
-
-
 
         return {'roster': {'starters': starters, 'bench': bench}}
