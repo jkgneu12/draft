@@ -12,6 +12,12 @@ print(args.filename)
 
 file = open(args.filename, 'r')
 
+ffa_name_mappings = {
+    "Dan Herron" : "Daniel Herron",
+    "LeVeon Bell": "Le'Veon Bell",
+    "Odell Beckham" : "Odell Beckham Jr.",
+}
+
 for line in csv.reader(file, delimiter="\t"):
 
     if args.filename == 'espn':
@@ -55,6 +61,11 @@ for line in csv.reader(file, delimiter="\t"):
             'risk': round(float(line[16])) if line[16] != 'null' else None,
             'points': round(float(line[5])) if line[5] != 'null' else None
         }
+
+        if player['name'] in ffa_name_mappings:
+            player['name'] = ffa_name_mappings[player['name']]
+        if player['position'] in ['DEF', 'DL', 'LB', 'DB', 'OLB', 'MLB', 'ILB', 'DE', 'FS', 'SS', 'DT', 'CB', 'NT', 'SAF']:
+            continue
 
     else:
         name_team = line[2].split('(')
