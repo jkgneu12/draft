@@ -1,8 +1,14 @@
 import math
-from sqlalchemy import and_
+from multiprocessing.pool import Pool
+from queue import Queue
+from threading import Thread
+from multiprocessing import Manager
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import joinedload
 import tornado
+import constants
 from models import Draft, Team, Player, PlayerCore
+import optimizer
 
 CORS_REQUEST_HEADERS = 'Access-Control-Request-Headers'
 CORS_ALLOW_HEADERS = 'Access-Control-Allow-Headers'
@@ -12,7 +18,6 @@ CORS_ALLOW_METHODS = 'Access-Control-Allow-Methods'
 
 
 class BaseHandler(tornado.web.RequestHandler):
-
     def set_default_headers(self):
         if CORS_REQUEST_HEADERS in self.request.headers:
             self.set_header(CORS_ALLOW_HEADERS, self.request.headers[CORS_REQUEST_HEADERS])
@@ -195,6 +200,7 @@ class PlayersHandler(BaseHandler):
         self._update_fields(player, self.request_body_json)
 
         if 'paid_price' in self.request_body_json:
+            optimizer.cache = optimizer.manager.dict()
             player.team.money -= int(self.request_body_json['paid_price'])
 
         self.db.add(player)
@@ -228,128 +234,88 @@ class CorePlayersHandler(BaseHandler):
         return player.to_dict()
 
 
-class RosteredPlayersHandler(BaseHandler):
-
-    position_importance = {
-        'QB': [
-            0.1,
-            0.00001,
-            0.00001
-        ],
-        'RB': [
-            0.285,
-            0.19,
-            0.02,
-            0.005,
-            0.005,
-            0.005,
-            0.00001
-        ],
-        'WR': [
-            0.2,
-            0.15,
-            0.005,
-            0.005,
-            0.005,
-            0.005,
-            0.00001
-        ],
-        'TE': [
-            0.01,
-            0.00001,
-            0.00001
-        ],
-        'D': [
-            0.005,
-            0.00001,
-            0.00001
-        ],
-        'K': [
-            0.005,
-            0.00001,
-            0.00001
-        ]
-    }
+class RostersHandler(BaseHandler):
 
     def _get(self, args):
         draft_id = args[0]
-        owner_team = self.db.query(Team).filter(and_(Team.is_owner == True),
-                                                     Team.draft_id == int(draft_id)).first()
+
+        owner_team = self.db.query(Team).filter(and_(Team.is_owner == True,
+                                                     Team.draft_id == int(draft_id))).first()
 
         team_id = owner_team.id
-        owned_players = self.db.query(Player).filter(Player.team_id == int(team_id)).all()
+        owned_players = self.db.query(Player).join(Player.core).filter(Player.team_id == int(team_id)).order_by(PlayerCore.rank).all()
 
-        positions = {
-            'QB': [
-                None,
-                None,
-                None
-            ],
-            'RB': [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None
-            ],
-            'WR': [
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None
-            ],
-            'TE': [
-                None,
-                None,
-                None
-            ],
-            'D': [
-                None,
-                None,
-                None
-            ],
-            'K': [
-                None,
-                None,
-                None
-            ]
-        }
+        starters = [None]*len(constants.required_positions)
+        defs = []
+        kickers = []
+        bench = []
+
+        def place_player(player):
+            if player.core.position == 'D':
+                defs.append(player)
+                return True
+            if player.core.position == 'K':
+                kickers.append(player)
+                return True
+            idx = 0
+            while idx < len(starters):
+                if player.core.position in constants.required_positions[idx]:
+                    if starters[idx] is None:
+                        starters[idx] = player
+                        return True
+                    elif starters[idx].core.rank > player.core.rank:
+                        other_player = starters[idx]
+                        starters[idx] = player
+                        place_player(other_player)
+                        return True
+                idx+=1
+            bench.append(player)
+            return False
 
         for player in owned_players:
-            position = player.core.position
-            pos_rank = player.core.position_rank
+            place_player(player)
 
-            slot = min(math.floor(pos_rank / 12), len(self.position_importance[position])-1)
+        optimal_roster = optimizer.optimize_roster(self.db, draft_id, starters, owner_team.money - (16 - len(owned_players)))
 
-            while slot < len(self.position_importance[position]):
-                if positions[position][slot] == None:
-                    positions[position][slot] = player
-                    break
-                slot+=1
+        for player in optimal_roster:
+            place_player(player)
 
-        flattend_positions = []
-        total_importance_gathered = 0.0
-        for position, importances in self.position_importance.items():
-            for index, importance in enumerate(importances):
-                player = positions[position][index]
-                flattend_positions.append({
-                    'position': position, 'importance': importance, 'slot': index+1, 'player': player.to_dict(['core']) if player else None
-                })
-                if player:
-                    total_importance_gathered += importance
+        if len(defs) == 0:
+            starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
+                                                                               PlayerCore.position == 'D',
+                                                                               PlayerCore.target_price <= 1,
+                                                                               Player.team_id == None)).order_by(PlayerCore.rank).first())
+        else:
+            starters.append(defs.pop(0))
+            while len(defs) > 0:
+                bench.append(defs.pop(0))
+
+        if len(kickers) == 0:
+            starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
+                                                                               PlayerCore.position == 'K',
+                                                                               PlayerCore.target_price <= 1,
+                                                                               Player.team_id == None)).order_by(PlayerCore.rank).first())
+        else:
+            starters.append(kickers.pop(0))
+            while len(kickers) > 0:
+                bench.append(kickers.pop(0))
+
+        bench_fill = self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
+                                                                        PlayerCore.position.in_(['RB','WR','TE']),
+                                                                        PlayerCore.target_price <= 1,
+                                                                        Player.team_id == None)).order_by(PlayerCore.rank).all()
+
+        while len(bench) < 16-len(starters) and len(bench_fill) > 0:
+            bench.append(bench_fill.pop(0))
+
+        starters = [p.to_dict(['core']) for p in starters]
+        bench = [p.to_dict(['core']) for p in bench]
+
+        for p in starters:
+            del p['id']
+        for p in bench:
+            del p['id']
 
 
-        flattend_positions = sorted(flattend_positions, key=lambda pos: pos['importance'], reverse=True)
 
-        for position in flattend_positions:
-            position['target_price'] = position['adjusted_target_price'] = math.floor(position['importance'] * 200)
-            if position['player'] is None:
-                position['importance'] = position['importance'] / ((1 - total_importance_gathered) + .0001)
-                position['adjusted_target_price'] = math.floor(position['importance'] * owner_team.money)
-
-        return {'rostered_players': flattend_positions}
+        return {'roster': {'starters': starters, 'bench': bench}}

@@ -68,6 +68,7 @@ class PlayerCore(BaseModel):
     likes = Column(Boolean)
     dropoff = Column(Integer)
     risk = Column(Integer)
+    points = Column(Integer)
 
     bye = Column(Integer)
 
@@ -105,7 +106,7 @@ class Player(BaseModel):
     paid_price = Column(Integer)
 
     core_id = Column(Integer, ForeignKey('player_core.id'))
-    core = relationship(PlayerCore)
+    core = relationship(PlayerCore, lazy='subquery')
 
     draft_id = Column(Integer, ForeignKey('draft.id'))
     draft = relationship(Draft)

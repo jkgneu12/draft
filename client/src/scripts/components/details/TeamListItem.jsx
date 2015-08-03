@@ -70,9 +70,11 @@ var TeamListItem = React.createClass({
         };
 
         var playerCount = 0;
+        var points = 0;
         this.state.players.where({team_id: this.state.team.get('id')}).forEach(function(player){
             positions[player.get('core').get('position')]++;
             playerCount++;
+            points += player.get('core').get('points') || 0;
         });
 
         positions = Object.keys(positions).map(function(key){
@@ -120,6 +122,8 @@ var TeamListItem = React.createClass({
             moneyClass += 'danger';
         }
 
+        var pointsPerDollar =  Math.round((money < 200 ? points / (200 - money) : 0)*100)/100;
+
         var maxBid = this.state.team.get('money') - (15-playerCount);
 
         return (
@@ -131,7 +135,8 @@ var TeamListItem = React.createClass({
 
                 <div className="panel-heading">
                     <h4>
-                        <span>{this.state.team.get('name')}</span>
+                        <span>{this.state.team.get('name')}</span> &nbsp;
+                        <small>{pointsPerDollar}</small>
                         <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>

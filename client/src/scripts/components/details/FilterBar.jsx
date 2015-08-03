@@ -88,7 +88,13 @@ var FilterBar = React.createClass({
 
     render() {
 
+        var pointsPerDollar = '-';
+        if(this.state.player && this.state.value > 0) {
+            pointsPerDollar = Math.round(this.state.player.get('core').get('points') / this.state.value * 100)/100;
+        }
+
         return (
+
             <div className="filter-bar"
                  draggable="true"
                  onDragStart={this.onDrag}
@@ -97,7 +103,7 @@ var FilterBar = React.createClass({
                  onDrop={this.onDrop}>
 
                 <div className="row">
-                    <div className="col-xs-10">
+                    <div className="col-xs-8">
                         <Input value={this.state.filter}
                                onChange={this.updateFilter}
                                onSelected={this.selectPlayer}
@@ -108,6 +114,9 @@ var FilterBar = React.createClass({
                         <Input value={this.state.value}
                                onChange={this.updateValue}
                                onScroll={this.scrollValue}/>
+                    </div>
+                    <div className="col-xs-2">
+                        {pointsPerDollar}
                     </div>
                 </div>
 

@@ -7,7 +7,7 @@ var React = require('react');
 var DraftStore = require('../../stores/DraftStore');
 var TeamStore = require('../../stores/TeamStore');
 var PlayerStore = require('../../stores/PlayerStore');
-var RosteredPlayerStore = require('../../stores/RosteredPlayerStore');
+var RosterStore = require('../../stores/RosterStore');
 
 var TeamsList = require('../details/TeamsList');
 var FilterBar = require('../details/FilterBar');
@@ -22,7 +22,7 @@ var DraftPage = React.createClass({
             DraftStore.setCurrent(params.draftId);
             TeamStore.loadAll({draftId: params.draftId});
             PlayerStore.loadAll({draftId: params.draftId});
-            RosteredPlayerStore.loadAll({draftId: params.draftId});
+            RosterStore.setCurrent(params.draftId);
         },
         willTransitionFrom() {
             DraftStore.setCurrent(-1);

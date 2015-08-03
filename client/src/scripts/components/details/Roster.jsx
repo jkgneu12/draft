@@ -6,32 +6,32 @@ var React = require('react');
 
 var _ = require('underscore');
 
-var RosteredPlayerStore = require('../../stores/RosteredPlayerStore');
+var RosterStore = require('../../stores/RosterStore');
 
 var Roster = React.createClass({
     displayName: 'Roster',
 
     getInitialState() {
         return {
-            positions: RosteredPlayerStore.getAll()
+            roster: RosterStore.getCurrent()
         };
     },
 
     componentDidMount() {
-        RosteredPlayerStore.addChangeAllListener(this.onPositionsChange);
+        RosterStore.addChangeCurrentListener(this.onRosterChange);
        $(window).resize(this.resize).resize();
     },
     componentWillUnmount() {
-        RosteredPlayerStore.removeChangeListener(this.onPositionsChange);
+        RosterStore.removeChangeListener(this.onRosterChange);
     },
 
     componentDidUpdate() {
         this.resize();
     },
 
-    onPositionsChange() {
+    onRosterChange() {
         this.setState({
-            positions: RosteredPlayerStore.getAll()
+            roster: RosterStore.getCurrent()
         });
     },
 
@@ -50,72 +50,65 @@ var Roster = React.createClass({
         });
     },
 
-    render() {
-
-
-        var roster = this.state.positions.map(function(position, index) {
-            var player = position.get('player');
-
-            if (player.get('id') > 0) {
-                var cls = '';
-                if (player.get('paid_price') > position.get('target_price')) {
-                    cls = 'danger';
-                }
-                if (player.get('paid_price') <= position.get('target_price')) {
-                    cls = 'success';
-                }
+    renderPlayer(indexOffset) {
+        return function(player, index) {
+            var cls = '';
+            if(player.get('paid_price')) {
+                cls = 'success';
+            }
+            if(player.get('core').get('name')) {
                 return (
                     <tr key={index} className={cls}>
-                        <td>{index+1}</td>
-                        <td>{position.get('position') + position.get('slot')}</td>
+                        <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
-                        <td>${player.get('paid_price')}</td>
-                        <td>${position.get('target_price')}</td>
-                        <td>${position.get('adjusted_target_price')}</td>
-                        <td>{Math.round(position.get('importance') * 100)}%</td>
+                        <td>{player.get('paid_price') ? "$" + player.get('paid_price') : '-'}</td>
+                        <td>${player.get('core').get('target_price')}</td>
                         <td>{player.get('core').get('bye')}</td>
                     </tr>
                 );
             } else {
                 return (
-                    <tr key={index}>
-                        <td>{index+1}</td>
-                        <td>{position.get('position') + position.get('slot')}</td>
+                    <tr key={index} className={cls}>
+                        <td>{index+1+indexOffset}</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
-                        <td>${position.get('target_price')}</td>
-                        <td>${position.get('adjusted_target_price')}</td>
-                        <td>{Math.round(position.get('importance') * 100)}%</td>
+                        <td>-</td>
                         <td>-</td>
                     </tr>
                 );
             }
-        });
+
+        };
+    },
+
+    render() {
+        var starters = this.state.roster.get('starters').map(this.renderPlayer(0));
+        var bench = this.state.roster.get('bench').map(this.renderPlayer(7));
         return (
             <div className="roster">
                 <div className="table-body">
                     <table className="table table-bordered table-hover">
                         <thead>
                             <th></th>
-                            <th>Slot</th>
                             <th>Rank</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>
                             <th>Price Paid</th>
                             <th>Target Price</th>
-                            <th>Adj Target Price</th>
-                            <th>Importance</th>
                             <th>Bye</th>
                         </thead>
                         <tbody>
-                            {roster}
+                            <tr key='break1'><td>Starters</td></tr>
+                            {starters}
+                            <tr key='break2'><td>Bench</td></tr>
+                            {bench}
                         </tbody>
                     </table>
                 </div>
@@ -123,15 +116,12 @@ var Roster = React.createClass({
                     <table className="table table-bordered table-hover">
                         <thead>
                             <th></th>
-                            <th>Slot</th>
                             <th>Rank</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>
                             <th>Price Paid</th>
                             <th>Target Price</th>
-                            <th>Adj Target Price</th>
-                            <th>Importance</th>
                             <th>Bye</th>
                         </thead>
                         <tbody></tbody>

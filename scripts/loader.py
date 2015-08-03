@@ -33,13 +33,13 @@ for line in csv.reader(file, delimiter="\t"):
             position = 'D'
 
         player = {
-            'rank': rank,
+            # 'rank': rank,
             'name': name,
-            'team_name': line[1],
-            'position': position,
-            'position_rank': ''.join([i for i in line[3] if i.isdigit()]),
+            # 'team_name': line[1],
+            # 'position': position,
+            # 'position_rank': ''.join([i for i in line[3] if i.isdigit()]),
             'target_price': target_price,
-            'bye': bye
+            # 'bye': bye
         }
 
     elif args.filename == 'ffa':
@@ -52,7 +52,8 @@ for line in csv.reader(file, delimiter="\t"):
             'position_rank': line[9] if line[9] != 'null' else None,
             'target_price': round(float(line[13])) if line[13] != 'null' else None,
             'dropoff': round(float(line[10])) if line[10] != 'null' else None,
-            'risk': round(float(line[16])) if line[16] != 'null' else None
+            'risk': round(float(line[16])) if line[16] != 'null' else None,
+            'points': round(float(line[5])) if line[5] != 'null' else None
         }
 
     else:

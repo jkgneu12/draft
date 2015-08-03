@@ -8,9 +8,6 @@ var _ = require('underscore');
 
 var PlayerStore = require('../../stores/PlayerStore');
 var TeamStore = require('../../stores/TeamStore');
-var RosteredPlayerStore = require('../../stores/RosteredPlayerStore');
-
-var RosteredPlayer = require('../../models/roster').RosteredPlayer;
 
 var Checkbox = require('../form/Checkbox');
 
@@ -21,7 +18,7 @@ var PlayersList = React.createClass({
         return {
             player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
-            positions: RosteredPlayerStore.getAll(),
+            teams: TeamStore.getAll(),
             filters: {
                 QB: true,
                 RB: true,
@@ -36,7 +33,7 @@ var PlayersList = React.createClass({
     componentDidMount() {
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
-        RosteredPlayerStore.addChangeAllListener(this.onPositionsChange);
+        TeamStore.addChangeAllListener(this.onTeamsChange);
 
 
         $(window).resize(this.resize).resize();
@@ -44,7 +41,7 @@ var PlayersList = React.createClass({
     componentWillUnmount() {
         PlayerStore.removeChangeListener(this.onPlayerChange);
         PlayerStore.removeChangeListener(this.onPlayersChange);
-        RosteredPlayerStore.removeChangeListener(this.onPositionsChange);
+        TeamStore.removeChangeListener(this.onTeamsChange);
     },
 
     componentDidUpdate() {
@@ -63,9 +60,9 @@ var PlayersList = React.createClass({
         });
     },
 
-    onPositionsChange() {
+    onTeamsChange() {
         this.setState({
-            positions: RosteredPlayerStore.getAll()
+            teams: TeamStore.getAll()
         });
     },
 
@@ -113,7 +110,7 @@ var PlayersList = React.createClass({
                 cls = 'info';
             }
 
-            var team = TeamStore.getAll().findWhere({id: player.get('team_id')});
+            var team = self.state.teams.findWhere({id: player.get('team_id')});
 
             var likePlayer = function() {
                 player.get('core').save({
@@ -126,18 +123,9 @@ var PlayersList = React.createClass({
                 likeClass += '-o';
             }
 
-            var slot = Math.ceil(player.get('core').get('position_rank') / 12);
-
-            var position = null;
-            while(position == null && slot > 0) {
-                position = self.state.positions.findWhere({position: player.get('core').get('position'), slot: slot});
-                slot--;
-            }
             if(player == null) {
                 player = new RosteredPlayer();
             }
-
-            var value = player.get('core').get('adp') - player.get('core').get('rank');
 
             return (
                 <tr key={index} className={cls} onClick={selectPlayer}>
@@ -145,13 +133,12 @@ var PlayersList = React.createClass({
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('adp')}</td>
-                    <td>{value}</td>
+                    <td>{player.get('core').get('adp') - player.get('core').get('rank')}</td>
+                    <td>{Math.round(player.get('core').get('points') / player.get('core').get('target_price') * 100)/100}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
                     <td>${player.get('core').get('target_price')}</td>
-                    <td>${position ? position.get('target_price') : ''}</td>
-                    <td>${position ? position.get('adjusted_target_price'): ''}</td>
                     <td>{player.get('core').get('dropoff')}</td>
                     <td>{player.get('core').get('risk')}</td>
                     <td>{player.get('core').get('bye')}</td>
@@ -177,12 +164,11 @@ var PlayersList = React.createClass({
                                 <th>Rank</th>
                                 <th>ADP</th>
                                 <th>Value</th>
+                                <th>P/$</th>
                                 <th>Position</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
-                                <th>Target</th>
-                                <th>Adj Tar</th>
                                 <th>Dropoff</th>
                                 <th>Risk</th>
                                 <th>Bye</th>
@@ -205,12 +191,11 @@ var PlayersList = React.createClass({
                                 <th>Rank</th>
                                 <th>ADP</th>
                                 <th>Value</th>
+                                <th>P/$</th>
                                 <th>Position</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
-                                <th>Target</th>
-                                <th>Adj Tar</th>
                                 <th>Dropoff</th>
                                 <th>Risk</th>
                                 <th>Bye</th>

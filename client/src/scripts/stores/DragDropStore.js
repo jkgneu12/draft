@@ -5,7 +5,7 @@ var assign = require('object-assign');
 var DraftStore = require('./DraftStore');
 var PlayerStore = require('./PlayerStore');
 var TeamStore = require('./TeamStore');
-var RosteredPlayerStore = require('./RosteredPlayerStore');
+var RosterStore = require('./RosterStore');
 
 var _draggedItem = null;
 var _draggedType = null;
@@ -32,12 +32,12 @@ var DragDropStore = assign({}, EventEmitter.prototype, {
                 success: function() {
                     team.fetch({
                         success: function() {
-                            RosteredPlayerStore.refreshAll();
+                            RosterStore.refreshCurrent();
                             var draft = DraftStore.getCurrent();
 
                             var currentTeam = TeamStore.getAll().findWhere({is_turn: true});
                             var nextOrder = currentTeam.get('order') + 1;
-                            if(nextOrder == draft.get('rounds')) {
+                            if(nextOrder == TeamStore.getAll().length) {
                                 nextOrder = 0;
                                 draft.save({round: draft.get('round') + 1})
                             }
