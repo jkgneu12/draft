@@ -38,6 +38,7 @@ var BaseStore = assign({}, EventEmitter.prototype, {
             this._currentModel = this.getAll().findWhere({id: id});
             if(this._currentModel === undefined) {
                 this._currentModel = this._createModel({id: id}, urlParams);
+                this.emitChangeCurrent();
                 var self = this;
                 this._currentModel.fetch({
                     success: function(){

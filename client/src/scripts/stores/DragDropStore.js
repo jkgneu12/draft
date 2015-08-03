@@ -32,7 +32,8 @@ var DragDropStore = assign({}, EventEmitter.prototype, {
                 success: function() {
                     team.fetch({
                         success: function() {
-                            RosterStore.refreshCurrent();
+                            RosterStore.setCurrent(RosterStore.getCurrentId());
+                            //RosterStore.refreshCurrent();
                             var draft = DraftStore.getCurrent();
 
                             var currentTeam = TeamStore.getAll().findWhere({is_turn: true});

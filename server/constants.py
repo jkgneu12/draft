@@ -1,6 +1,6 @@
 THREAD_DEPTH = 0
 PRICE_OFFSET = 0
-MAX_BUDGET = 180
+BUDGET_BUFFER_PCT = .9
 
 
 required_positions = [

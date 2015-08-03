@@ -89,7 +89,7 @@ var Roster = React.createClass({
 
     render() {
         var starters = this.state.roster.get('starters').map(this.renderPlayer(0));
-        var bench = this.state.roster.get('bench').map(this.renderPlayer(7));
+        var bench = this.state.roster.get('bench').map(this.renderPlayer(9));
         return (
             <div className="roster">
                 <div className="table-body">

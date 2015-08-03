@@ -189,7 +189,9 @@ class PlayersHandler(BaseHandler):
             player = q.filter(Player.id == int(id)).first()
             return player.to_dict(['core'])
         else:
-            players = q.options(joinedload('core')).filter(Player.draft_id == int(draft_id)).all()
+            players = q.join(PlayerCore).filter(and_(Player.draft_id == int(draft_id),
+                                                     PlayerCore.rank != None,
+                                                     PlayerCore.target_price != None)).all()
             return {'players': [p.to_dict(['core']) for p in players]}
 
     def _update(self, args):
@@ -283,6 +285,8 @@ class RostersHandler(BaseHandler):
         if len(defs) == 0:
             starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
                                                                                PlayerCore.position == 'D',
+                                                                               PlayerCore.rank != None,
+                                                                               PlayerCore.target_price != None,
                                                                                PlayerCore.target_price <= 1,
                                                                                Player.team_id == None)).order_by(PlayerCore.rank).first())
         else:
@@ -293,6 +297,8 @@ class RostersHandler(BaseHandler):
         if len(kickers) == 0:
             starters.append(self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
                                                                                PlayerCore.position == 'K',
+                                                                               PlayerCore.rank != None,
+                                                                               PlayerCore.target_price != None,
                                                                                PlayerCore.target_price <= 1,
                                                                                Player.team_id == None)).order_by(PlayerCore.rank).first())
         else:
@@ -302,6 +308,8 @@ class RostersHandler(BaseHandler):
 
         bench_fill = self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
                                                                         PlayerCore.position.in_(['RB','WR','TE']),
+                                                                        PlayerCore.rank != None,
+                                                                        PlayerCore.target_price != None,
                                                                         PlayerCore.target_price <= 1,
                                                                         Player.team_id == None)).order_by(PlayerCore.rank).all()
 

@@ -1,6 +1,7 @@
 
 from multiprocessing import Manager
 from multiprocessing.pool import Pool
+import math
 from sqlalchemy import and_
 import constants
 from models import Player, PlayerCore
@@ -24,7 +25,7 @@ def optimize_roster(db, draft_id, starters, money):
 
     filled_slots = [i for i, p in enumerate(starters) if p is not None]
 
-    result = optimize_remaining(available, filled_slots, money, [])
+    result = optimize_remaining(available, filled_slots, math.ceil(money * constants.BUDGET_BUFFER_PCT), [])
 
     print(result[0])
     for player in result[1]:
