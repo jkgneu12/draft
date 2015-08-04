@@ -51,7 +51,10 @@ optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_
          maxCost,
          num_players)
 
-    return(Rglpk_solve_LP(obj = points, mat = A, dir = dir, rhs = b,types = var.types, max = TRUE))
+    bounds <- list(lower = list(ind = seq(1, num.players, 1), val = rep(0, num.players)),
+        upper = list(ind = seq(1, num.players, 1), val = rep(1, num.players)))
+
+    return(Rglpk_solve_LP(obj = points, mat = A, dir = dir, rhs = b,types = var.types, bounds = bounds, max = TRUE))
 }
 """
 

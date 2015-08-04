@@ -202,7 +202,6 @@ class PlayersHandler(BaseHandler):
         self._update_fields(player, self.request_body_json)
 
         if 'paid_price' in self.request_body_json:
-            optimizer.cache = optimizer.manager.dict()
             player.team.money -= int(self.request_body_json['paid_price'])
 
         self.db.add(player)
@@ -221,8 +220,6 @@ class CorePlayersHandler(BaseHandler):
         self.db.add(player)
         self.db.commit()
 
-        optimizer.cache = optimizer.manager.dict()
-
         return player.to_dict()
 
     def _update(self, args):
@@ -234,8 +231,6 @@ class CorePlayersHandler(BaseHandler):
 
         self.db.add(player)
         self.db.commit()
-
-        optimizer.cache = optimizer.manager.dict()
 
         return player.to_dict()
 
