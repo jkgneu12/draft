@@ -199,9 +199,11 @@ class PlayersHandler(BaseHandler):
 
         player = self.db.query(Player).filter(Player.id == int(id)).first()
 
+        assigning = player.team_id is None and 'paid_price' in self.request_body_json
+
         self._update_fields(player, self.request_body_json)
 
-        if 'paid_price' in self.request_body_json:
+        if assigning:
             player.team.money -= int(self.request_body_json['paid_price'])
 
         self.db.add(player)
