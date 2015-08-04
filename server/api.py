@@ -250,18 +250,19 @@ class RostersHandler(BaseHandler):
         bench = []
 
         def place_player(player):
-            idx = 0
-            while idx < len(starters):
-                if player.core.position in constants.required_positions[idx]:
-                    if starters[idx] is None:
-                        starters[idx] = player
-                        return True
-                    elif starters[idx].core.rank > player.core.rank:
-                        other_player = starters[idx]
-                        starters[idx] = player
-                        place_player(other_player)
-                        return True
-                idx+=1
+            if player.starter:
+                idx = 0
+                while idx < len(starters):
+                    if player.core.position in constants.required_positions[idx]:
+                        if starters[idx] is None:
+                            starters[idx] = player
+                            return True
+                        elif starters[idx].core.rank > player.core.rank:
+                            other_player = starters[idx]
+                            starters[idx] = player
+                            place_player(other_player)
+                            return True
+                    idx+=1
             bench.append(player)
             return False
 
@@ -274,7 +275,7 @@ class RostersHandler(BaseHandler):
             place_player(player)
 
         bench_fill = self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
-                                                                        PlayerCore.position.in_(['RB','WR','TE']),
+                                                                        PlayerCore.position.in_(['RB','WR']),
                                                                         PlayerCore.rank != None,
                                                                         PlayerCore.target_price != None,
                                                                         PlayerCore.target_price <= 1,

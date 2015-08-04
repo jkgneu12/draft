@@ -111,6 +111,7 @@ class Player(BaseModel):
     id = Column(Integer, primary_key=True)
 
     paid_price = Column(Integer)
+    starter = Column(Boolean, default=True)
 
     core_id = Column(Integer, ForeignKey('player_core.id'))
     core = relationship(PlayerCore, lazy='subquery')
