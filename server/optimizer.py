@@ -77,8 +77,7 @@ def optimize_roster(db, draft_id, starters, money):
         names.append(player.core.name)
         positions.append(player.core.position)
         points.append(player.core.points)
-        costs.append(player.core.target_price + constants.PRICE_OFFSET)
-
+        costs.append(math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)))
 
     d = {
         'name': robjects.StrVector(names),
@@ -147,7 +146,7 @@ def optimize_roster(db, draft_id, starters, money):
         ks -= 1
         roster_size -= 1
 
-    res = r_code.optimize(dataf, math.ceil(money * constants.BUDGET_BUFFER_PCT), qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, roster_size)
+    res = r_code.optimize(dataf, money, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, roster_size)
 
     res = res[1]
 
@@ -155,7 +154,7 @@ def optimize_roster(db, draft_id, starters, money):
     for idx, count in enumerate(res):
         for i in range(int(count)):
             player = players[idx]
-            print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, player.core.target_price + constants.PRICE_OFFSET, player.core.points, player.core.rank, player.core.adp))
+            print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
             roster.append(player)
 
     return roster

@@ -139,7 +139,7 @@ var PlayersList = React.createClass({
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
-                    <td>${player.get('core').get('target_price')}</td>
+                    <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
                     <td>{player.get('core').get('dropoff')}</td>
                     <td>{player.get('core').get('risk')}</td>
                     <td>{player.get('core').get('bye')}</td>

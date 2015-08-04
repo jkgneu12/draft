@@ -1,8 +1,10 @@
 import datetime
+import math
 from sqlalchemy import Column, String, ForeignKey, Boolean, Float, Text
 from sqlalchemy import Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+import constants
 
 Base = declarative_base()
 
@@ -71,6 +73,11 @@ class PlayerCore(BaseModel):
     points = Column(Integer)
 
     bye = Column(Integer)
+
+    def to_dict(self, deep_fields=[]):
+        ret = super(PlayerCore, self).to_dict(deep_fields)
+        ret['adj_price'] = math.floor(self.target_price + (self.target_price * constants.PRICE_OFFSET))
+        return ret
 
 
 class Draft(BaseModel):

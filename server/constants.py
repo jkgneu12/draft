@@ -1,7 +1,5 @@
 THREAD_DEPTH = 0
-PRICE_OFFSET = 0
-BUDGET_BUFFER_PCT = .9
-
+PRICE_OFFSET = .2
 
 required_positions = [
     ['QB'],

@@ -286,9 +286,4 @@ class RostersHandler(BaseHandler):
         starters = [p.to_dict(['core']) for p in starters if p is not None]
         bench = [p.to_dict(['core']) for p in bench]
 
-        for p in starters:
-            del p['id']
-        for p in bench:
-            del p['id']
-
         return {'roster': {'starters': starters, 'bench': bench}}
