@@ -12,7 +12,7 @@ var PlayerStore = assign({}, BaseStore, {
     _modelClass: Player,
     _collectionClass: Players,
 
-    _value: 0,
+    _value: 1,
 
     setValue: function(value) {
         this._value = value;

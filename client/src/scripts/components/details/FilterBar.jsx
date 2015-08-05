@@ -6,6 +6,7 @@ var React = require('react');
 
 var PlayerStore = require('../../stores/PlayerStore');
 var RosterStore = require('../../stores/RosterStore');
+var TeamStore = require('../../stores/TeamStore');
 
 var Input = require('../form/Input');
 
@@ -23,6 +24,7 @@ var FilterBar = React.createClass({
             player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
             roster: RosterStore.getCurrent(),
+            team: TeamStore.getAll().findWhere({is_owner: true}),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
         };
     },
@@ -31,11 +33,13 @@ var FilterBar = React.createClass({
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
         RosterStore.addChangeCurrentListener(this.onRosterChange);
+        TeamStore.addChangeAllListener(this.onTeamsChange);
     },
     componentWillUnmount() {
         PlayerStore.removeChangeListener(this.onPlayerChange);
         PlayerStore.removeChangeListener(this.onPlayersChange);
         RosterStore.removeChangeListener(this.onRosterChange);
+        TeamStore.removeChangeListener(this.onTeamsChange);
     },
 
     onPlayerChange() {
@@ -57,6 +61,13 @@ var FilterBar = React.createClass({
             roster: RosterStore.getCurrent()
         });
     },
+
+    onTeamsChange() {
+        this.setState({
+            team: TeamStore.getAll().findWhere({is_owner: true})
+        });
+    },
+
 
     updateFilter(text) {
         this.setState({
@@ -97,18 +108,43 @@ var FilterBar = React.createClass({
     },
 
     render() {
-        var maxPoints = '-';
-        var pointsCls = 'label-default';
-        if(this.state.player.get('max_points')[this.state.value]) {
-            maxPoints = this.state.player.get('max_points')[this.state.value] + this.state.player.get('core').get('points');
-            if(maxPoints > this.state.roster.get('max_points')) {
-                pointsCls = 'label-success';
-            }
-            else if(maxPoints < this.state.roster.get('max_points')) {
-                pointsCls = 'label-danger';
+        var lastColumn = null;
+
+        if(this.state.player.get('id')) {
+
+            var playerCount = this.state.team ? this.state.players.where({team_id: this.state.team.get('id')}).length : 0;
+            var maxBid = this.state.team ? this.state.team.get('money') - (15 - playerCount) : 0;
+
+            if (this.state.value > maxBid) {
+                lastColumn = (
+                    <i className='fa fa-times-circle' style={{color: 'red', 'font-size': '2em'}}/>
+                );
+            } else {
+                var maxPoints = '-';
+                var pointsCls = 'label-default';
+                if (this.state.player.get('max_points')[this.state.value]) {
+                    maxPoints = this.state.player.get('max_points')[this.state.value];
+                    if (maxPoints > this.state.roster.get('max_points')) {
+                        pointsCls = 'label-success';
+                    }
+                    else if (maxPoints < this.state.roster.get('max_points')) {
+                        pointsCls = 'label-danger';
+                    }
+                }
+                pointsCls = 'label ' + pointsCls;
+
+                lastColumn = (
+                    <div>
+                        <div className={pointsCls}>
+                            {maxPoints - this.state.roster.get('max_points')}
+                        </div>
+                        <div>
+                            {maxPoints} - {this.state.roster.get('max_points')}
+                        </div>
+                    </div>
+                );
             }
         }
-        pointsCls = 'label ' + pointsCls;
 
         return (
 
@@ -132,10 +168,8 @@ var FilterBar = React.createClass({
                                onChange={this.updateValue}
                                onScroll={this.scrollValue}/>
                     </div>
-                    <div className="col-xs-2">
-                        <span className={pointsCls}>
-                        {maxPoints} / {this.state.roster.get('max_points')}
-                        </span>
+                    <div className="col-xs-2" style={{'text-align': 'center'}}>
+                        {lastColumn}
                     </div>
                 </div>
 

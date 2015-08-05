@@ -185,7 +185,8 @@ class PlayersHandler(BaseHandler):
         q = self.db.query(Player)
         if id is not None:
             player = q.filter(Player.id == int(id)).first()
-            team = self.db.query(Team).filter(Team.is_owner == True).first()
+            team = self.db.query(Team).filter(and_(Team.is_owner == True,
+                                                   Team.draft_id == draft_id)).first()
 
             available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
                                                                                     PlayerCore.target_price != None,
@@ -194,20 +195,21 @@ class PlayersHandler(BaseHandler):
                                                                                     Player.team_id == None,
                                                                                     Player.id != player.id)).order_by(PlayerCore.rank).all()
 
-            min_price = max(player.core.target_price - 20, 1)
+            min_price = 1
             max_price = min(player.core.target_price + 21, team.money)
             manager = Manager()
             max_points = manager.dict()
             pool = Pool(processes=8)
+            starters, bench = get_starters_and_bench(self.db, team.id)
+            place_player(player, starters, bench)
             for m in range(min_price, max_price):
-                starters, bench = get_starters_and_bench(self.db, team.id)
-                place_player(player, starters, bench)
                 pool.apply_async(wrap_optimizer, args=(starters, available_players, team.money - m - (7 - len(bench)), max_points, m))
             pool.close()
             pool.join()
 
             ret = player.to_dict(['core'])
             ret['max_points'] = dict(max_points)
+
             return ret
         else:
             players = q.join(PlayerCore).filter(and_(Player.draft_id == int(draft_id),
@@ -303,11 +305,6 @@ class RostersHandler(BaseHandler):
 
         starters, bench = get_starters_and_bench(self.db, team_id)
 
-        initial_points = 0
-        for player in starters:
-            if player is not None:
-                initial_points += player.core.points
-
         available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
                                                                                 PlayerCore.target_price != None,
                                                                                 PlayerCore.points > 0,
@@ -328,8 +325,6 @@ class RostersHandler(BaseHandler):
 
         while len(bench) < 16-len(starters) and len(bench_fill) > 0:
             bench.append(bench_fill.pop(0))
-
-        points += initial_points
 
         starters = [p.to_dict(['core']) for p in starters if p is not None]
         bench = [p.to_dict(['core']) for p in bench]

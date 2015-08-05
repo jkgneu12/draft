@@ -147,6 +147,9 @@ def optimize_roster(starters, available_players, money):
 
     roster = []
     points = 0
+    for p in starters:
+        if p is not None:
+            points += p.core.points
     for idx, count in enumerate(res):
         for i in range(int(count)):
             player = available_players[idx]
