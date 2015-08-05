@@ -91,8 +91,8 @@ def optimize_roster(starters, available_players, money):
     max_wrs = 3
     min_tes = 1
     max_tes = 2
-    ks = 0 if starters[8] is not None else 1
-    ds = 0 if starters[7] is not None else 1
+    ks = 1
+    ds = 1
     roster_size = 9
 
     if starters[0] is not None:
