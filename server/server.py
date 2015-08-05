@@ -2,13 +2,12 @@
 from sqlalchemy import engine_from_config
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
-
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
-
 from tornado.options import define, options
+
 from api import DraftsHandler, TeamsHandler, PlayersHandler, CorePlayersHandler, RostersHandler
 from models import Base
 

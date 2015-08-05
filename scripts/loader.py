@@ -1,6 +1,6 @@
 import argparse
 import csv
-import json
+
 import requests
 
 parser = argparse.ArgumentParser()

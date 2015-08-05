@@ -1,9 +1,9 @@
 import math
-from sqlalchemy import and_
+
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import SignatureTranslatedAnonymousPackage
+
 import constants
-from models import Player, PlayerCore
 
 r_code = """
 library(Rglpk)

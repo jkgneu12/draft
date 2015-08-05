@@ -1,9 +1,11 @@
 import datetime
 import math
-from sqlalchemy import Column, String, ForeignKey, Boolean, Float, Text
+
+from sqlalchemy import Column, String, ForeignKey, Boolean, Text
 from sqlalchemy import Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+
 import constants
 
 Base = declarative_base()
