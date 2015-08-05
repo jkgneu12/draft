@@ -160,6 +160,23 @@ var PlayersList = React.createClass({
             return <span key={filter} className="filter-checkbox"><Checkbox checked={self.state.filters[filter]} onChange={onChange}/> {filter}</span>;
         });
 
+        var toggleAllFilters = function(val) {
+            Object.keys(self.state.filters).forEach(function(filter) {
+                self.toggleFilter(filter, val);
+            })
+        };
+        var allChecked = true;
+        Object.keys(self.state.filters).forEach(function(filter){
+            if(!self.state.filters[filter]) {
+                allChecked = false;
+            }
+        });
+        var toggleAllCheckbox = (
+            <span key='toggleAll' className="filter-checkbox">
+                <Checkbox checked={allChecked} onChange={toggleAllFilters}/> All
+            </span>);
+        filters.splice(0, 0, toggleAllCheckbox);
+
         return (
             <div className="players-list">
                 <div className="table-body">
