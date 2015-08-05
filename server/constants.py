@@ -1,5 +1,5 @@
 THREAD_DEPTH = 0
-PRICE_OFFSET = .2
+PRICE_OFFSET = .1
 
 required_positions = [
     ['QB'],

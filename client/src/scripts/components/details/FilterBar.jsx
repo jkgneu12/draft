@@ -5,6 +5,7 @@
 var React = require('react');
 
 var PlayerStore = require('../../stores/PlayerStore');
+var RosterStore = require('../../stores/RosterStore');
 
 var Input = require('../form/Input');
 
@@ -21,6 +22,7 @@ var FilterBar = React.createClass({
             value: PlayerStore.getValue(),
             player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
+            roster: RosterStore.getCurrent(),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
         };
     },
@@ -28,10 +30,12 @@ var FilterBar = React.createClass({
    componentDidMount() {
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayersChange);
+        RosterStore.addChangeCurrentListener(this.onRosterChange);
     },
     componentWillUnmount() {
         PlayerStore.removeChangeListener(this.onPlayerChange);
         PlayerStore.removeChangeListener(this.onPlayersChange);
+        RosterStore.removeChangeListener(this.onRosterChange);
     },
 
     onPlayerChange() {
@@ -45,6 +49,12 @@ var FilterBar = React.createClass({
         this.setState({
             players: PlayerStore.getAll(),
             cores: PlayerStore.getAll().map(function(player){return player.get('core')})
+        });
+    },
+
+    onRosterChange() {
+        this.setState({
+            roster: RosterStore.getCurrent()
         });
     },
 
@@ -87,11 +97,18 @@ var FilterBar = React.createClass({
     },
 
     render() {
-
-        var pointsPerDollar = '-';
-        if(this.state.player && this.state.value > 0) {
-            pointsPerDollar = Math.round(this.state.player.get('core').get('points') / this.state.value * 100)/100;
+        var maxPoints = '-';
+        var pointsCls = 'label-default';
+        if(this.state.player.get('max_points')[this.state.value]) {
+            maxPoints = this.state.player.get('max_points')[this.state.value] + this.state.player.get('core').get('points');
+            if(maxPoints > this.state.roster.get('max_points')) {
+                pointsCls = 'label-success';
+            }
+            else if(maxPoints < this.state.roster.get('max_points')) {
+                pointsCls = 'label-danger';
+            }
         }
+        pointsCls = 'label ' + pointsCls;
 
         return (
 
@@ -116,7 +133,9 @@ var FilterBar = React.createClass({
                                onScroll={this.scrollValue}/>
                     </div>
                     <div className="col-xs-2">
-                        {pointsPerDollar}
+                        <span className={pointsCls}>
+                        {maxPoints} / {this.state.roster.get('max_points')}
+                        </span>
                     </div>
                 </div>
 

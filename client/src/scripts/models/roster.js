@@ -15,7 +15,8 @@ var Roster = BaseModel.extend({
     _baseUrl: Urls.roster,
     defaults: {
         starters: new Players(),
-        bench: new Players()
+        bench: new Players(),
+        max_points: 0
     },
     parse: function(response) {
         var roster = response.roster;

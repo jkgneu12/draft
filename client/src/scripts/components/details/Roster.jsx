@@ -38,6 +38,7 @@ var Roster = React.createClass({
 
     selectPlayer(player) {
         PlayerStore.setCurrent(player.get('id'));
+        PlayerStore.refreshCurrent();
     },
     startPlayer(player) {
         PlayerStore.getAll().findWhere({id: player.get('id')}).save({

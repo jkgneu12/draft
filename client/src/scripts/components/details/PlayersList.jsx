@@ -68,6 +68,7 @@ var PlayersList = React.createClass({
 
     selectPlayer(player) {
         PlayerStore.setCurrent(player.get('id'));
+        PlayerStore.refreshCurrent();
     },
 
     toggleFilter(filter, val) {
@@ -132,8 +133,8 @@ var PlayersList = React.createClass({
                     <td><i className={likeClass} onClick={likePlayer} /></td>
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
-                    <td>{player.get('core').get('adp')}</td>
-                    <td>{player.get('core').get('adp') - player.get('core').get('rank')}</td>
+                    <td>{player.get('core').get('ecr')}</td>
+                    <td>{player.get('core').get('ecr') - player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('points')}</td>
                     <td>{Math.round(player.get('core').get('points') / Math.max(player.get('core').get('target_price'), 1) * 100)/100}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
@@ -163,7 +164,7 @@ var PlayersList = React.createClass({
                                 <th>Like</th>
                                 <th>Owner</th>
                                 <th>Rank</th>
-                                <th>ADP</th>
+                                <th>ECR</th>
                                 <th>Value</th>
                                 <th>Points</th>
                                 <th>P/$</th>
@@ -191,7 +192,7 @@ var PlayersList = React.createClass({
                                 <th>Like</th>
                                 <th>Owner</th>
                                 <th>Rank</th>
-                                <th>ADP</th>
+                                <th>ECR</th>
                                 <th>Value</th>
                                 <th>Points</th>
                                 <th>P/$</th>

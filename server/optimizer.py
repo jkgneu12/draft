@@ -61,19 +61,14 @@ optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_
 r_code = SignatureTranslatedAnonymousPackage(r_code, "r_code")
 
 
-def optimize_roster(db, draft_id, starters, money):
-    players = db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
-                                                             PlayerCore.target_price != None,
-                                                             PlayerCore.points > 0,
-                                                             Player.draft_id == draft_id,
-                                                             Player.team_id == None)).order_by(PlayerCore.rank).all()
+def optimize_roster(starters, available_players, money):
 
     names = []
     positions = []
     points = []
     costs = []
 
-    for player in players:
+    for player in available_players:
         names.append(player.core.name)
         positions.append(player.core.position)
         points.append(player.core.points)
@@ -151,10 +146,12 @@ def optimize_roster(db, draft_id, starters, money):
     res = res[1]
 
     roster = []
+    points = 0
     for idx, count in enumerate(res):
         for i in range(int(count)):
-            player = players[idx]
+            player = available_players[idx]
+            points += player.core.points
             print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
             roster.append(player)
 
-    return roster
+    return roster, points
