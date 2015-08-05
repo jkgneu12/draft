@@ -5,6 +5,7 @@
 var React = require('react');
 
 var PlayerStore = require('../../stores/PlayerStore');
+var DraftStore = require('../../stores/DraftStore');
 
 var DragDrop = require('../mixins/DragDrop');
 
@@ -16,7 +17,8 @@ var TeamListItem = React.createClass({
     getInitialState() {
         return {
             team: this.props.team,
-            players: PlayerStore.getAll()
+            players: PlayerStore.getAll(),
+            draft: DraftStore.getCurrent()
         };
     },
 
@@ -29,14 +31,22 @@ var TeamListItem = React.createClass({
     componentDidMount() {
         PlayerStore.addChangeCurrentListener(this.onPlayerChange);
         PlayerStore.addChangeAllListener(this.onPlayerChange);
+        DraftStore.addChangeCurrentListener(this.onDraftChange);
     },
     componentWillUnmount() {
         PlayerStore.removeChangeListener(this.onPlayerChange);
+        DraftStore.removeChangeListener(this.onDraftChange);
     },
 
     onPlayerChange() {
         this.setState({
             players: PlayerStore.getAll()
+        });
+    },
+
+    onDraftChange() {
+        this.setState({
+            draft: DraftStore.getCurrent()
         });
     },
 
@@ -62,8 +72,8 @@ var TeamListItem = React.createClass({
 
         var needed = {
             'QB': 1,
-            'RB': 4,
-            'WR': 4,
+            'RB': 2,
+            'WR': 2,
             'TE': 1,
             'D': 1,
             'K': 1
@@ -110,21 +120,23 @@ var TeamListItem = React.createClass({
             className += "  panel-default";
         }
 
+        var maxBudget = this.state.draft.get('max_budget');
+
         var money = parseInt(this.state.team.get('money'));
         var moneyClass = 'label label-';
-        if(money > 160) {
+        if(money > maxBudget * .75) {
             moneyClass += 'success';
-        }else if(money > 100) {
+        }else if(money > maxBudget * .5) {
             moneyClass += 'info';
-        }else if(money > 20) {
+        }else if(money > maxBudget* .25) {
             moneyClass += 'warning';
         }else {
             moneyClass += 'danger';
         }
 
-        var pointsPerDollar =  Math.round((money < 200 ? points / (200 - money) : 0)*100)/100;
+        var pointsPerDollar =  Math.round((money < maxBudget ? points / (maxBudget - money) : 0)*100)/100;
 
-        var maxBid = this.state.team.get('money') - (15-playerCount);
+        var maxBid = this.state.team.get('money') - (this.state.draft.get('team_size') - 1 - playerCount);
 
         return (
             <div className={className}

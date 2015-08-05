@@ -105,9 +105,14 @@ var PlayersList = React.createClass({
             };
             var cls = '';
             if(player.get('team_id')) {
-                cls = 'warning';
+                var ownerTeam = self.state.teams.findWhere({is_owner: true});
+                if(ownerTeam && player.get('team_id') == ownerTeam.get('id')) {
+                    cls = 'success';
+                } else {
+                    cls = 'warning';
+                }
             }
-            if(self.state.player.get('id') === player.get('id')) {
+            else if(self.state.player.get('id') === player.get('id')) {
                 cls = 'info';
             }
 

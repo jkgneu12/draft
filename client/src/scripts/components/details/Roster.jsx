@@ -40,9 +40,9 @@ var Roster = React.createClass({
         PlayerStore.setCurrent(player.get('id'));
         PlayerStore.refreshCurrent();
     },
-    startPlayer(player) {
+    benchPlayer(player) {
         PlayerStore.getAll().findWhere({id: player.get('id')}).save({
-            starter: !player.get('starter')
+            bench: !player.get('bench')
         }, {
             success: function() {
                 RosterStore.refreshCurrent();
@@ -71,21 +71,21 @@ var Roster = React.createClass({
             var selectPlayer = function(){
                 self.selectPlayer(player);
             };
-            var startPlayer = function(){
-                self.startPlayer(player);
+            var benchPlayer = function(){
+                self.benchPlayer(player);
             };
             var cls = '';
-            var starter = '-';
+            var bench = '-';
             if(player.get('paid_price')) {
                 cls = 'success';
-                starter = <i className={player.get('starter') ? 'fa fa-check-square-o' : 'fa fa-square-o'} onClick={startPlayer}/>;
+                bench = <i className={player.get('bench') ? 'fa fa-check-square-o' : 'fa fa-square-o'} onClick={benchPlayer}/>;
             }
             if(player.get('core').get('name')) {
                 return (
                     <tr key={index} className={cls} onClick={selectPlayer}>
                         <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
-                        <td>{starter}</td>
+                        <td>{bench}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
@@ -123,7 +123,7 @@ var Roster = React.createClass({
                         <thead>
                             <th></th>
                             <th>Rank</th>
-                            <th>Starter</th>
+                            <th>Benched</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>
@@ -144,7 +144,7 @@ var Roster = React.createClass({
                         <thead>
                             <th></th>
                             <th>Rank</th>
-                            <th>Starter</th>
+                            <th>Benched</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>

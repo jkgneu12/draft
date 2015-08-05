@@ -96,7 +96,7 @@ class Team(BaseModel):
     id = Column(Integer, primary_key=True)
 
     name = Column(String(128))
-    money = Column(Integer, default=200)
+    money = Column(Integer, default=constants.MAX_BUDGET)
     is_owner = Column(Boolean)
     is_turn = Column(Boolean)
     order = Column(Integer)
@@ -112,7 +112,7 @@ class Player(BaseModel):
     id = Column(Integer, primary_key=True)
 
     paid_price = Column(Integer)
-    starter = Column(Boolean, default=True)
+    bench = Column(Boolean, default=False)
 
     core_id = Column(Integer, ForeignKey('player_core.id'))
     core = relationship(PlayerCore, lazy='subquery')

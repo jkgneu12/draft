@@ -162,6 +162,12 @@ td, th {
     position: relative;
 
     .success {
+        text-decoration: line-through;
+    }
+    .warning {
+        text-decoration: line-through;
+    }
+    .info {
         font-weight: bold;
     }
     .filters {
