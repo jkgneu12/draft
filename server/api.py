@@ -226,12 +226,20 @@ class PlayersHandler(BaseHandler):
 
         player = self.db.query(Player).filter(Player.id == int(id)).first()
 
-        assigning = player.team_id is None and 'paid_price' in self.request_body_json
+        price_paid = int(self.request_body_json['paid_price']) if 'paid_price' in self.request_body_json else 0
+
+        if player.team is not None:
+            player.team.money += player.paid_price
 
         self._update_fields(player, self.request_body_json)
 
-        if assigning:
-            player.team.money -= int(self.request_body_json['paid_price'])
+        self.db.add(player)
+        self.db.commit()
+
+        player = self.db.query(Player).filter(Player.id == int(id)).first()
+
+        if player.team is not None:
+            player.team.money -= price_paid
 
         self.db.add(player)
         self.db.commit()
