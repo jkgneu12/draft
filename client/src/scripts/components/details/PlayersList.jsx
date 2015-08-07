@@ -140,7 +140,7 @@ var PlayersList = React.createClass({
                     <td>{player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('ecr')}</td>
                     <td>{player.get('core').get('ecr') - player.get('core').get('rank')}</td>
-                    <td>{player.get('core').get('points')}</td>
+                    <td>{Math.round(player.get('core').get('points') / 16 * 10)/10}</td>
                     <td>{Math.round(player.get('core').get('points') / Math.max(player.get('core').get('target_price'), 1) * 100)/100}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>

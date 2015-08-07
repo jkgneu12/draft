@@ -132,14 +132,15 @@ var FilterBar = React.createClass({
                     <i className='fa fa-times-circle' style={{color: 'red', 'fontSize': '2em'}}/>
                 );
             } else {
-                var maxPoints = '-';
+                var playerMaxPoints = '-';
+                var rosterMaxPoints = this.state.roster.get('max_points') / 16;
                 var pointsCls = 'label-default';
                 if (this.state.player.get('max_points')[this.state.value]) {
-                    maxPoints = this.state.player.get('max_points')[this.state.value];
-                    if (maxPoints > this.state.roster.get('max_points')) {
+                    playerMaxPoints = this.state.player.get('max_points')[this.state.value] / 16;
+                    if (playerMaxPoints > rosterMaxPoints) {
                         pointsCls = 'label-success';
                     }
-                    else if (maxPoints < this.state.roster.get('max_points')) {
+                    else if (playerMaxPoints < rosterMaxPoints) {
                         pointsCls = 'label-danger';
                     }
                 }
@@ -148,10 +149,10 @@ var FilterBar = React.createClass({
                 lastColumn = (
                     <div>
                         <div className={pointsCls}>
-                            {maxPoints - this.state.roster.get('max_points')}
+                            {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
                         </div>
                         <div>
-                            {maxPoints} - {this.state.roster.get('max_points')}
+                            {Math.round(playerMaxPoints*100)/100} - {Math.round(rosterMaxPoints*100)/100}
                         </div>
                     </div>
                 );
