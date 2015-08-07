@@ -125,12 +125,40 @@ var CreatePage = React.createClass({
             var setOwner = function(checked) {
                 self.setOwner(index, checked);
             };
+            var moveDown = function() {
+                self.state.teams.splice(index, 1);
+                self.state.teams.splice(index+1, 0, team);
+                self.setState({teams:self.state.teams});
+            };
+            var moveUp = function() {
+                self.state.teams.splice(index, 1);
+                self.state.teams.splice(index-1, 0, team);
+                self.setState({teams:self.state.teams});
+            };
+            var downButton = null;
+            if(index < self.state.teams.length-1) {
+                downButton = (
+                    <button className="btn btn-info btn-xs" style={{float:'left'}} onClick={moveDown}>
+                        <i className="fa fa-arrow-down"></i>
+                    </button>
+                );
+            }
+            var upButton = null;
+            if(index > 0) {
+                upButton = (
+                    <button className="btn btn-info btn-xs" style={{float:'right'}}  onClick={moveUp}>
+                        <i className="fa fa-arrow-up"></i>
+                    </button>
+                );
+            }
+
             return (
                 <tr key={index}>
                     <td className="col-xs-2">{index}</td>
-                    <td className="col-xs-8">{team.name}</td>
                     <td className="col-xs-2"><Checkbox checked={team.is_owner} onChange={setOwner}/></td>
-                    <td className="col-xs-2"><button className="btn btn-danger btn-sm" onClick={deleteTeam}><i className="fa fa-close"></i></button></td>
+                    <td className="col-xs-4">{team.name}</td>
+                    <td className="col-xs-2"><button className="btn btn-danger btn-xs" onClick={deleteTeam}><i className="fa fa-close"></i></button></td>
+                    <td className="col-xs-2">{downButton} {upButton}</td>
                 </tr>
             );
         });
@@ -169,9 +197,10 @@ var CreatePage = React.createClass({
                             <table className="table">
                                 <thead>
                                     <th className="col-xs-2">Order</th>
-                                    <th className="col-xs-8">Name</th>
-                                    <th className="col-xs-2">Is Owner</th>
+                                    <th className="col-xs-2">Owner</th>
+                                    <th className="col-xs-4">Name</th>
                                     <th className="col-xs-2">Delete</th>
+                                    <th className="col-xs-2">Reorder</th>
                                 </thead>
                                 <tbody>
                                     {teams}
