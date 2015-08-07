@@ -18,7 +18,8 @@ var TeamListItem = React.createClass({
         return {
             team: this.props.team,
             players: PlayerStore.getAll(),
-            draft: DraftStore.getCurrent()
+            draft: DraftStore.getCurrent(),
+            expanded: false
         };
     },
 
@@ -47,6 +48,12 @@ var TeamListItem = React.createClass({
     onDraftChange() {
         this.setState({
             draft: DraftStore.getCurrent()
+        });
+    },
+
+    toggleExpand() {
+        this.setState({
+            expanded: !this.state.expanded
         });
     },
 
@@ -138,12 +145,44 @@ var TeamListItem = React.createClass({
 
         var maxBid = this.state.team.get('money') - (this.state.draft.get('team_size') - 1 - playerCount);
 
+        var expandedContent = null;
+        if(this.state.expanded) {
+            var players = this.state.players.where({team_id: this.state.team.get('id')}).map(function(player){
+                return (
+                    <tr key={player.get('id')} >
+                        <td>{player.get('core').get('rank')}</td>
+                        <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
+                        <td>{player.get('core').get('name')}</td>
+                        <td>{player.get('core').get('team_name')}</td>
+                        <td>{player.get('paid_price') ? "$" + player.get('paid_price') : '-'}</td>
+                        <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
+                    </tr>
+                );
+            });
+            expandedContent = (
+                <table className='table table-bordered'>
+                    <thead>
+                        <th>Rank</th>
+                        <th>Pos</th>
+                        <th>Name</th>
+                        <th>Team</th>
+                        <th>Paid</th>
+                        <th>Target</th>
+                    </thead>
+                    <tbody>
+                        {players}
+                    </tbody>
+                </table>
+            );
+        }
+
         return (
             <div className={className}
                  onDragStart={this.onDrag}
                  onDragOver={this.onDragOver}
                  onDragLeave={this.onDragLeave}
-                 onDrop={this.onDrop}>
+                 onDrop={this.onDrop}
+                 onClick={this.toggleExpand}>
 
                 <div className="panel-heading">
                     <h4>
@@ -154,6 +193,7 @@ var TeamListItem = React.createClass({
                 </div>
                 <div className="panel-body">
                     {positions}
+                    {expandedContent}
                 </div>
             </div>
         );
