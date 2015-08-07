@@ -60,7 +60,7 @@ for line in csv.reader(file, delimiter="\t"):
             'target_price': round(float(line[13])) if line[13] != 'null' else 0,
             'dropoff': round(float(line[10])) if line[10] != 'null' else None,
             'risk': round(float(line[16])) if line[16] != 'null' else None,
-            'points': round(float(line[5])) if line[5] != 'null' else None
+            'points': round(float(line[15])) if line[15] != 'null' else None
         }
 
         if player['name'] in ffa_name_mappings:
