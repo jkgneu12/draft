@@ -152,7 +152,7 @@ var FilterBar = React.createClass({
                             {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
                         </div>
                         <div>
-                            {Math.round(playerMaxPoints*100)/100} - {Math.round(rosterMaxPoints*100)/100}
+                            {Math.round(playerMaxPoints*100)/100} vs. {Math.round( this.state.player.get('max_points')[0] / 16*100)/100}
                         </div>
                     </div>
                 );

@@ -140,8 +140,6 @@ var TeamListItem = React.createClass({
             moneyClass += 'danger';
         }
 
-        var pointsPerDollar =  Math.round((money < maxBudget ? points / (maxBudget - money) : 0)*100)/100;
-
         var maxBid = this.state.team.get('money') - (this.state.draft.get('team_size') - 1 - playerCount);
 
         var expandedContent = null;
@@ -186,7 +184,7 @@ var TeamListItem = React.createClass({
                 <div className="panel-heading">
                     <h4>
                         <span>{this.state.team.get('name')}</span> &nbsp;
-                        <small>{pointsPerDollar}</small>
+                        <small>{Math.round(points / 16*10)/10}</small>
                         <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>

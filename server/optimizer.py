@@ -154,7 +154,7 @@ def optimize_roster(starters, available_players, money):
         for i in range(int(count)):
             player = available_players[idx]
             points += player.core.points
-            print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
+            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
             roster.append(player)
 
     return roster, points

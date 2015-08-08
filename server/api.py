@@ -205,6 +205,7 @@ class PlayersHandler(BaseHandler):
             max_points = manager.dict()
             pool = Pool(processes=8)
             starters, bench = get_starters_and_bench(self.db, team.id)
+            max_points[0] = optimizer.optimize_roster(starters, available_players, team.money - (constants.BENCH_SIZE - len(bench)))[1]
             place_player(player, starters, bench)
             for m in range(min_price, max_price):
                 pool.apply_async(wrap_optimizer, args=(starters, available_players, team.money - m - (constants.BENCH_SIZE - len(bench)), max_points, m))

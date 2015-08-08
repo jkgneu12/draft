@@ -86,6 +86,7 @@ var Roster = React.createClass({
                         <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
                         <td>{bench}</td>
+                        <td>{Math.round(player.get('core').get('points') / 16 * 10)/10}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
@@ -106,6 +107,7 @@ var Roster = React.createClass({
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
+                        <td>-</td>
                     </tr>
                 );
             }
@@ -116,6 +118,11 @@ var Roster = React.createClass({
     render() {
         var starters = this.state.roster.get('starters').map(this.renderPlayer(0));
         var bench = this.state.roster.get('bench').map(this.renderPlayer(9));
+
+        var totalPoints = 0;
+        this.state.roster.get('starters').forEach(function(player){
+            totalPoints += player.get('core').get('points');
+        });
         return (
             <div className="roster">
                 <div className="table-body">
@@ -124,6 +131,7 @@ var Roster = React.createClass({
                             <th></th>
                             <th>Rank</th>
                             <th>Benched</th>
+                            <th>Points</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>
@@ -132,7 +140,7 @@ var Roster = React.createClass({
                             <th>Bye</th>
                         </thead>
                         <tbody>
-                            <tr key='break1'><td>Starters</td></tr>
+                            <tr key='break1'><td>Starters</td><td></td><td></td><td>{Math.round(totalPoints / 16 * 10)/10}</td></tr>
                             {starters}
                             <tr key='break2'><td>Bench</td></tr>
                             {bench}
@@ -145,6 +153,7 @@ var Roster = React.createClass({
                             <th></th>
                             <th>Rank</th>
                             <th>Benched</th>
+                            <th>Points</th>
                             <th>Position</th>
                             <th>Name</th>
                             <th>Team</th>
