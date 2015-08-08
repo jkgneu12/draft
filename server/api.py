@@ -1,5 +1,6 @@
 from multiprocessing.pool import Pool
 from multiprocessing import Manager
+import math
 
 from sqlalchemy import and_
 import tornado
@@ -329,15 +330,16 @@ class RostersHandler(BaseHandler):
         for player in optimal_roster:
             place_player(player, starters, bench)
 
-        bench_fill = self.db.query(Player).join(PlayerCore).filter(and_(Player.draft_id == draft_id,
-                                                                        PlayerCore.position.in_(['RB','WR']),
-                                                                        PlayerCore.rank != None,
-                                                                        PlayerCore.target_price != None,
-                                                                        PlayerCore.target_price <= 1,
-                                                                        Player.team_id == None)).order_by(PlayerCore.rank).all()
+        money_spent = 0
+        available_bench = list(available_players)
+        for p in starters:
+            if p in available_bench:
+                money_spent += max(1, math.floor(p.core.target_price + (p.core.target_price * constants.PRICE_OFFSET)))
+                available_bench.remove(p)
 
-        while len(bench) < constants.TEAM_SIZE-len(starters) and len(bench_fill) > 0:
-            bench.append(bench_fill.pop(0))
+        optimal_bench = optimizer.optimize_bench(bench, available_players, owner_team.money - money_spent)[0]
+        for player in optimal_bench:
+            place_player(player, starters, bench)
 
         starters = [p.to_dict(['core']) for p in starters if p is not None]
         bench = [p.to_dict(['core']) for p in bench]

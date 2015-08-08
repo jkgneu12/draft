@@ -31,7 +31,7 @@ var Input = React.createClass({
         if(this.props.onScroll) {
             var self = this;
             $(this.getDOMNode()).mousewheel(function(event) {
-                console.log(event.deltaX, event.deltaY, event.deltaFactor);
+                //console.log(event.deltaX, event.deltaY, event.deltaFactor);
                 self.props.onScroll(event.deltaX, event.deltaY, event.deltaFactor);
             });
         }

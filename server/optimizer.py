@@ -7,7 +7,7 @@ import constants
 
 r_code = """
 library(Rglpk)
-optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, num_players) {
+optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, num_players) {
 
     points=optimizeData$points
     playerCost=optimizeData$cost
@@ -16,6 +16,7 @@ optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_
     var.types <- rep("I", num.players)
 
     A <- rbind(as.numeric(optimizeData$pos == "QB"), # num QB
+             as.numeric(optimizeData$pos == "QB"), # num QB
              as.numeric(optimizeData$pos == "RB"), # num RB
              as.numeric(optimizeData$pos == "RB"), # num RB
              as.numeric(optimizeData$pos == "WR"), # num WR
@@ -27,7 +28,8 @@ optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_
              playerCost,                           # total cost
              rep(1,num.players))                   # num of players in starting lineup
 
-    dir <- c("==",
+    dir <- c(">=",
+           "<=",
            ">=",
            "<=",
            ">=",
@@ -39,7 +41,8 @@ optimize <- function(optimizeData, maxCost, qbs, min_rbs, max_rbs, min_wrs, max_
            "<=",
            "==")
 
-    b <- c(qbs,
+    b <- c(min_qbs,
+         max_qbs,
          min_rbs,
          max_rbs,
          min_wrs,
@@ -72,7 +75,7 @@ def optimize_roster(starters, available_players, money):
         names.append(player.core.name)
         positions.append(player.core.position)
         points.append(player.core.points)
-        costs.append(math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)))
+        costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
 
     d = {
         'name': robjects.StrVector(names),
@@ -141,7 +144,7 @@ def optimize_roster(starters, available_players, money):
         ks -= 1
         roster_size -= 1
 
-    res = r_code.optimize(dataf, money, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, roster_size)
+    res = r_code.optimize(dataf, money, qbs, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, roster_size)
 
     res = res[1]
 
@@ -158,3 +161,66 @@ def optimize_roster(starters, available_players, money):
             roster.append(player)
 
     return roster, points
+
+
+def optimize_bench(bench, available_players, money):
+
+    names = []
+    positions = []
+    points = []
+    costs = []
+
+    for player in available_players:
+        names.append(player.core.name)
+        positions.append(player.core.position)
+        pts = player.core.points
+        if player.core.position == 'QB':
+            pts /= 3
+        points.append(pts)
+        costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
+
+    d = {
+        'name': robjects.StrVector(names),
+        'player': robjects.StrVector(names),
+        'pos': robjects.StrVector(positions),
+        'points': robjects.IntVector(points),
+        'cost': robjects.IntVector(costs)
+
+    }
+    dataf = robjects.DataFrame(d)
+
+    min_qbs = 0
+    max_qbs = 1
+    min_rbs = 0
+    max_rbs = constants.BENCH_SIZE
+    min_wrs = 0
+    max_wrs = constants.BENCH_SIZE
+    min_tes = 0
+    max_tes = 1
+    ks = 0
+    ds = 0
+    bench_size = constants.BENCH_SIZE - len(bench)
+
+    for player in bench:
+        if player.core.position == 'QB':
+            max_qbs = 0
+        if player.core.position == 'TE':
+            max_tes = 0
+
+    res = r_code.optimize(dataf, money, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, bench_size)
+
+    res = res[1]
+
+    bench = []
+    points = 0
+    for p in bench:
+        if p is not None:
+            points += p.core.points
+    for idx, count in enumerate(res):
+        for i in range(int(count)):
+            player = available_players[idx]
+            points += player.core.points
+            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
+            bench.append(player)
+
+    return bench, points

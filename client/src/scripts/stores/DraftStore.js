@@ -12,5 +12,6 @@ var DraftStore = assign({}, BaseStore, {
     _modelClass: Draft,
     _collectionClass: Drafts
 });
+DraftStore.setMaxListeners(100);
 
 module.exports = DraftStore;
