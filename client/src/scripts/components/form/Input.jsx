@@ -12,22 +12,24 @@ var Input = React.createClass({
         return {value: this.props.value};
     },
     componentDidMount() {
-        $(this.getDOMNode()).
-            bind('typeahead:selected', this.typeaheadSelected).
-            bind('typeahead:autocompleted', this.typeaheadCompleted);
+        if(this.props.autocompletes) {
+            $(this.getDOMNode()).
+                bind('typeahead:selected', this.typeaheadSelected).
+                bind('typeahead:autocompleted', this.typeaheadCompleted);
 
-        $(this.getDOMNode()).typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'autocompletes',
-                displayKey: this.getAutocompleteDisplay,
-                source: this.substringMatcher,
-                limit: 20
-            }
-        );
+            $(this.getDOMNode()).typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'autocompletes',
+                    displayKey: this.getAutocompleteDisplay,
+                    source: this.substringMatcher,
+                    limit: 20
+                }
+            );
+        }
         if(this.props.onScroll) {
             var self = this;
             $(this.getDOMNode()).mousewheel(function(event) {
@@ -38,7 +40,9 @@ var Input = React.createClass({
 
     },
     componentWillUnmount() {
-        $(this.getDOMNode()).typeahead('destroy');
+        if(this.props.autocompletes) {
+            $(this.getDOMNode()).typeahead('destroy');
+        }
     },
     componentWillReceiveProps(nextProps) {
         this.setState({value: nextProps.value});
@@ -51,7 +55,8 @@ var Input = React.createClass({
                    value={this.state.value}
                    placeholder={this.props.placeholder}
                    onChange={this.onChange}
-                   onKeyUp={this.onKeyUp}/>
+                   onKeyUp={this.onKeyUp}
+                   onKeyDown={this.onKeyDown}/>
         );
     },
     onChange(event) {
@@ -61,6 +66,14 @@ var Input = React.createClass({
     onKeyUp(event) {
         if(event.which === 13 && this.props.onEnter) {//enter
             this.props.onEnter();
+        }
+    },
+    onKeyDown(event) {
+        if(event.which === 38 && this.props.onScroll) {//up
+            this.props.onScroll(0,1);
+        }
+        if(event.which === 40 && this.props.onScroll) {//down
+            this.props.onScroll(0,-1);
         }
     },
     substringMatcher(q, cb) {
