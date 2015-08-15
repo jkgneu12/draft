@@ -1,11 +1,12 @@
 $icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 $fa-font-path: "../../node_modules/font-awesome/fonts";
 //
-//$brand-primary:         rgb(75,125,165) !default;
-//$brand-success:         rgb(107,191,184) !default;
-//$brand-info:            rgb(216,233,246) !default;
-//$brand-warning:         rgb(235,173,40) !default;
-//$brand-danger:          rgb(191,63,42) !default;
+$brand-primary:         #337BB7 !default;
+$brand-success:         #2BBE83 !default;
+$brand-info:            #4442C2 !default;
+$brand-warning:         #FFCF3A !default;
+$brand-danger:          #FF753A !default;
+
 
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
 @import "../../node_modules/font-awesome/scss/font-awesome";
@@ -13,16 +14,17 @@ $fa-font-path: "../../node_modules/font-awesome/fonts";
 
 $font-family:'Roboto',arial,sans-serif;
 
-$header-height: 20px;
+$header-height: 30px;
 $header-color: $brand-primary;
-$header-text-color: white;
+$header-text-color: $brand-danger;
 
-$footer-height: 30px;
-$footer-color: transparent;
-$footer-text-color: black;
+$footer-height: 20px;
+$footer-color: $brand-primary;
+$footer-text-color: $brand-danger;
 
 $soft-border-color: rgb(231, 231, 231);
 $hard-border-color: rgba(100,100,100,0.5);
+$soft-background-color: rgb(245, 245, 245);
 
 $text-color: #333;
 

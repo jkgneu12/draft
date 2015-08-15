@@ -22,9 +22,18 @@ body {
     color: $text-color;
 }
 
+thead {
+    background-color: $soft-background-color;
+}
+
 td, th {
     padding: 2px !important;
     text-align: center !important;
+}
+
+input {
+    background-color: rgba(100,100,100,.9) !important;
+    color: white !important;;
 }
 
 #content {
@@ -38,7 +47,8 @@ td, th {
     color: $header-text-color;
     height: $header-height;
     font-size: 18px;
-    line-height: 35px;
+    font-weight: bold;
+    line-height: 26px;
     padding: 2px 5px;
 }
 
@@ -50,8 +60,8 @@ td, th {
     color: $footer-text-color;
     height: $footer-height;
     font-size: 12px;
-    line-height: 35px;
-    padding: 2px 5px;
+    line-height: 19px;
+    padding: 0px 5px;
     width: 100%;
     text-align: right;
 }
@@ -79,6 +89,7 @@ td, th {
     .right-side {
         overflow: hidden;
         padding-left: 0;
+        background-color: $soft-background-color;
     }
 }
 
@@ -131,6 +142,7 @@ td, th {
 .filter-bar {
     height: $filterBarHeight;
     border: solid thin $soft-border-color;
+    background-color: $soft-background-color;
 
     input {
         font-size: 18px;
@@ -174,7 +186,7 @@ td, th {
         position: absolute;
         top: 0;
         width: 100%;
-        background: white;
+        background-color: $soft-border-color;
         .filter-checkbox {
             margin: 0 20px;
         }
@@ -188,12 +200,12 @@ td, th {
     }
     .table-body {
         top: 20px;
-        @include calc(height, unquote("100% - 39px"));
+        @include calc(height, unquote("100% - 20px"));
     }
 }
 
 .roster {
-    @include calc(height, unquote("#{$rosterHeight} - #{$playerDetailsHeight}"));
+    @include calc(height, unquote("#{$rosterHeight} - 91px"));
     overflow: hidden;
     position: relative;
 

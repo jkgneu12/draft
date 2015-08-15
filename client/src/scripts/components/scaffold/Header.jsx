@@ -9,7 +9,7 @@ var Header = React.createClass({
     render() {
         return (
             <header id="header">
-
+                <i className='fa fa-diamond'></i>
             </header>
         );
     }

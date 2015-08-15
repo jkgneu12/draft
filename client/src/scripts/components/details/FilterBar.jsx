@@ -174,7 +174,8 @@ var FilterBar = React.createClass({
                                onChange={this.updateFilter}
                                onSelected={this.selectPlayer}
                                autocompletes={this.state.cores}
-                               autocompleteKey="name" />
+                               autocompleteKey="name"
+                               placeholder="Player Name..."/>
                     </div>
                     <div className="col-xs-2">
                         <Input value={this.state.value}
