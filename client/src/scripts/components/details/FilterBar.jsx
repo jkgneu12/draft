@@ -120,6 +120,7 @@ var FilterBar = React.createClass({
     },
 
     render() {
+        var pointsColumn = null;
         var lastColumn = null;
 
         if(this.state.player.get('id')) {
@@ -129,7 +130,7 @@ var FilterBar = React.createClass({
 
             if (this.state.value > maxBid) {
                 lastColumn = (
-                    <i className='fa fa-times-circle' style={{color: 'red', 'fontSize': '2em'}}/>
+                    <i className='fa fa-times-circle'/>
                 );
             } else {
                 var playerMaxPoints = '-';
@@ -146,15 +147,15 @@ var FilterBar = React.createClass({
                 }
                 pointsCls = 'label ' + pointsCls;
 
-                lastColumn = (
-                    <div>
-                        <div className={pointsCls}>
-                            {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
-                        </div>
+                pointsColumn = (
                         <div>
                             {Math.round(playerMaxPoints*100)/100} vs. {Math.round( this.state.player.get('max_points')[0] / 16*100)/100}
                         </div>
-                    </div>
+                );
+                lastColumn = (
+                        <div className={pointsCls}>
+                            {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
+                        </div>
                 );
             }
         }
@@ -182,7 +183,10 @@ var FilterBar = React.createClass({
                                onChange={this.updateValue}
                                onScroll={this.scrollValue}/>
                     </div>
-                    <div className="col-xs-3" style={{'textAlign': 'center'}}>
+                    <div className="col-xs-2 points-column" style={{'textAlign': 'center'}}>
+                        {pointsColumn}
+                    </div>
+                    <div className="col-xs-1 last-column" style={{'textAlign': 'center'}}>
                         {lastColumn}
                     </div>
                 </div>

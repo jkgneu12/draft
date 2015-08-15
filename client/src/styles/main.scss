@@ -35,6 +35,9 @@ input {
     background-color: rgba(100,100,100,.9) !important;
     color: white !important;;
 }
+.label {
+    font-weight: normal;
+}
 
 #content {
     height: 100%;
@@ -89,19 +92,22 @@ input {
     .right-side {
         overflow: hidden;
         padding-left: 0;
-        background-color: $soft-background-color;
+        background-color: $hard-background-color;
     }
 }
 
 .round-label {
     text-align: right;
-    padding-right: 6px;
+    padding-right: 15px;
+    color: white;
 }
 
 .teams-list {
     border-left: solid thin $soft-border-color;
     overflow: scroll;
     @include calc(height, unquote("100% - 40px"));
+    position: relative;
+    top: 1px;
 
     .panel {
         margin: 0;
@@ -141,12 +147,29 @@ input {
 
 .filter-bar {
     height: $filterBarHeight;
-    border: solid thin $soft-border-color;
-    background-color: $soft-background-color;
+    border-bottom: solid thin $soft-border-color;
+    background-color: $hard-background-color;
+    color: white;
 
     input {
         font-size: 18px;
         height:40px;
+    }
+
+    .points-column {
+        font-size: 1.2em;
+        line-height: 41px;
+    }
+    .last-column {
+        font-size: 1.2em;
+        line-height: 36px;
+    }
+    .fa-times-circle {
+        color: $brand-danger;
+        font-size: 1.8em;
+        padding-bottom: 0;
+        position: relative;
+        top: 5px;
     }
 }
 
@@ -193,7 +216,7 @@ input {
     }
 
     .fa-star {
-        color: goldenrod;
+        color: $brand-warning;
     }
     .table-head {
         top: 19px;
