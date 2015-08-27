@@ -141,19 +141,16 @@ var PlayersList = React.createClass({
             }
 
             return (
-                <tr key={index} className={cls} onClick={selectPlayer}>
+                <tr id={"player_" + player.get('id')} key={index} className={cls} onClick={selectPlayer}>
                     <td><i className={likeClass} onClick={likePlayer} /></td>
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('ecr')}</td>
-                    <td>{player.get('core').get('ecr') - player.get('core').get('rank')}</td>
                     <td>{Math.round(player.get('core').get('points') / 16 * 10)/10}</td>
-                    <td>{Math.round(player.get('core').get('points') / Math.max(player.get('core').get('target_price'), 1) * 100)/100}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
                     <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
-                    <td>{player.get('core').get('dropoff')}</td>
                     <td>{player.get('core').get('risk')}</td>
                     <td>{player.get('core').get('bye')}</td>
                 </tr>
@@ -194,14 +191,11 @@ var PlayersList = React.createClass({
                                 <th>Owner</th>
                                 <th>Rank</th>
                                 <th>ECR</th>
-                                <th>Value</th>
                                 <th>Points</th>
-                                <th>P/$</th>
                                 <th>Position</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
-                                <th>Dropoff</th>
                                 <th>Risk</th>
                                 <th>Bye</th>
                             </tr>
@@ -222,14 +216,11 @@ var PlayersList = React.createClass({
                                 <th>Owner</th>
                                 <th>Rank</th>
                                 <th>ECR</th>
-                                <th>Value</th>
                                 <th>Points</th>
-                                <th>P/$</th>
                                 <th>Position</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
-                                <th>Dropoff</th>
                                 <th>Risk</th>
                                 <th>Bye</th>
                             </tr>
