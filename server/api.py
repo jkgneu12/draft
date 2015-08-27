@@ -252,7 +252,9 @@ class PlayersHandler(BaseHandler):
 class CorePlayersHandler(BaseHandler):
     def _create(self, args):
         player_name = self.request_body_json['name']
-        player = self.db.query(PlayerCore).filter(PlayerCore.name == player_name).first()
+        position = self.request_body_json['position']
+        player = self.db.query(PlayerCore).filter(and_(PlayerCore.name == player_name,
+                                                       PlayerCore.position == position)).first()
         if player is None:
             player = PlayerCore()
         self._update_fields(player, self.request_body_json)
