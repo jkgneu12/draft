@@ -52,6 +52,13 @@ var PlayersList = React.createClass({
         this.setState({
             player: PlayerStore.getCurrent()
         });
+        if(PlayerStore.getCurrent().get('id')) {
+            var table = $(this.getDOMNode()).find('.table-body');
+            var scroll = table.scrollTop();
+            var player = $(this.getDOMNode()).find('#player_' + PlayerStore.getCurrent().get('id'));
+            var playerTop = player.offset().top;
+            table.scrollTop(scroll + playerTop - table.offset().top - player.height());
+        }
     },
 
     onPlayersChange() {
