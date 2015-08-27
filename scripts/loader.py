@@ -13,9 +13,45 @@ print(args.filename)
 file = open(args.filename, 'r')
 
 ffa_name_mappings = {
-    "Dan Herron" : "Daniel Herron",
+    "Dan Herron": "Daniel Herron",
     "LeVeon Bell": "Le'Veon Bell",
-    "Odell Beckham" : "Odell Beckham Jr.",
+    "Odell Beckham": "Odell Beckham Jr.",
+    "Robert Griffin" : "Robert Griffin III",
+
+    "Colts": "Indianapolis Colts",
+    "Giants": "New York Giants",
+    "Buccaneers": "Tampa Bay Buccaneers",
+    "Bears": "Chicago Bears",
+    "Bills": "Buffalo Bills",
+    "Texans": "Houston Texans",
+    "Seahawks": "Seattle Seahawks",
+    "Cardinals": "Arizona Cardinals",
+    "Patriots": "New England Patriots",
+    "Chiefs": "Kansas City Chiefs",
+    "Eagles": "Philadelphia Eagles",
+    "Panthers": "Carolina Panthers",
+    "Rams": "St. Louis Rams",
+    "Packers": "Green Bay Packers",
+    "Ravens": "Baltimore Ravens",
+    "Lions": "Detroit Lions",
+    "Broncos": "Denver Broncos",
+    "Dolphins": "Miami Dolphins",
+    "49ers": "San Francisco 49ers",
+    "Cowboys": "Dallas Cowboys",
+    "Jaguars": "Jacksonville Jaguars",
+    "Browns": "Cleveland Browns",
+    "Bengals": "Cincinnati Bengals",
+    "Jets": "New York Jets",
+    "Falcons": "Atlanta Falcons",
+    "Vikings": "Minnesota Vikings",
+    "Steelers": "Pittsburgh Steelers",
+    "Saints": "New Orleans Saints",
+    "Titans": "Tennessee Titans",
+    "Redskins": "Washington Redskins",
+    "Chargers": "San Diego Chargers",
+    "Raiders": "Oakland Raiders"
+
+
 }
 
 for line in csv.reader(file, delimiter="\t"):
@@ -42,26 +78,29 @@ for line in csv.reader(file, delimiter="\t"):
             # 'rank': rank,
             'name': name,
             # 'team_name': line[1],
-            # 'position': position,
+            'position': position,
             # 'position_rank': ''.join([i for i in line[3] if i.isdigit()]),
             'target_price': target_price,
-            # 'bye': bye
+            'bye': bye
         }
 
     elif args.filename == 'ffa':
         player = {
-            'adp': round(float(line[11])) if line[11] != 'null' else None,
-            'rank': round(float(line[8])) if line[8] != 'null' else None,
-            'name': line[1] if line[1] != 'null' else None,
-            'team_name': line[3]if line[3] != 'null' else 'FA',
-            'position': line[2] if line[2] != 'null' else None,
-            'position_rank': line[9] if line[9] != 'null' else None,
-            'ecr': line[7] if line[7] != 'null' else None,
-            'target_price': round(float(line[13])) if line[13] != 'null' else 0,
-            'dropoff': round(float(line[10])) if line[10] != 'null' else None,
-            'risk': round(float(line[16])) if line[16] != 'null' else None,
-            'points': round(float(line[15])) if line[15] != 'null' else None
+            'adp': round(float(line[15])) if line[15] != 'null' else None,
+            'rank': round(float(line[11])) if line[11] != 'null' else None,
+            'name': line[2] if line[2] != 'null' else None,
+            'team_name': line[4]if line[4] != 'null' else 'FA',
+            'position': line[3] if line[3] != 'null' else None,
+            'position_rank': line[12] if line[12] != 'null' else None,
+            'ecr': line[10] if line[10] != 'null' else None,
+            # 'target_price': round(float(line[17])) if line[17] != 'null' else 0,
+            'dropoff': round(float(line[14])) if line[14] != 'null' else None,
+            'risk': round(float(line[20])) if line[20] != 'null' else None,
+            'points': round(float(line[19])) if line[19] != 'null' else None
         }
+
+        if player['position'] == 'DST':
+            player['position'] = 'D'
 
         if player['name'] in ffa_name_mappings:
             player['name'] = ffa_name_mappings[player['name']]
