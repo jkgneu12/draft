@@ -85,6 +85,12 @@ var PlayersList = React.createClass({
         });
     },
 
+    likePlayer(player) {
+        player.get('core').set('likes', !player.get('core').get('likes'));
+        this.setState({players: this.state.players});
+        player.get('core').save();
+    },
+
     resize() {
         var $tableHead = $(this.getDOMNode()).find('.table-head');
         var $tableBody = $(this.getDOMNode()).find('.table-body');
@@ -125,10 +131,10 @@ var PlayersList = React.createClass({
 
             var team = self.state.teams.findWhere({id: player.get('team_id')});
 
-            var likePlayer = function() {
-                player.get('core').save({
-                    likes: !player.get('core').get('likes')
-                });
+            var likePlayer = function(e) {
+                self.likePlayer(player);
+                e.stopImmediatePropagation();
+                e.preventDefault();
             };
 
             var likeClass = 'fa fa-star';
