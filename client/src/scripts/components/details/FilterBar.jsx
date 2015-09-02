@@ -120,8 +120,8 @@ var FilterBar = React.createClass({
     },
 
     render() {
-        var pointsColumn = null;
-        var lastColumn = null;
+        var leaveColumn = null;
+        var takeColumn = null;
 
         if(this.state.player.get('id')) {
 
@@ -129,33 +129,49 @@ var FilterBar = React.createClass({
             var maxBid = this.state.team ? this.state.team.get('money') - (this.state.draft.get('team_size') - 1 - playerCount) : 0;
 
             if (this.state.value > maxBid) {
-                lastColumn = (
+                takeColumn = (
                     <i className='fa fa-times-circle'/>
                 );
             } else {
                 var playerMaxPoints = '-';
                 var rosterMaxPoints = this.state.roster.get('max_points') / 16;
-                var pointsCls = 'label-default';
+                var takeCls = 'label-default';
                 if (this.state.player.get('max_points')[this.state.value]) {
                     playerMaxPoints = this.state.player.get('max_points')[this.state.value] / 16;
                     if (playerMaxPoints > rosterMaxPoints) {
-                        pointsCls = 'label-success';
+                        takeCls = 'label-success';
                     }
                     else if (playerMaxPoints < rosterMaxPoints) {
-                        pointsCls = 'label-danger';
+                        takeCls = 'label-danger';
                     }
                 }
-                pointsCls = 'label ' + pointsCls;
+                takeCls = 'label ' + takeCls;
 
-                pointsColumn = (
-                        <div>
-                            {Math.round(playerMaxPoints*100)/100} vs. {Math.round( this.state.player.get('max_points')[0] / 16*100)/100}
+                var leaveCls = 'label-default';
+                var leavePoints = this.state.player.get('max_points')[0] / 16;
+                if (leavePoints > rosterMaxPoints ) {
+                    leaveCls = 'label-success';
+                }
+                else if (leavePoints < rosterMaxPoints ) {
+                    leaveCls = 'label-danger';
+                }
+                leaveCls = 'label ' + leaveCls;
+
+                leaveColumn = (
+                    <div>
+                        <small>Leave</small>&nbsp;
+                        <div className={leaveCls}>
+                            {Math.round((leavePoints - rosterMaxPoints) * 100)/100}
                         </div>
+                    </div>
                 );
-                lastColumn = (
-                        <div className={pointsCls}>
+                takeColumn = (
+                    <div>
+                        <small>Take</small>&nbsp;
+                        <div className={takeCls}>
                             {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
                         </div>
+                    </div>
                 );
             }
         }
@@ -170,7 +186,7 @@ var FilterBar = React.createClass({
                  onDrop={this.onDrop}>
 
                 <div className="row">
-                    <div className="col-xs-7">
+                    <div className="col-xs-6">
                         <Input value={this.state.filter}
                                onChange={this.updateFilter}
                                onSelected={this.selectPlayer}
@@ -184,10 +200,10 @@ var FilterBar = React.createClass({
                                onScroll={this.scrollValue}/>
                     </div>
                     <div className="col-xs-2 points-column" style={{'textAlign': 'center'}}>
-                        {pointsColumn}
+                        {leaveColumn}
                     </div>
-                    <div className="col-xs-1 last-column" style={{'textAlign': 'center'}}>
-                        {lastColumn}
+                    <div className="col-xs-2 points-column" style={{'textAlign': 'center'}}>
+                        {takeColumn}
                     </div>
                 </div>
 
