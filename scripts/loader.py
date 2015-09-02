@@ -17,6 +17,7 @@ ffa_name_mappings = {
     "LeVeon Bell": "Le'Veon Bell",
     "Odell Beckham": "Odell Beckham Jr.",
     "Robert Griffin" : "Robert Griffin III",
+    "Steve Smith Sr.": "Steve Smith",
 
     "Colts": "Indianapolis Colts",
     "Giants": "New York Giants",
@@ -83,6 +84,9 @@ for line in csv.reader(file, delimiter="\t"):
             'target_price': target_price,
             'bye': bye
         }
+
+        if player['name'] in ffa_name_mappings:
+            player['name'] = ffa_name_mappings[player['name']]
 
     elif args.filename == 'ffa':
         player = {
