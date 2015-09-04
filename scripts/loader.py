@@ -100,7 +100,7 @@ for line in csv.reader(file, delimiter="\t"):
             # 'target_price': round(float(line[17])) if line[17] != 'null' else 0,
             'dropoff': round(float(line[14])) if line[14] != 'null' else None,
             'risk': round(float(line[20])) if line[20] != 'null' else None,
-            'points': round(float(line[19])) if line[19] != 'null' else None
+            'points': round(float(line[8])) if line[8] != 'null' else None
         }
 
         if player['position'] == 'DST':
