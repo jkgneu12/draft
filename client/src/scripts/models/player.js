@@ -16,7 +16,8 @@ var Player = BaseModel.extend({
     _baseUrl: Urls.players,
     defaults: {
         core: new PlayerCore(),
-        max_points: {}
+        max_starters_points: {},
+        max_bench_points: {}
     },
     parse: function(response) {
         response.core = new PlayerCore(response.core);

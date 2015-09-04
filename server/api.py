@@ -203,18 +203,26 @@ class PlayersHandler(BaseHandler):
             min_price = 1
             max_price = min(player.core.target_price + 21, team.money)
             manager = Manager()
-            max_points = manager.dict()
+            max_starters_points = manager.dict()
+            max_bench_points = manager.dict()
             pool = Pool(processes=8)
             starters, bench = get_starters_and_bench(self.db, team.id)
-            max_points[0] = optimizer.optimize_roster(starters, available_players, team.money - (constants.BENCH_SIZE - len(bench)))[1]
-            place_player(player, starters, bench)
-            for m in range(min_price, max_price):
-                pool.apply_async(wrap_optimizer, args=(starters, available_players, team.money - m - (constants.BENCH_SIZE - len(bench)), max_points, m))
+            max_starters_points[0] = optimizer.optimize_roster(starters, available_players, team.money - (constants.BENCH_SIZE - len(bench)))[1]
+            for m in range(min_price, 10):
+                pool.apply_async(wrap_optimizer, args=(starters, available_players, team.money - m - (constants.BENCH_SIZE - len(bench)) + 1, max_bench_points, m))
+            if len(get_owned_players(self.db, team.id)) < (constants.TEAM_SIZE - constants.BENCH_SIZE):
+                starters_clone = list(starters)
+                bench_clone = list(bench)
+                place_player(player, starters_clone, bench_clone)
+                for m in range(min_price, max_price):
+                    pool.apply_async(wrap_optimizer, args=(starters_clone, available_players, team.money - m - (constants.BENCH_SIZE - len(bench_clone)), max_starters_points, m))
+
             pool.close()
             pool.join()
 
             ret = player.to_dict(['core'])
-            ret['max_points'] = dict(max_points)
+            ret['max_starters_points'] = dict(max_starters_points)
+            ret['max_bench_points'] = dict(max_bench_points)
 
             return ret
         else:
@@ -296,9 +304,11 @@ def place_player(player, starters, bench):
     bench.append(player)
     return False
 
+def get_owned_players(db, team_id):
+    return db.query(Player).join(Player.core).filter(Player.team_id == int(team_id)).order_by(PlayerCore.rank).all()
 
 def get_starters_and_bench(db, team_id):
-    owned_players = db.query(Player).join(Player.core).filter(Player.team_id == int(team_id)).order_by(PlayerCore.rank).all()
+    owned_players = get_owned_players(db, team_id)
 
     starters = [None]*len(constants.required_positions)
     bench = []

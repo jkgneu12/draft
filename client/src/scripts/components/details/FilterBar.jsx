@@ -121,34 +121,52 @@ var FilterBar = React.createClass({
 
     render() {
         var leaveColumn = null;
-        var takeColumn = null;
+        var startColumn = null;
+        var benchColumn = null;
 
         if(this.state.player.get('id')) {
 
             var playerCount = this.state.team ? this.state.players.where({team_id: this.state.team.get('id')}).length : 0;
             var maxBid = this.state.team ? this.state.team.get('money') - (this.state.draft.get('team_size') - 1 - playerCount) : 0;
 
+            var maxStartersPoints = this.state.player.get('max_starters_points');
+            var maxBenchPoints = this.state.player.get('max_bench_points');
+
             if (this.state.value > maxBid) {
-                takeColumn = (
+                startColumn = (
                     <i className='fa fa-times-circle'/>
                 );
             } else {
-                var playerMaxPoints = '-';
                 var rosterMaxPoints = this.state.roster.get('max_points') / 16;
-                var takeCls = 'label-default';
-                if (this.state.player.get('max_points')[this.state.value]) {
-                    playerMaxPoints = this.state.player.get('max_points')[this.state.value] / 16;
-                    if (playerMaxPoints > rosterMaxPoints) {
-                        takeCls = 'label-success';
+
+                var playerMaxStarterPoints = '-';
+                var startCls = 'label-default';
+                if (maxStartersPoints[this.state.value]) {
+                    playerMaxStarterPoints = maxStartersPoints[this.state.value] / 16;
+                    if (playerMaxStarterPoints > rosterMaxPoints) {
+                        startCls = 'label-success';
                     }
-                    else if (playerMaxPoints < rosterMaxPoints) {
-                        takeCls = 'label-danger';
+                    else if (playerMaxStarterPoints < rosterMaxPoints) {
+                        startCls = 'label-danger';
                     }
                 }
-                takeCls = 'label ' + takeCls;
+                startCls = 'label ' + startCls;
+
+                var playerMaxBenchPoints = '-';
+                var benchCls = 'label-default';
+                if (maxBenchPoints[this.state.value]) {
+                    playerMaxBenchPoints = maxBenchPoints[this.state.value] / 16;
+                    if (playerMaxBenchPoints > rosterMaxPoints) {
+                        benchCls = 'label-success';
+                    }
+                    else if (playerMaxBenchPoints < rosterMaxPoints) {
+                        benchCls = 'label-danger';
+                    }
+                }
+                benchCls = 'label ' + benchCls;
 
                 var leaveCls = 'label-default';
-                var leavePoints = this.state.player.get('max_points')[0] / 16;
+                var leavePoints = maxStartersPoints[0] / 16;
                 if (leavePoints > rosterMaxPoints ) {
                     leaveCls = 'label-success';
                 }
@@ -165,11 +183,19 @@ var FilterBar = React.createClass({
                         </div>
                     </div>
                 );
-                takeColumn = (
+                startColumn = (
                     <div>
-                        <small>Take</small>&nbsp;
-                        <div className={takeCls}>
-                            {Math.round((playerMaxPoints - rosterMaxPoints)*100)/100}
+                        <small>Start</small>&nbsp;
+                        <div className={startCls}>
+                            {Math.round((playerMaxStarterPoints - rosterMaxPoints)*100)/100}
+                        </div>
+                    </div>
+                );
+                benchColumn = (
+                    <div>
+                        <small>Bench</small>&nbsp;
+                        <div className={benchCls}>
+                            {Math.round((playerMaxBenchPoints - rosterMaxPoints)*100)/100}
                         </div>
                     </div>
                 );
@@ -186,7 +212,7 @@ var FilterBar = React.createClass({
                  onDrop={this.onDrop}>
 
                 <div className="row">
-                    <div className="col-xs-6">
+                    <div className="col-xs-4">
                         <Input value={this.state.filter}
                                onChange={this.updateFilter}
                                onSelected={this.selectPlayer}
@@ -203,7 +229,10 @@ var FilterBar = React.createClass({
                         {leaveColumn}
                     </div>
                     <div className="col-xs-2 points-column" style={{'textAlign': 'center'}}>
-                        {takeColumn}
+                        {startColumn}
+                    </div>
+                    <div className="col-xs-2 points-column" style={{'textAlign': 'center'}}>
+                        {benchColumn}
                     </div>
                 </div>
 
