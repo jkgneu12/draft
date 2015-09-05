@@ -210,7 +210,12 @@ class PlayersHandler(BaseHandler):
             max_starters_points[0] = optimizer.optimize_roster(starters, available_players, team.money - (constants.BENCH_SIZE - len(bench)))[1]
             for m in range(min_price, 10):
                 pool.apply_async(wrap_optimizer, args=(starters, available_players, team.money - m - (constants.BENCH_SIZE - len(bench)) + 1, max_bench_points, m))
-            if len(get_owned_players(self.db, team.id)) < (constants.TEAM_SIZE - constants.BENCH_SIZE):
+
+            full_starters = True
+            for s in starters:
+                if s is None:
+                    full_starters = False
+            if not full_starters:
                 starters_clone = list(starters)
                 bench_clone = list(bench)
                 place_player(player, starters_clone, bench_clone)
