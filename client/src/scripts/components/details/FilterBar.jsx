@@ -13,6 +13,8 @@ var Input = require('../form/Input');
 
 var DragDrop = require('../mixins/DragDrop');
 
+var Constants = require('../../constants/Constants');
+
 var FilterBar = React.createClass({
     displayName: 'FilterBar',
 
@@ -137,12 +139,12 @@ var FilterBar = React.createClass({
                     <i className='fa fa-times-circle'/>
                 );
             } else {
-                var rosterMaxPoints = this.state.roster.get('max_points') / 16;
+                var rosterMaxPoints = this.state.roster.get('max_points') / Constants.WEEKS;
 
                 var playerMaxStarterPoints = '-';
                 var startCls = 'label-default';
                 if (maxStartersPoints[this.state.value]) {
-                    playerMaxStarterPoints = maxStartersPoints[this.state.value] / 16;
+                    playerMaxStarterPoints = maxStartersPoints[this.state.value] / Constants.WEEKS;
                     if (playerMaxStarterPoints > rosterMaxPoints) {
                         startCls = 'label-success';
                     }
@@ -155,7 +157,7 @@ var FilterBar = React.createClass({
                 var playerMaxBenchPoints = '-';
                 var benchCls = 'label-default';
                 if (maxBenchPoints[this.state.value]) {
-                    playerMaxBenchPoints = maxBenchPoints[this.state.value] / 16;
+                    playerMaxBenchPoints = maxBenchPoints[this.state.value] / Constants.WEEKS;
                     if (playerMaxBenchPoints > rosterMaxPoints) {
                         benchCls = 'label-success';
                     }
@@ -166,7 +168,7 @@ var FilterBar = React.createClass({
                 benchCls = 'label ' + benchCls;
 
                 var leaveCls = 'label-default';
-                var leavePoints = maxStartersPoints[0] / 16;
+                var leavePoints = maxStartersPoints[0] / Constants.WEEKS;
                 if (leavePoints > rosterMaxPoints ) {
                     leaveCls = 'label-success';
                 }

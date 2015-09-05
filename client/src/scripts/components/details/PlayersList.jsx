@@ -11,6 +11,8 @@ var TeamStore = require('../../stores/TeamStore');
 
 var Checkbox = require('../form/Checkbox');
 
+var Constants = require('../../constants/Constants');
+
 var PlayersList = React.createClass({
     displayName: 'PlayersList',
 
@@ -154,7 +156,7 @@ var PlayersList = React.createClass({
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
                     <td>{player.get('core').get('ecr')}</td>
-                    <td>{Math.round(player.get('core').get('points') / 16 * 10)/10}</td>
+                    <td>{Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>

@@ -9,6 +9,8 @@ var DraftStore = require('../../stores/DraftStore');
 
 var DragDrop = require('../mixins/DragDrop');
 
+var Constants = require('../../constants/Constants');
+
 var TeamListItem = React.createClass({
     displayName: 'TeamListItem',
 
@@ -184,7 +186,7 @@ var TeamListItem = React.createClass({
                 <div className="panel-heading">
                     <h4>
                         <span>{this.state.team.get('name')}</span> &nbsp;
-                        <small>{Math.round(points / 16*10)/10}</small>
+                        <small>{Math.round(points / Constants.WEEKS*10)/10}</small>
                         <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>

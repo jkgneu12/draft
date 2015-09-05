@@ -9,6 +9,8 @@ var _ = require('underscore');
 var PlayerStore = require('../../stores/PlayerStore');
 var RosterStore = require('../../stores/RosterStore');
 
+var Constants = require('../../constants/Constants');
+
 var Roster = React.createClass({
     displayName: 'Roster',
 
@@ -86,7 +88,7 @@ var Roster = React.createClass({
                         <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
                         <td>{bench}</td>
-                        <td>{Math.round(player.get('core').get('points') / 16 * 10)/10}</td>
+                        <td>{Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
@@ -140,7 +142,7 @@ var Roster = React.createClass({
                             <th>Bye</th>
                         </thead>
                         <tbody>
-                            <tr key='break1'><td>Starters</td><td></td><td></td><td>{Math.round(totalPoints / 16 * 10)/10}</td></tr>
+                            <tr key='break1'><td>Starters</td><td></td><td></td><td>{Math.round(totalPoints / Constants.WEEKS * 10)/10}</td></tr>
                             {starters}
                             <tr key='break2'><td>Bench</td></tr>
                             {bench}
