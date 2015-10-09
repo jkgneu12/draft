@@ -113,6 +113,34 @@ for line in csv.reader(file, delimiter="\t"):
         if player['position'] in ['DEF', 'DL', 'LB', 'DB', 'OLB', 'MLB', 'ILB', 'DE', 'FS', 'SS', 'DT', 'CB', 'NT', 'SAF']:
             continue
 
+    elif args.filename == 'dk':
+        name_pos = line[0] if line[0] != 'null' else None
+        if name_pos is None:
+            continue
+
+        name_team = name_pos.split('(')
+        name = name_team[0][:-1]
+        pos = name_team[1].split(',')[0]
+
+        price =  line[4] if line[4] != 'null' else '$0'
+        price = round(float(price.replace(',', '').replace('$', '')))
+
+        player = {
+            # 'adp': round(float(line[15])) if line[15] != 'null' else None,
+            # 'rank': round(float(line[11])) if line[11] != 'null' else None,
+            'name': name,
+            'team_name': line[1]if line[1] != 'null' else 'FA',
+            'position': pos,
+            'position_rank': line[2] if line[2] != 'null' else None,
+            # 'ecr': line[10] if line[10] != 'null' else None,
+            'target_price': price,
+            # 'dropoff': round(float(line[14])) if line[14] != 'null' else None,
+            # 'risk': round(float(line[20])) if line[20] != 'null' else None,
+            'points': round(float(line[3]) * 100) if line[3] != 'null' else None,
+            # 'floor': round(float(line[19])) if line[19] != 'null' else None,
+            # 'ceil': round(float(line[18])) if line[18] != 'null' else None
+        }
+
     else:
         name_team = line[2].split('(')
         min_max = line[8].split('-')

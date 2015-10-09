@@ -153,30 +153,30 @@ class TeamsHandler(BaseHandler):
         if id is not None:
             team = q.filter(Team.id == int(id)).first().to_dict()
             starters, bench = get_starters_and_bench(self.db, team['id'])
-            team['starters'] = [player.to_dict(['core']) for player in starters]
+            team['starters'] = [player.to_dict(['core']) if player is not None else None for player in starters]
             team['bench'] = [player.to_dict(['core']) for player in bench]
             team['points'] = 0
             team['ceil'] = 0
             team['floor'] = 0
             for player in starters:
-                team['points'] += player.core.points
-                team['ceil'] += player.core.ceil
-                team['floor'] += player.core.floor
+                team['points'] += player.core.points if player is not None else 0
+                team['ceil'] += player.core.ceil if player is not None else 0
+                team['floor'] += player.core.floor if player is not None else 0
             return team
         else:
             teams = q.filter(Team.draft_id == int(draft_id)).all()
             teams_dict = [t.to_dict() for t in teams]
             for team in teams_dict:
                 starters, bench = get_starters_and_bench(self.db, team['id'])
-                team['starters'] = [player.to_dict(['core']) for player in starters]
+                team['starters'] = [player.to_dict(['core']) if player is not None else None for player in starters]
                 team['bench'] = [player.to_dict(['core']) for player in bench]
                 team['points'] = 0
                 team['ceil'] = 0
                 team['floor'] = 0
                 for player in starters:
-                    team['points'] += player.core.points
-                    team['ceil'] += player.core.ceil
-                    team['floor'] += player.core.floor
+                    team['points'] += player.core.points if player is not None else 0
+                    team['ceil'] += player.core.ceil if player is not None else 0
+                    team['floor'] += player.core.floor if player is not None else 0
             return {'teams': teams_dict}
 
     def _create(self, args):
@@ -254,7 +254,6 @@ class PlayersHandler(BaseHandler):
             return ret
         else:
             players = q.join(PlayerCore).filter(and_(Player.draft_id == int(draft_id),
-                                                     PlayerCore.rank != None,
                                                      PlayerCore.target_price != None)).all()
             return {'players': [p.to_dict(['core']) for p in players]}
 
@@ -358,11 +357,10 @@ class RostersHandler(BaseHandler):
 
         starters, bench = get_starters_and_bench(self.db, team_id)
 
-        available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
-                                                                                PlayerCore.target_price != None,
+        available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.target_price != None,
                                                                                 PlayerCore.points > 0,
                                                                                 Player.draft_id == draft_id,
-                                                                                Player.team_id == None)).order_by(PlayerCore.rank).all()
+                                                                                Player.team_id == None)).all()
 
         optimal_roster, points = optimizer.optimize_roster(starters, available_players, owner_team.money - (constants.BENCH_SIZE - len(bench)))
 

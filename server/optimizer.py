@@ -74,8 +74,12 @@ def optimize_roster(starters, available_players, money):
     for player in available_players:
         names.append(player.core.name)
         positions.append(player.core.position)
-        points.append(player.core.points)
-        costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
+        if player.core.target_price == 0:
+            points.append(0)
+            costs.append(100000)
+        else:
+            points.append(player.core.points)
+            costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
 
     d = {
         'name': robjects.StrVector(names),
@@ -90,11 +94,11 @@ def optimize_roster(starters, available_players, money):
     qbs = 1
     min_rbs = 2
     max_rbs = 3
-    min_wrs = 2
-    max_wrs = 3
+    min_wrs = 3
+    max_wrs = 4
     min_tes = 1
     max_tes = 2
-    ks = 1
+    ks = 0
     ds = 1
     roster_size = 9
 

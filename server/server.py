@@ -13,7 +13,7 @@ from models import Base
 
 define("port", default=9000, help="run on the given port", type=int)
 define("proxy", default="", help="prefix your endpoints with a string", type=str)
-define("msurl", default="mysql+pymysql://root:%s@localhost/draft?charset=utf8", help="mysql url", type=str)
+define("msurl", default="mysql+pymysql://root:%s@localhost/dk?charset=utf8", help="mysql url", type=str)
 define("mspwd", default="", help="mysql password", type=str)
 
 
