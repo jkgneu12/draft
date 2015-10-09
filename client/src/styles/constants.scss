@@ -35,8 +35,8 @@ $bg-color: rgba(100,100,100,.1);
 
 $filterBarHeight: 41px;
 $playerDetailsHeight: 100px;
-$playersListHeight: 60%;
-$rosterHeight: 40%;
+$playersListHeight: 25%;
+$rosterHeight: 75%;
 
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;

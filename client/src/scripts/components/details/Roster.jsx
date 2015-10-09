@@ -83,12 +83,16 @@ var Roster = React.createClass({
                 bench = <i className={player.get('bench') ? 'fa fa-check-square-o' : 'fa fa-square-o'} onClick={benchPlayer}/>;
             }
             if(player.get('core').get('name')) {
+                var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
+                var ceil = Math.round(player.get('core').get('ceil') / Constants.WEEKS * 10)/10;
+                var floor = Math.round(player.get('core').get('floor') / Constants.WEEKS * 10)/10;
+
                 return (
                     <tr key={index} className={cls} onClick={selectPlayer}>
                         <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
                         <td>{bench}</td>
-                        <td>{Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10}</td>
+                        <td>{floor} - {points} - {ceil}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>

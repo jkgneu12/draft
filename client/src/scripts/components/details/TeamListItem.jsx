@@ -88,11 +88,9 @@ var TeamListItem = React.createClass({
         };
 
         var playerCount = 0;
-        var points = 0;
         this.state.players.where({team_id: this.state.team.get('id')}).forEach(function(player){
             positions[player.get('core').get('position')]++;
             playerCount++;
-            points += player.get('core').get('points') || 0;
         });
 
         positions = Object.keys(positions).map(function(key){
@@ -146,10 +144,14 @@ var TeamListItem = React.createClass({
 
         var expandedContent = null;
         if(this.state.expanded) {
-            var players = this.state.players.where({team_id: this.state.team.get('id')}).map(function(player){
+            var renderPlayer = function(player){
+                var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
+                var ceil = Math.round(player.get('core').get('ceil') / Constants.WEEKS * 10)/10;
+                var floor = Math.round(player.get('core').get('floor') / Constants.WEEKS * 10)/10;
+
                 return (
                     <tr key={player.get('id')} >
-                        <td>{player.get('core').get('rank')}</td>
+                        <td>{floor} - {points} - {ceil}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
@@ -157,11 +159,12 @@ var TeamListItem = React.createClass({
                         <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
                     </tr>
                 );
-            });
+            };
+            var players = this.state.team.get('starters').map(renderPlayer).concat(this.state.team.get('bench').map(renderPlayer));
             expandedContent = (
                 <table className='table table-bordered'>
                     <thead>
-                        <th>Rank</th>
+                        <th>Points</th>
                         <th>Pos</th>
                         <th>Name</th>
                         <th>Team</th>
@@ -175,6 +178,10 @@ var TeamListItem = React.createClass({
             );
         }
 
+        var points = Math.round(this.state.team.get('points') / Constants.WEEKS*10)/10;
+        var ceil = Math.round(this.state.team.get('ceil') / Constants.WEEKS*10)/10;
+        var floor = Math.round(this.state.team.get('floor') / Constants.WEEKS*10)/10;
+
         return (
             <div className={className}
                  onDragStart={this.onDrag}
@@ -186,7 +193,7 @@ var TeamListItem = React.createClass({
                 <div className="panel-heading">
                     <h4>
                         <span>{this.state.team.get('name')}</span> &nbsp;
-                        <small>{Math.round(points / Constants.WEEKS*10)/10}</small>
+                        <small>{floor} - {points} - {ceil}</small>
                         <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>

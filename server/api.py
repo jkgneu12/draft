@@ -151,11 +151,33 @@ class TeamsHandler(BaseHandler):
 
         q = self.db.query(Team)
         if id is not None:
-            team = q.filter(Team.id == int(id)).first()
-            return team.to_dict()
+            team = q.filter(Team.id == int(id)).first().to_dict()
+            starters, bench = get_starters_and_bench(self.db, team['id'])
+            team['starters'] = [player.to_dict(['core']) for player in starters]
+            team['bench'] = [player.to_dict(['core']) for player in bench]
+            team['points'] = 0
+            team['ceil'] = 0
+            team['floor'] = 0
+            for player in starters:
+                team['points'] += player.core.points
+                team['ceil'] += player.core.ceil
+                team['floor'] += player.core.floor
+            return team
         else:
             teams = q.filter(Team.draft_id == int(draft_id)).all()
-            return {'teams': [t.to_dict() for t in teams]}
+            teams_dict = [t.to_dict() for t in teams]
+            for team in teams_dict:
+                starters, bench = get_starters_and_bench(self.db, team['id'])
+                team['starters'] = [player.to_dict(['core']) for player in starters]
+                team['bench'] = [player.to_dict(['core']) for player in bench]
+                team['points'] = 0
+                team['ceil'] = 0
+                team['floor'] = 0
+                for player in starters:
+                    team['points'] += player.core.points
+                    team['ceil'] += player.core.ceil
+                    team['floor'] += player.core.floor
+            return {'teams': teams_dict}
 
     def _create(self, args):
         draft_id = args[0]

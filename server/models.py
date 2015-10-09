@@ -73,6 +73,8 @@ class PlayerCore(BaseModel):
     dropoff = Column(Integer)
     risk = Column(Integer)
     points = Column(Integer)
+    ceil = Column(Integer)
+    floor = Column(Integer)
     ecr = Column(Integer)
 
     bye = Column(Integer)
