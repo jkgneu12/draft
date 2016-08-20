@@ -3,6 +3,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var _ = require('underscore');
 
@@ -55,9 +56,9 @@ var PlayersList = React.createClass({
             player: PlayerStore.getCurrent()
         });
         if(PlayerStore.getCurrent().get('id')) {
-            var player = $(this.getDOMNode()).find('#player_' + PlayerStore.getCurrent().get('id'));
-            if(player.size() > 0) {
-                var table = $(this.getDOMNode()).find('.table-body');
+            var player = $(ReactDOM.findDOMNode(this)).find('#player_' + PlayerStore.getCurrent().get('id'));
+            if(player.length > 0) {
+                var table = $(ReactDOM.findDOMNode(this)).find('.table-body');
                 var scroll = table.scrollTop();
                 var playerTop = player.offset().top;
                 table.scrollTop(scroll + playerTop - table.offset().top - player.height());
@@ -96,8 +97,8 @@ var PlayersList = React.createClass({
     },
 
     resize() {
-        var $tableHead = $(this.getDOMNode()).find('.table-head');
-        var $tableBody = $(this.getDOMNode()).find('.table-body');
+        var $tableHead = $(ReactDOM.findDOMNode(this)).find('.table-head');
+        var $tableBody = $(ReactDOM.findDOMNode(this)).find('.table-body');
         var $headCells = $tableHead.find('thead tr:first').children();
         var $bodyCells = $tableBody.find('thead tr:first').children();
 

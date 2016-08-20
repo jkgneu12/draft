@@ -6,7 +6,6 @@ var React = require('react');
 
 var DraftStore = require('../../stores/DraftStore');
 var TeamStore = require('../../stores/TeamStore');
-var NavStore = require('../../stores/NavStore');
 
 var Input = require('../form/Input');
 var Checkbox = require('../form/Checkbox');
@@ -15,11 +14,6 @@ var Q = require('Q');
 
 var CreatePage = React.createClass({
     displayName: 'CreatePage',
-    statics: {
-        willTransitionTo(transition, params) {
-            DraftStore.loadAll();
-        }
-    },
     getInitialState() {
         return {
             draft: {},
@@ -30,6 +24,8 @@ var CreatePage = React.createClass({
     },
 
     componentDidMount() {
+        DraftStore.loadAll();
+
         DraftStore.addChangeAllListener(this.onDraftsChange);
     },
     componentWillUnmount() {
@@ -43,7 +39,7 @@ var CreatePage = React.createClass({
     },
 
     gotoDraft(id) {
-        NavStore.emitNavigate('draft', {draftId: id});
+        window.location = '#/draft/' + id;
     },
 
     createDraft() {
@@ -196,11 +192,13 @@ var CreatePage = React.createClass({
                         <div className="col-xs-12">
                             <table className="table">
                                 <thead>
-                                    <th className="col-xs-2">Order</th>
-                                    <th className="col-xs-2">Owner</th>
-                                    <th className="col-xs-4">Name</th>
-                                    <th className="col-xs-2">Delete</th>
-                                    <th className="col-xs-2">Reorder</th>
+                                    <tr>
+                                        <th className="col-xs-2">Order</th>
+                                        <th className="col-xs-2">Owner</th>
+                                        <th className="col-xs-4">Name</th>
+                                        <th className="col-xs-2">Delete</th>
+                                        <th className="col-xs-2">Reorder</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     {teams}

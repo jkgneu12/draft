@@ -17,18 +17,6 @@ var PlayersList = require('../details/PlayersList');
 
 var DraftPage = React.createClass({
     displayName: 'DraftPage',
-    statics: {
-        willTransitionTo(transition, params) {
-            DraftStore.setCurrent(params.draftId);
-            TeamStore.loadAll({draftId: params.draftId});
-            PlayerStore.loadAll({draftId: params.draftId});
-            RosterStore.setCurrent(params.draftId);
-        },
-        willTransitionFrom() {
-            DraftStore.setCurrent(-1);
-        }
-    },
-
     getInitialState() {
         return {
             draft: DraftStore.getCurrent()
@@ -36,9 +24,16 @@ var DraftPage = React.createClass({
     },
 
     componentDidMount() {
+        DraftStore.setCurrent(this.props.params.draftId);
+        TeamStore.loadAll({draftId: this.props.params.draftId});
+        PlayerStore.loadAll({draftId: this.props.params.draftId});
+        RosterStore.setCurrent(this.props.params.draftId);
+
         DraftStore.addChangeCurrentListener(this.onDraftChange);
     },
     componentWillUnmount() {
+        DraftStore.setCurrent(-1);
+
         DraftStore.removeChangeListener(this.onDraftChange);
     },
 
@@ -60,7 +55,7 @@ var DraftPage = React.createClass({
                         <Roster />
                     </div>
                     <div className="col-xs-4 right-side fill-height">
-                        <h4 className="round-label">Round {this.state.draft.get('round') + 1}</h4>
+                        <h4 className="round-label">{"Round " + this.state.draft.get('round') + 1}</h4>
                         <TeamsList />
                     </div>
                 </div>

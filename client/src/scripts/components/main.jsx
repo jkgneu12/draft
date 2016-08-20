@@ -2,27 +2,28 @@
 
 'use strict';
 
-window.React = require('react/addons');
+window.React = require('react');
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 window.jQuery = window.$ = require('jquery');
 
-var Router = require('react-router');
-var { Route, DefaultRoute } = Router;
-
+var RouterLib = require('react-router');
+var { Router, Route, IndexRoute, hashHistory } = RouterLib;
 
 var App = require('./handlers/App');
 var CreatePage = require('./handlers/CreatePage');
 var DraftPage = require('./handlers/DraftPage');
 
+
 var routes = (
-    <Route name="home" path="/" handler={App}>
-        <Route name="draft" path="/draft/:draftId" handler={DraftPage} />
-        <DefaultRoute handler={CreatePage} />
+    <Route name="home" path="/" component={App}>
+        <IndexRoute component={CreatePage}/>
+        <Route name="draft" path="/draft/:draftId" component={DraftPage}/>        
     </Route>
 );
 
-Router.run(routes, function(Root) {
-    React.render(<Root/>, document.getElementById('content'));
-});
+var router = <Router history={hashHistory}>{routes}</Router>;
+
+ReactDOM.render(router, document.getElementById('content'));
 

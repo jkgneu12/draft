@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var $ = require('jquery');
 var typeahead = require('typeahead.js');
@@ -13,26 +14,26 @@ var Input = React.createClass({
     },
     componentDidMount() {
         if(this.props.autocompletes) {
-            $(this.getDOMNode()).
-                bind('typeahead:selected', this.typeaheadSelected).
-                bind('typeahead:autocompleted', this.typeaheadCompleted);
+            // $(ReactDOM.findDOMNode(this)).
+            //     bind('typeahead:selected', this.typeaheadSelected).
+            //     bind('typeahead:autocompleted', this.typeaheadCompleted);
 
-            $(this.getDOMNode()).typeahead({
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                },
-                {
-                    name: 'autocompletes',
-                    displayKey: this.getAutocompleteDisplay,
-                    source: this.substringMatcher,
-                    limit: 20
-                }
-            );
+            // $(ReactDOM.findDOMNode(this)).typeahead({
+            //         hint: true,
+            //         highlight: true,
+            //         minLength: 1
+            //     },
+            //     {
+            //         name: 'autocompletes',
+            //         displayKey: this.getAutocompleteDisplay,
+            //         source: this.substringMatcher,
+            //         limit: 20
+            //     }
+            // );
         }
         if(this.props.onScroll) {
             var self = this;
-            $(this.getDOMNode()).mousewheel(function(event) {
+            $(ReactDOM.findDOMNode(this)).mousewheel(function(event) {
                 //console.log(event.deltaX, event.deltaY, event.deltaFactor);
                 self.props.onScroll(event.deltaX, event.deltaY, event.deltaFactor);
             });
@@ -41,7 +42,7 @@ var Input = React.createClass({
     },
     componentWillUnmount() {
         if(this.props.autocompletes) {
-            $(this.getDOMNode()).typeahead('destroy');
+            $(ReactDOM.findDOMNode(this)).typeahead('destroy');
         }
     },
     componentWillReceiveProps(nextProps) {
@@ -52,7 +53,7 @@ var Input = React.createClass({
         return (
             <input type={this.props.type || "text"}
                    className="form-control typeahead"
-                   value={this.state.value}
+                   value={this.state.value}                   
                    placeholder={this.props.placeholder}
                    onChange={this.onChange}
                    onKeyUp={this.onKeyUp}

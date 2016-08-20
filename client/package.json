@@ -20,6 +20,7 @@
     "object-assign": "^4.1.0",
     "q": "^1.4.1",
     "react": "~15.3.1",
+    "react-dom": "^15.3.0",
     "react-router": "~2.6.1",
     "typeahead.js": "^0.11.1",
     "underscore": "^1.8.3"
@@ -31,6 +32,7 @@
     "css-loader": "~0.23.1",
     "eslint": "^3.3.1",
     "eslint-plugin-react": "^6.1.2",
+    "file-loader": "^0.9.0",
     "grunt": "~1.0.1",
     "grunt-contrib-clean": "~1.0.0",
     "grunt-contrib-connect": "~1.0.2",

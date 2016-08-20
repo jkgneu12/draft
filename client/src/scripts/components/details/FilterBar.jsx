@@ -22,7 +22,7 @@ var FilterBar = React.createClass({
 
     getInitialState() {
         return {
-            filter: PlayerStore.getCurrent().get('core').get('name'),
+            filter: PlayerStore.getCurrent().get('core').get('name') || '',
             value: PlayerStore.getValue(),
             player: PlayerStore.getCurrent(),
             players: PlayerStore.getAll(),
@@ -51,7 +51,7 @@ var FilterBar = React.createClass({
     onPlayerChange() {
         this.setState({
             player: PlayerStore.getCurrent(),
-            filter: PlayerStore.getCurrent().get('core').get('name')
+            filter: PlayerStore.getCurrent().get('core').get('name') || ''
         });
     },
 

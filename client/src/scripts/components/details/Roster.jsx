@@ -3,6 +3,7 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var _ = require('underscore');
 
@@ -53,8 +54,8 @@ var Roster = React.createClass({
     },
 
     resize() {
-        var $tableHead = $(this.getDOMNode()).find('.table-head');
-        var $tableBody = $(this.getDOMNode()).find('.table-body');
+        var $tableHead = $(ReactDOM.findDOMNode(this)).find('.table-head');
+        var $tableBody = $(ReactDOM.findDOMNode(this)).find('.table-body');
         var $headCells = $tableHead.find('thead tr:first').children();
         var $bodyCells = $tableBody.find('thead tr:first').children();
 
@@ -134,16 +135,18 @@ var Roster = React.createClass({
                 <div className="table-body">
                     <table className="table table-bordered table-hover">
                         <thead>
-                            <th></th>
-                            <th>Rank</th>
-                            <th>Benched</th>
-                            <th>Points</th>
-                            <th>Position</th>
-                            <th>Name</th>
-                            <th>Team</th>
-                            <th>Paid</th>
-                            <th>Price</th>
-                            <th>Bye</th>
+                            <tr>
+                                <th></th>
+                                <th>Rank</th>
+                                <th>Benched</th>
+                                <th>Points</th>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Team</th>
+                                <th>Paid</th>
+                                <th>Price</th>
+                                <th>Bye</th>
+                            </tr>
                         </thead>
                         <tbody>
                             <tr key='break1'><td>Starters</td><td></td><td></td><td>{Math.round(totalPoints / Constants.WEEKS * 10)/10}</td></tr>
@@ -156,16 +159,18 @@ var Roster = React.createClass({
                 <div className="table-head">
                     <table className="table table-bordered table-hover">
                         <thead>
-                            <th></th>
-                            <th>Rank</th>
-                            <th>Benched</th>
-                            <th>Points</th>
-                            <th>Position</th>
-                            <th>Name</th>
-                            <th>Team</th>
-                            <th>Paid</th>
-                            <th>Price</th>
-                            <th>Bye</th>
+                            <tr>
+                                <th></th>
+                                <th>Rank</th>
+                                <th>Benched</th>
+                                <th>Points</th>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>Team</th>
+                                <th>Paid</th>
+                                <th>Price</th>
+                                <th>Bye</th>
+                            </tr>   
                         </thead>
                         <tbody></tbody>
                     </table>

@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var Checkbox = React.createClass({
 
@@ -11,14 +12,14 @@ var Checkbox = React.createClass({
         };
     },
     componentDidMount: function() {
-        this.getDOMNode().indeterminate = this.state.indeterminate && this.state.checked;
+        ReactDOM.findDOMNode(this).indeterminate = this.state.indeterminate && this.state.checked;
     },
     componentWillReceiveProps: function(nextProps) {
         this.setState({
             checked: nextProps.checked,
             indeterminate: nextProps.indeterminate
         });
-        this.getDOMNode().indeterminate = nextProps.indeterminate;
+        ReactDOM.findDOMNode(this).indeterminate = nextProps.indeterminate;
     },
     render: function() {
         return (
@@ -27,7 +28,7 @@ var Checkbox = React.createClass({
     },
     onChange: function(event) {
         var checked = event.target.checked;
-        this.getDOMNode().indeterminate = this.state.indeterminate && checked;
+        ReactDOM.findDOMNode().indeterminate = this.state.indeterminate && checked;
         this.props.onChange(checked, this.props.value);
         this.setState({checked: checked});
     }
