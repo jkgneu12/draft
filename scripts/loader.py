@@ -97,12 +97,12 @@ for line in csv.reader(file, delimiter="\t"):
             'position': line[3] if line[3] != 'null' else None,
             'position_rank': line[12] if line[12] != 'null' else None,
             'ecr': line[10] if line[10] != 'null' else None,
-            # 'target_price': round(float(line[17])) if line[17] != 'null' else 0,
+            'target_price': round(float(line[18])) if line[18] != 'null' else 0,
             'dropoff': round(float(line[14])) if line[14] != 'null' else None,
             'risk': round(float(line[20])) if line[20] != 'null' else None,
             'points': round(float(line[8])) if line[8] != 'null' else None,
-            'floor': round(float(line[19])) if line[19] != 'null' else None,
-            'ceil': round(float(line[18])) if line[18] != 'null' else None
+            'floor': round(float(line[20])) if line[20] != 'null' else None,
+            'ceil': round(float(line[19])) if line[19] != 'null' else None
         }
 
         if player['position'] == 'DST':
