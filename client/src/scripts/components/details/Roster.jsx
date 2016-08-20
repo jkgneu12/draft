@@ -123,7 +123,7 @@ var Roster = React.createClass({
 
     render() {
         var starters = this.state.roster.get('starters').map(this.renderPlayer(0));
-        var bench = this.state.roster.get('bench').map(this.renderPlayer(9));
+        var bench = this.state.roster.get('bench').map(this.renderPlayer(11));
 
         var totalPoints = 0;
         this.state.roster.get('starters').forEach(function(player){

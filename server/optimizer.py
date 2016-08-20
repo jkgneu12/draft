@@ -88,15 +88,15 @@ def optimize_roster(starters, available_players, money):
     dataf = robjects.DataFrame(d)
 
     qbs = 1
-    min_rbs = 2
-    max_rbs = 3
-    min_wrs = 2
-    max_wrs = 3
+    min_rbs = 3
+    max_rbs = 4
+    min_wrs = 3
+    max_wrs = 4
     min_tes = 1
     max_tes = 2
     ks = 1
     ds = 1
-    roster_size = 9
+    roster_size = 11
 
     if starters[0] is not None:
         qbs -= 1
@@ -113,8 +113,8 @@ def optimize_roster(starters, available_players, money):
         roster_size -= 1
 
     if starters[3] is not None:
-        min_wrs -= 1
-        max_wrs -= 1
+        min_rbs -= 1
+        max_rbs -= 1
         roster_size -= 1
 
     if starters[4] is not None:
@@ -123,11 +123,21 @@ def optimize_roster(starters, available_players, money):
         roster_size -= 1
 
     if starters[5] is not None:
+        min_wrs -= 1
+        max_wrs -= 1
+        roster_size -= 1
+
+    if starters[6] is not None:
+        min_wrs -= 1
+        max_wrs -= 1
+        roster_size -= 1
+
+    if starters[7] is not None:
         min_tes -= 1
         max_tes -= 1
         roster_size -= 1
 
-    if starters[6] is not None:
+    if starters[8] is not None:
         if starters[6].core.position == 'RB':
             max_rbs -= 1
         if starters[6].core.position == 'WR':
@@ -136,11 +146,11 @@ def optimize_roster(starters, available_players, money):
             max_tes -= 1
         roster_size -= 1
 
-    if starters[7] is not None:
+    if starters[9] is not None:
         ds -= 1
         roster_size -= 1
 
-    if starters[8] is not None:
+    if starters[10] is not None:
         ks -= 1
         roster_size -= 1
 
