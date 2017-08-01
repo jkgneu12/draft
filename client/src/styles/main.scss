@@ -168,6 +168,12 @@ input {
         top: 5px;
     }
 }
+.filter-bar.danger {
+    background-color: $brand-warning;
+}
+.filter-bar.success {
+    background-color: $brand-success;
+}
 
 .player-details {
     height: $playerDetailsHeight;
@@ -211,8 +217,11 @@ input {
         }
     }
 
-    .fa-star {
-        color: $brand-warning;
+    .fa-thumbs-up {
+        color: $brand-success;
+    }
+    .fa-thumbs-down {
+        color: $brand-danger;
     }
     .table-head {
         top: 19px;

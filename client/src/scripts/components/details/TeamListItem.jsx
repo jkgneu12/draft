@@ -179,8 +179,6 @@ var TeamListItem = React.createClass({
         }
 
         var points = Math.round(this.state.team.get('points') / Constants.WEEKS*10)/10;
-        var ceil = Math.round(this.state.team.get('ceil') / Constants.WEEKS*10)/10;
-        var floor = Math.round(this.state.team.get('floor') / Constants.WEEKS*10)/10;
 
         return (
             <div className={className}
@@ -193,7 +191,7 @@ var TeamListItem = React.createClass({
                 <div className="panel-heading">
                     <h4>
                         <span>{this.state.team.get('name')}</span> &nbsp;
-                        <small>{floor} - {points} - {ceil}</small>
+                        <small>{points}</small>
                         <span className={moneyClass}>${maxBid} - ${this.state.team.get('money')}</span>
                     </h4>
                 </div>

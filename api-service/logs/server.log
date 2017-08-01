@@ -1,0 +1,308 @@
+[tornado.general] 2017-04-29 20:50:30,951 INFO autoreload:198: /app/logs/server.log modified; restarting server
+[api.server] 2017-04-29 20:50:31,720 INFO server:51: Settings: {'debug': True, 'autoreload': True}
+[api.server] 2017-04-29 20:50:31,721 INFO server:55: Server started
+[app.server] 2017-04-29 20:53:23,968 INFO server:50: Settings: {'autoreload': True, 'debug': True}
+[app.server] 2017-04-29 20:53:23,970 INFO server:54: Server started
+[__main__] 2017-04-29 20:54:39,780 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 20:54:39,784 INFO __main__:54: Server started
+[tornado.general] 2017-04-29 20:54:44,788 INFO autoreload:198: /app/app/__main__.py modified; restarting server
+[__main__] 2017-04-29 20:55:12,671 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 20:55:12,674 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 20:55:21,812 INFO web:2063: 200 GET /players (172.26.0.1) 1.01ms
+[tornado.general] 2017-04-29 20:55:28,183 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 20:56:31,041 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 20:56:31,043 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 20:57:13,830 INFO web:2063: 200 GET /players (172.26.0.1) 2.12ms
+[tornado.access] 2017-04-29 20:57:14,590 WARNING web:2063: 404 GET /favicon.ico (172.26.0.1) 8.08ms
+[tornado.general] 2017-04-29 20:57:24,051 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:01:13,581 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:01:13,584 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 21:01:40,449 INFO web:2063: 200 GET /players (172.26.0.1) 0.96ms
+[tornado.general] 2017-04-29 21:01:45,091 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:01:45,646 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:01:45,657 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 21:01:46,881 INFO web:2063: 200 GET /players (172.26.0.1) 1.59ms
+[__main__] 2017-04-29 21:05:49,981 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:05:49,984 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 21:05:50,730 INFO web:2063: 304 GET /players (172.26.0.1) 1.55ms
+[tornado.general] 2017-04-29 21:06:14,993 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:23:53,212 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:23:53,215 INFO __main__:54: Server started
+[__main__] 2017-04-29 21:26:47,029 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:26:47,042 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 21:33:13,506 WARNING web:2063: 405 GET /players (172.26.0.1) 10.21ms
+[tornado.general] 2017-04-29 21:34:08,052 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:34:08,823 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:34:08,832 INFO __main__:54: Server started
+[tornado.application] 2017-04-29 21:35:43,571 ERROR web:1590: Uncaught exception GET /players (172.26.0.1)
+HTTPServerRequest(protocol='http', host='localhost', method='GET', uri='/players', version='HTTP/1.1', remote_ip='172.26.0.1', headers={'Upgrade-Insecure-Requests': '1', 'Accept-Encoding': 'gzip, deflate, sdch, br', 'Connection': 'keep-alive', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36', 'Host': 'localhost', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Cache-Control': 'max-age=0', 'Cookie': 'ActiveX=0; MP_MODE=1', 'Accept-Language': 'en-US,en;q=0.8'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1511, in _execute
+    result = yield result
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 292, in wrapper
+    result = func(*args, **kwargs)
+TypeError: get() takes 1 positional argument but 2 were given
+[tornado.access] 2017-04-29 21:35:43,578 ERROR web:2063: 500 GET /players (172.26.0.1) 7.88ms
+[tornado.general] 2017-04-29 21:36:20,839 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:36:21,335 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:36:21,341 INFO __main__:54: Server started
+[app.handlers] 2017-04-29 21:36:24,791 DEBUG handlers:42: 
+[app.service] 2017-04-29 21:36:24,792 DEBUG service:38: Making GET "/players" request to stats service
+[app.service] 2017-04-29 21:36:24,922 INFO service:43: 599 response from stats service
+[tornado.general] 2017-04-29 21:36:24,924 ERROR web:1565: Bad HTTP status code: 599
+[tornado.access] 2017-04-29 21:36:24,941 ERROR web:2063: 500 GET /players (172.26.0.1) 151.39ms
+[tornado.general] 2017-04-29 21:37:05,855 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:37:06,547 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:37:06,559 INFO __main__:54: Server started
+[app.service] 2017-04-29 21:37:08,010 DEBUG service:38: Making GET "/players" request to stats service
+[app.service] 2017-04-29 21:37:08,020 INFO service:43: 599 response from stats service
+[tornado.general] 2017-04-29 21:37:08,021 ERROR web:1565: Bad HTTP status code: 599
+[tornado.access] 2017-04-29 21:37:08,037 ERROR web:2063: 500 GET /players (172.26.0.1) 27.74ms
+[__main__] 2017-04-29 21:38:21,334 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:38:21,338 INFO __main__:54: Server started
+[app.service] 2017-04-29 21:38:21,891 DEBUG service:38: Making GET "/players" request to stats service
+[app.service] 2017-04-29 21:38:21,902 INFO service:43: 500 response from stats service
+[tornado.access] 2017-04-29 21:38:21,921 ERROR web:2063: 500 GET /players (172.26.0.1) 30.47ms
+[app.service] 2017-04-29 21:38:44,743 DEBUG service:38: Making GET "/players" request to stats service
+[app.service] 2017-04-29 21:38:44,956 INFO service:43: 500 response from stats service
+[tornado.access] 2017-04-29 21:38:44,966 ERROR web:2063: 500 GET /players (172.26.0.1) 223.89ms
+[app.service] 2017-04-29 21:39:25,273 DEBUG service:38: Making GET "/players" request to stats service
+[tornado.application] 2017-04-29 21:39:25,299 ERROR web:1590: Uncaught exception GET /players (172.26.0.1)
+HTTPServerRequest(protocol='http', host='localhost', method='GET', uri='/players', version='HTTP/1.1', remote_ip='172.26.0.1', headers={'Cache-Control': 'max-age=0', 'Cookie': 'ActiveX=0; MP_MODE=1', 'Accept-Language': 'en-US,en;q=0.8', 'Connection': 'keep-alive', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36', 'Upgrade-Insecure-Requests': '1', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Accept-Encoding': 'gzip, deflate, sdch, br', 'Host': 'localhost'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1511, in _execute
+    result = yield result
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1063, in run
+    yielded = self.gen.throw(*exc_info)
+  File "/app/app/handlers.py", line 42, in get
+    self.write((yield self.stats_service.get('/players')))
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1069, in run
+    yielded = self.gen.send(value)
+  File "/app/app/service.py", line 20, in get
+    return self._parse_response(resp)
+  File "/app/app/service.py", line 48, in _parse_response
+    return json.loads(response.body.decode())
+  File "/usr/local/lib/python3.5/json/__init__.py", line 319, in loads
+    return _default_decoder.decode(s)
+  File "/usr/local/lib/python3.5/json/decoder.py", line 339, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/local/lib/python3.5/json/decoder.py", line 357, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+[tornado.access] 2017-04-29 21:39:25,305 ERROR web:2063: 500 GET /players (172.26.0.1) 32.73ms
+[app.service] 2017-04-29 21:40:24,918 DEBUG service:38: Making GET "/players" request to stats service
+[tornado.access] 2017-04-29 21:40:24,958 INFO web:2063: 200 GET /players (172.26.0.1) 39.98ms
+[__main__] 2017-04-29 21:48:52,303 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:48:52,308 INFO __main__:54: Server started
+[tornado.application] 2017-04-29 21:48:54,896 ERROR web:1590: Uncaught exception GET /drafts (172.26.0.1)
+HTTPServerRequest(protocol='http', host='localhost', method='GET', uri='/drafts', version='HTTP/1.1', remote_ip='172.26.0.1', headers={'Accept-Encoding': 'gzip, deflate, sdch, br', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.8', 'Connection': 'keep-alive', 'Cookie': 'ActiveX=0; MP_MODE=1', 'Upgrade-Insecure-Requests': '1', 'Host': 'localhost', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1511, in _execute
+    result = yield result
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 292, in wrapper
+    result = func(*args, **kwargs)
+TypeError: get() missing 1 required positional argument: 'args'
+[tornado.access] 2017-04-29 21:48:54,901 ERROR web:2063: 500 GET /drafts (172.26.0.1) 5.53ms
+[tornado.application] 2017-04-29 21:49:13,968 ERROR web:1590: Uncaught exception GET /drafts (172.26.0.1)
+HTTPServerRequest(protocol='http', host='localhost', method='GET', uri='/drafts', version='HTTP/1.1', remote_ip='172.26.0.1', headers={'Accept-Encoding': 'gzip, deflate, sdch, br', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.8', 'Connection': 'keep-alive', 'Cookie': 'ActiveX=0; MP_MODE=1', 'Cache-Control': 'max-age=0', 'Upgrade-Insecure-Requests': '1', 'Host': 'localhost', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1511, in _execute
+    result = yield result
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 292, in wrapper
+    result = func(*args, **kwargs)
+TypeError: get() missing 1 required positional argument: 'args'
+[tornado.access] 2017-04-29 21:49:13,973 ERROR web:2063: 500 GET /drafts (172.26.0.1) 6.74ms
+[tornado.general] 2017-04-29 21:50:48,814 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:50:49,450 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:50:49,461 INFO __main__:54: Server started
+[app.service] 2017-04-29 21:51:03,189 DEBUG service:38: Making GET "/drafts" request to drafts service
+[app.service] 2017-04-29 21:51:03,338 INFO service:43: 599 response from drafts service
+[tornado.general] 2017-04-29 21:51:03,340 ERROR web:1565: Bad HTTP status code: 599
+[tornado.access] 2017-04-29 21:51:03,419 ERROR web:2063: 500 GET /drafts (172.26.0.1) 226.14ms
+[__main__] 2017-04-29 21:53:18,662 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:53:18,665 INFO __main__:54: Server started
+[app.service] 2017-04-29 22:16:46,928 DEBUG service:38: Making GET "/drafts" request to drafts service
+[app.service] 2017-04-29 22:16:46,939 INFO service:43: 599 response from drafts service
+[tornado.general] 2017-04-29 22:16:46,940 ERROR web:1565: Bad HTTP status code: 599
+[tornado.access] 2017-04-29 22:16:46,952 ERROR web:2063: 500 GET /drafts (172.26.0.1) 25.10ms
+[__main__] 2017-04-29 22:19:01,565 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 22:19:01,571 INFO __main__:54: Server started
+[app.service] 2017-04-29 22:19:27,117 DEBUG service:38: Making GET "/drafts" request to drafts service
+[app.service] 2017-04-29 22:19:27,148 INFO service:43: 500 response from drafts service
+[tornado.access] 2017-04-29 22:19:27,178 ERROR web:2063: 500 GET /drafts (172.26.0.1) 62.44ms
+[app.service] 2017-04-29 22:20:21,090 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 22:20:21,166 INFO web:2063: 200 GET /drafts (172.26.0.1) 76.70ms
+[tornado.general] 2017-04-29 22:26:29,079 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 22:26:29,624 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 22:26:29,630 INFO __main__:54: Server started
+[tornado.general] 2017-04-29 22:26:30,642 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 22:26:31,285 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 22:26:31,301 INFO __main__:54: Server started
+[app.service] 2017-04-29 22:40:44,345 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 22:40:44,435 INFO web:2063: 304 GET /drafts (172.26.0.1) 90.77ms
+[__main__] 2017-04-29 23:10:34,796 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 23:10:34,800 INFO __main__:54: Server started
+[__main__] 2017-04-29 23:23:49,841 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 23:23:49,845 INFO __main__:54: Server started
+[app.service] 2017-04-29 23:47:06,319 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:47:08,513 INFO web:2063: 200 GET /drafts (172.26.0.1) 2359.20ms
+[app.service] 2017-04-29 23:49:39,602 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:49:39,614 INFO web:2063: 200 GET /drafts (172.26.0.1) 13.59ms
+[app.service] 2017-04-29 23:54:35,161 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:54:35,183 INFO web:2063: 200 GET /drafts (172.26.0.1) 22.57ms
+[tornado.access] 2017-04-29 23:55:31,567 INFO web:2063: 200 OPTIONS /drafts (172.26.0.1) 1.04ms
+[app.service] 2017-04-29 23:55:31,590 DEBUG service:38: Making POST "/drafts" request to drafts service
+[tornado.application] 2017-04-29 23:55:31,600 ERROR web:1590: Uncaught exception POST /drafts (172.26.0.1)
+HTTPServerRequest(protocol='http', host='127.0.0.1', method='POST', uri='/drafts', version='HTTP/1.1', remote_ip='172.26.0.1', headers={'Host': '127.0.0.1', 'Cache-Control': 'no-cache', 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36', 'Pragma': 'no-cache', 'Accept': 'application/json, text/javascript, */*; q=0.01', 'Referer': 'http://localhost:8080/', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Origin': 'http://localhost:8080', 'Accept-Language': 'en-US,en;q=0.8', 'Accept-Encoding': 'gzip, deflate, br', 'Content-Length': '15'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1511, in _execute
+    result = yield result
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1063, in run
+    yielded = self.gen.throw(*exc_info)
+  File "/app/app/handlers.py", line 67, in post
+    self.write((yield self.drafts_service.post('/drafts', body=self.request.body)))
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1063, in run
+    yielded = self.gen.throw(*exc_info)
+  File "/app/app/service.py", line 29, in post
+    resp = yield self._send('POST', path, **kwargs)
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 1055, in run
+    value = future.result()
+  File "/usr/local/lib/python3.5/site-packages/tornado/concurrent.py", line 238, in result
+    raise_exc_info(self._exc_info)
+  File "<string>", line 4, in raise_exc_info
+  File "/usr/local/lib/python3.5/site-packages/tornado/gen.py", line 307, in wrapper
+    yielded = next(result)
+  File "/app/app/service.py", line 39, in _send
+    kwargs['body'] = json.dumps(kwargs['body']) if 'body' in kwargs else None
+  File "/usr/local/lib/python3.5/json/__init__.py", line 230, in dumps
+    return _default_encoder.encode(obj)
+  File "/usr/local/lib/python3.5/json/encoder.py", line 198, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/local/lib/python3.5/json/encoder.py", line 256, in iterencode
+    return _iterencode(o, 0)
+  File "/usr/local/lib/python3.5/json/encoder.py", line 179, in default
+    raise TypeError(repr(o) + " is not JSON serializable")
+TypeError: b'{"name":"test"}' is not JSON serializable
+[tornado.access] 2017-04-29 23:55:31,698 ERROR web:2063: 500 POST /drafts (172.26.0.1) 114.09ms
+[tornado.general] 2017-04-29 23:56:50,849 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 23:56:51,589 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 23:56:51,596 INFO __main__:54: Server started
+[tornado.access] 2017-04-29 23:56:55,390 INFO web:2063: 200 OPTIONS /drafts (172.26.0.1) 1.22ms
+[app.service] 2017-04-29 23:56:55,396 DEBUG service:38: Making POST "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:56:56,431 INFO web:2063: 200 POST /drafts (172.26.0.1) 1035.84ms
+[tornado.access] 2017-04-29 23:56:56,443 INFO web:2063: 200 OPTIONS /drafts/1/teams (172.26.0.1) 1.00ms
+[tornado.access] 2017-04-29 23:56:56,450 INFO web:2063: 200 OPTIONS /drafts/1/teams (172.26.0.1) 1.76ms
+[app.service] 2017-04-29 23:56:56,452 DEBUG service:38: Making POST "/drafts/1/teams" request to drafts service
+[app.service] 2017-04-29 23:56:56,461 DEBUG service:38: Making POST "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-29 23:56:56,571 INFO web:2063: 200 POST /drafts/1/teams (172.26.0.1) 119.47ms
+[tornado.access] 2017-04-29 23:56:56,632 INFO web:2063: 200 POST /drafts/1/teams (172.26.0.1) 172.15ms
+[app.service] 2017-04-29 23:56:57,184 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[app.service] 2017-04-29 23:56:57,189 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[app.service] 2017-04-29 23:56:57,222 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[tornado.access] 2017-04-29 23:56:57,236 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 5.22ms
+[app.service] 2017-04-29 23:56:57,240 INFO service:43: 500 response from drafts service
+[tornado.access] 2017-04-29 23:56:57,255 ERROR web:2063: 500 GET /drafts/1/teams (172.26.0.1) 66.22ms
+[tornado.access] 2017-04-29 23:56:57,263 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 79.58ms
+[tornado.access] 2017-04-29 23:56:57,414 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 192.98ms
+[app.service] 2017-04-29 23:58:12,986 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:58:13,236 INFO web:2063: 200 GET /drafts (172.26.0.1) 251.01ms
+[app.service] 2017-04-29 23:58:15,812 DEBUG service:38: Making GET "/drafts" request to drafts service
+[tornado.access] 2017-04-29 23:58:15,838 INFO web:2063: 200 GET /drafts (172.26.0.1) 26.77ms
+[app.service] 2017-04-29 23:58:22,059 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[tornado.access] 2017-04-29 23:58:22,065 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 1.66ms
+[app.service] 2017-04-29 23:58:22,067 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[app.service] 2017-04-29 23:58:22,072 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-29 23:58:22,114 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 56.05ms
+[app.service] 2017-04-29 23:58:22,206 INFO service:43: 500 response from drafts service
+[tornado.access] 2017-04-29 23:58:22,227 ERROR web:2063: 500 GET /drafts/1/teams (172.26.0.1) 156.13ms
+[tornado.access] 2017-04-29 23:58:22,285 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 218.19ms
+[__main__] 2017-04-30 00:32:22,495 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 00:32:22,498 INFO __main__:54: Server started
+[__main__] 2017-04-30 00:45:47,936 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-30 00:45:47,940 INFO __main__:54: Server started
+[__main__] 2017-04-30 00:47:06,953 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 00:47:06,956 INFO __main__:54: Server started
+[__main__] 2017-04-30 00:52:44,973 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 00:52:44,975 INFO __main__:54: Server started
+[__main__] 2017-04-30 00:59:54,873 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 00:59:54,881 INFO __main__:54: Server started
+[__main__] 2017-04-30 01:16:16,658 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 01:16:16,661 INFO __main__:54: Server started
+[__main__] 2017-04-30 02:12:08,456 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 02:12:08,460 INFO __main__:54: Server started
+[__main__] 2017-04-30 02:13:28,093 INFO __main__:50: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 02:13:28,095 INFO __main__:54: Server started
+[app.service] 2017-04-30 02:13:52,659 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[app.service] 2017-04-30 02:13:52,674 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-30 02:13:52,704 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 5.41ms
+[app.service] 2017-04-30 02:13:52,711 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[tornado.access] 2017-04-30 02:13:53,280 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 630.49ms
+[app.service] 2017-04-30 02:13:53,561 INFO service:43: 500 response from drafts service
+[tornado.access] 2017-04-30 02:13:53,632 ERROR web:2063: 500 GET /drafts/1/teams (172.26.0.1) 959.30ms
+[tornado.access] 2017-04-30 02:13:53,967 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 1256.21ms
+[app.service] 2017-04-30 02:15:06,974 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[app.service] 2017-04-30 02:15:06,995 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[app.service] 2017-04-30 02:15:07,018 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[tornado.access] 2017-04-30 02:15:07,045 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 5.89ms
+[tornado.access] 2017-04-30 02:15:07,484 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 511.34ms
+[tornado.access] 2017-04-30 02:15:07,578 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 560.39ms
+[app.service] 2017-04-30 02:15:07,765 INFO service:43: 500 response from drafts service
+[tornado.access] 2017-04-30 02:15:07,769 ERROR web:2063: 500 GET /drafts/1/teams (172.26.0.1) 778.93ms
+[app.service] 2017-04-30 02:16:23,758 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[tornado.access] 2017-04-30 02:16:23,778 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 7.30ms
+[app.service] 2017-04-30 02:16:23,783 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[app.service] 2017-04-30 02:16:23,792 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-30 02:16:24,486 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 730.43ms
+[tornado.access] 2017-04-30 02:16:25,064 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 1282.91ms
+[tornado.access] 2017-04-30 02:16:25,243 INFO web:2063: 200 GET /drafts/1/teams (172.26.0.1) 1453.14ms
+[app.service] 2017-04-30 02:16:35,551 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[app.service] 2017-04-30 02:16:35,579 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[tornado.access] 2017-04-30 02:16:35,593 WARNING web:2063: 404 GET /draftroster/1 (172.26.0.1) 1.99ms
+[app.service] 2017-04-30 02:16:35,595 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-30 02:16:35,630 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 83.56ms
+[tornado.access] 2017-04-30 02:16:37,325 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 1746.76ms
+[tornado.access] 2017-04-30 02:16:37,492 INFO web:2063: 200 GET /drafts/1/teams (172.26.0.1) 1897.08ms
+[app.service] 2017-04-30 02:19:48,512 DEBUG service:38: Making GET "/drafts/1" request to drafts service
+[app.service] 2017-04-30 02:19:48,584 DEBUG service:38: Making GET "/drafts/1/players" request to drafts service
+[app.service] 2017-04-30 02:19:48,598 DEBUG service:38: Making GET "/drafts/1/teams" request to drafts service
+[tornado.access] 2017-04-30 02:19:48,612 WARNING web:2063: 404 GET /drafts/:draftId/roster/1 (172.26.0.1) 1.61ms
+[tornado.access] 2017-04-30 02:19:48,719 INFO web:2063: 200 GET /drafts/1 (172.26.0.1) 238.20ms
+[tornado.access] 2017-04-30 02:19:49,300 INFO web:2063: 200 GET /drafts/1/players (172.26.0.1) 716.55ms
+[tornado.access] 2017-04-30 02:19:49,461 INFO web:2063: 200 GET /drafts/1/teams (172.26.0.1) 863.84ms
+[__main__] 2017-04-30 02:28:09,075 INFO __main__:50: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-30 02:28:09,078 INFO __main__:54: Server started

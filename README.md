@@ -22,7 +22,7 @@ pip install -r ./server/requirements.txt
 http://ftp.gnu.org/gnu/glpk/
 
 ```
-./configure --prefix=/usr/local # see note [1]
+./configure --prefix=/usr/local
 make
 sudo make install
 ```

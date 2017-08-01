@@ -16,7 +16,7 @@ var CreatePage = React.createClass({
     displayName: 'CreatePage',
     getInitialState() {
         return {
-            draft: {},
+            draft: {name:''},
             teams: [],
             teamName: "",
             drafts: DraftStore.getAll()

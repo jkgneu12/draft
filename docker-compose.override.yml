@@ -1,0 +1,65 @@
+version: '2'
+services:
+  api:
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./api-service:/app
+     - ./api-service/logs:/var/log/app
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=true
+     - AUTORELOAD=true
+
+  stats:
+    build:
+      context: ./stats-service
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./stats-service:/app
+     - ./stats-service/logs:/var/log/app
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=true
+     - AUTORELOAD=true
+
+  stats-db:
+    volumes:
+     - ./stats-service/db/postgres:/var/lib/postgresql/data
+
+  drafts:
+    build:
+      context: ./drafts-service
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./drafts-service:/app
+     - ./drafts-service/logs:/var/log/app
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=true
+     - AUTORELOAD=true
+
+  drafts-db:
+    volumes:
+     - ./drafts-service/db/postgres:/var/lib/postgresql/data
+
+  optimizer:
+    build:
+      context: ./optimizer-service
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./optimizer-service:/app
+     - ./optimizer-service/logs:/var/log/app
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=true
+     - AUTORELOAD=true
+
+  webapp:
+    build:
+        context: ./webapp
+        dockerfile: Dockerfile-builder
+    command: grunt serve
+    volumes:
+     - ./webapp/src:/app/src

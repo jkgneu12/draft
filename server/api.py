@@ -156,12 +156,8 @@ class TeamsHandler(BaseHandler):
             team['starters'] = [player.to_dict(['core']) if player is not None else None for player in starters]
             team['bench'] = [player.to_dict(['core']) for player in bench]
             team['points'] = 0
-            team['ceil'] = 0
-            team['floor'] = 0
             for player in starters:
                 team['points'] += player.core.points if player is not None else 0
-                team['ceil'] += player.core.ceil if player is not None else 0
-                team['floor'] += player.core.floor if player is not None else 0
             return team
         else:
             teams = q.filter(Team.draft_id == int(draft_id)).all()
@@ -171,12 +167,8 @@ class TeamsHandler(BaseHandler):
                 team['starters'] = [player.to_dict(['core']) if player is not None else None for player in starters]
                 team['bench'] = [player.to_dict(['core']) if player is not None else None for player in bench]
                 team['points'] = 0
-                team['ceil'] = 0
-                team['floor'] = 0
                 for player in starters:
                     team['points'] += player.core.points if player is not None else 0
-                    team['ceil'] += player.core.ceil if player is not None else 0
-                    team['floor'] += player.core.floor if player is not None else 0
             return {'teams': teams_dict}
 
     def _create(self, args):
@@ -215,8 +207,7 @@ class PlayersHandler(BaseHandler):
             team = self.db.query(Team).filter(and_(Team.is_owner == True,
                                                    Team.draft_id == draft_id)).first()
 
-            available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
-                                                                                    PlayerCore.target_price != None,
+            available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.target_price != None,
                                                                                     PlayerCore.points > 0,
                                                                                     Player.draft_id == draft_id,
                                                                                     Player.team_id == None,
@@ -254,7 +245,6 @@ class PlayersHandler(BaseHandler):
             return ret
         else:
             players = q.join(PlayerCore).filter(and_(Player.draft_id == int(draft_id),
-                                                     PlayerCore.rank != None,
                                                      PlayerCore.target_price != None)).all()
             return {'players': [p.to_dict(['core']) for p in players]}
 
@@ -287,12 +277,21 @@ class PlayersHandler(BaseHandler):
 class CorePlayersHandler(BaseHandler):
     def _create(self, args):
         player_name = self.request_body_json['name']
-        position = self.request_body_json['position']
-        player = self.db.query(PlayerCore).filter(and_(PlayerCore.name == player_name,
-                                                       PlayerCore.position == position)).first()
+        position = self.request_body_json['position'] if 'position' in self.request_body_json else None
+        if position is not None:
+            player = self.db.query(PlayerCore).filter(and_(PlayerCore.name == player_name,
+                                                           PlayerCore.position == position)).first()
+        else:
+            player = self.db.query(PlayerCore).filter(and_(PlayerCore.name == player_name)).first()
+
+        request_body = self.request_body_json    
         if player is None:
-            player = PlayerCore()
-        self._update_fields(player, self.request_body_json)
+            return {}
+        else:
+            if player.target_price > request_body['target_price']:
+                print(player.name + ' ' + str(player.target_price))
+                request_body['target_price'] = player.target_price
+        self._update_fields(player, request_body)
         self.db.add(player)
         self.db.commit()
 
@@ -301,7 +300,7 @@ class CorePlayersHandler(BaseHandler):
     def _update(self, args):
         id = args[0]
 
-        player = self.db.query(PlayerCore).filter(PlayerCore.id == int(id)).first()
+        player = self.db.query(PlayerCore).filter(PlayerCore.id == int(id)).first()        
 
         self._update_fields(player, self.request_body_json)
 
@@ -358,8 +357,7 @@ class RostersHandler(BaseHandler):
 
         starters, bench = get_starters_and_bench(self.db, team_id)
 
-        available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.rank != None,
-                                                                                PlayerCore.target_price != None,
+        available_players = self.db.query(Player).join(Player.core).filter(and_(PlayerCore.target_price != None,
                                                                                 PlayerCore.points > 0,
                                                                                 Player.draft_id == draft_id,
                                                                                 Player.team_id == None)).order_by(PlayerCore.rank).all()
@@ -367,6 +365,7 @@ class RostersHandler(BaseHandler):
         optimal_roster, points = optimizer.optimize_roster(starters, available_players, owner_team.money - (constants.BENCH_SIZE - len(bench)))
 
         for player in optimal_roster:
+            print(player.core.name)
             place_player(player, starters, bench)
 
         money_spent = 0

@@ -1,0 +1,13 @@
+FROM nginx:1.11
+
+ENV WEBAPP_STATIC_DIR=/usr/share/nginx \
+    WEBAPP_LOG_DIR=/var/log/nginx
+
+RUN mkdir -p $WEBAPP_LOG_DIR
+
+RUN rm -f $WEBAPP_LOG_DIR/access.log $WEBAPP_LOG_DIR/error.log
+VOLUME ["$WEBAPP_LOG_DIR"]
+
+WORKDIR $WEBAPP_STATIC_DIR
+
+ADD ./html $WEBAPP_STATIC_DIR/html

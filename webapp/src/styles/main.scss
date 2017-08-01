@@ -1,0 +1,306 @@
+@import './constants';
+
+@import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import "../../node_modules/font-awesome/scss/font-awesome";
+
+* {
+    border-radius: 0 !important;
+    font-family:$font-family;
+}
+.btn:focus {outline:0;}
+.CodeMirror * {
+    font-family: monospace !important;
+}
+a {
+    cursor: pointer;
+}
+
+html, .fill-height {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    color: $text-color;
+}
+
+thead {
+    background-color: $soft-background-color;
+}
+
+td, th {
+    padding: 2px !important;
+    text-align: center !important;
+}
+
+input {
+    background-color: rgba(100,100,100,.9) !important;
+    color: white !important;;
+}
+.label {
+    font-weight: normal;
+}
+
+#content {
+    height: 100%;
+}
+
+
+#header {
+    background-color: $header-color;
+    border: thin solid $soft-border-color;
+    color: $header-text-color;
+    height: $header-height;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 26px;
+    padding: 2px 5px;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    background-color: $footer-color;
+    border: thin solid $soft-border-color;
+    color: $footer-text-color;
+    height: $footer-height;
+    font-size: 12px;
+    line-height: 19px;
+    padding: 0px 5px;
+    width: 100%;
+    text-align: right;
+}
+
+#main-content {
+    @include calc(height, unquote("100% - #{$header-height} - #{$footer-height}"));
+    overflow: hidden;
+}
+
+.create {
+    overflow-y: scroll;
+    .create-body {
+        margin: 0 auto;
+        padding: 30px 20px;
+        width: 600px;
+        background-color: $bg-color;
+    }
+}
+
+.draft {
+    .left-side {
+        overflow: hidden;
+        padding-right: 0;
+    }
+    .right-side {
+        overflow: hidden;
+        padding-left: 0;
+        background-color: $hard-background-color;
+    }
+}
+
+.round-label {
+    text-align: right;
+    padding-right: 15px;
+    color: white;
+}
+
+.teams-list {
+    border-left: solid thin $soft-border-color;
+    overflow: scroll;
+    @include calc(height, unquote("100% - 40px"));
+    position: relative;
+    top: 1px;
+
+    .panel {
+        margin: 0;
+        .panel-heading {
+            padding: 0;
+            h4 {
+                padding-left: 6px;
+                padding-top: 3px;
+                margin: 1px;
+            }
+        }
+        .panel-body {
+            padding: 0;
+        }
+    }
+
+    .teams-list-item {
+        border: solid thin $hard-border-color;
+        @extend .panel;
+
+
+        .label {
+            width: 100px;
+            @extend .pull-right;
+        }
+        .col-xs-2 {
+            padding: 0;
+            .panel {
+                text-align: center;
+            }
+        }
+    }
+    .teams-list-item.droppable {
+        border: solid thin $brand-primary;
+    }
+}
+
+.filter-bar {
+    height: $filterBarHeight;
+    border-bottom: solid thin $soft-border-color;
+    background-color: $hard-background-color;
+    color: white;
+
+    input {
+        font-size: 18px;
+        height:40px;
+    }
+
+    .points-column {
+        font-size: 1.2em;
+        line-height: 41px;
+    }
+    .fa-times-circle {
+        color: $brand-danger;
+        font-size: 1.8em;
+        padding-bottom: 0;
+        position: relative;
+        top: 5px;
+    }
+}
+.filter-bar.danger {
+    background-color: $brand-warning;
+}
+.filter-bar.success {
+    background-color: $brand-success;
+}
+
+.player-details {
+    height: $playerDetailsHeight;
+    border: solid thin $soft-border-color;
+    overflow: hidden;
+    .col-xs-4 {
+        padding: 0;
+    }
+    .panel {
+        margin: 0;
+        text-align: center;
+        .panel-body {
+            font-weight: bold;
+        }
+    }
+}
+
+
+.players-list {
+    @include calc(height, unquote("#{$playersListHeight} - #{$playerDetailsHeight/2}"));
+    overflow: hidden;
+    text-align: center !important;
+    position: relative;
+
+    .success {
+        //text-decoration: line-through;
+    }
+    .warning {
+        //text-decoration: line-through;
+    }
+    .info {
+        font-weight: bold;
+    }
+    .filters {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        background-color: $soft-border-color;
+        .filter-checkbox {
+            margin: 0 20px;
+        }
+    }
+
+    .fa-thumbs-up {
+        color: $brand-success;
+    }
+    .fa-thumbs-down {
+        color: $brand-danger;
+    }
+    .table-head {
+        top: 19px;
+    }
+    .table-body {
+        top: 20px;
+        @include calc(height, unquote("100% - 20px"));
+    }
+}
+
+.roster {
+    @include calc(height, unquote("#{$rosterHeight} - 91px"));
+    overflow: hidden;
+    position: relative;
+
+    .table-head {
+        top: 0;
+    }
+    .table-body {
+        height: 100%;
+    }
+}
+
+
+.table-head {
+    overflow-y: scroll;
+    position: absolute;
+    background-color: white;
+    table {
+        margin-bottom: 0;
+    }
+}
+.table-body {
+    position: relative;
+    overflow-y: scroll;
+    thead {
+        visibility: hidden;
+    }
+}
+
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+.tt-query {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+    color: #999
+}
+
+.tt-menu {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    padding: 3px 20px;
+    font-size: 14px;
+    line-height: 18px;
+    color: black;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+

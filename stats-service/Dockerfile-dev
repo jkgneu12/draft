@@ -1,0 +1,6 @@
+FROM stats-service
+
+ADD . /app
+ADD ./conf/app.conf $CONF_DIR/app.conf
+
+RUN pip install -r requirements.txt --upgrade

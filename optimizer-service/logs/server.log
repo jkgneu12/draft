@@ -1,0 +1,294 @@
+[__main__] 2017-04-29 21:05:48,839 INFO __main__:31: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:05:48,846 INFO __main__:35: Server started
+[__main__] 2017-04-29 21:12:46,666 INFO __main__:31: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:12:46,669 INFO __main__:35: Server started
+[tornado.general] 2017-04-29 21:13:05,674 INFO autoreload:198: /app/app/__main__.py modified; restarting server
+[__main__] 2017-04-29 21:26:34,425 INFO __main__:35: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:38:08,829 INFO __main__:35: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 21:38:08,957 INFO __main__:48: Server started
+[tornado.application] 2017-04-29 21:38:21,898 ERROR web:1590: Uncaught exception GET /players (172.26.0.2)
+HTTPServerRequest(protocol='http', host='stats', method='GET', uri='/players', version='HTTP/1.1', remote_ip='172.26.0.2', headers={'Connection': 'close', 'Host': 'stats', 'Accept-Encoding': 'gzip'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1509, in _execute
+    result = method(*self.path_args, **self.path_kwargs)
+TypeError: get() takes 1 positional argument but 2 were given
+[tornado.access] 2017-04-29 21:38:21,901 ERROR web:2063: 500 GET /players (172.26.0.2) 3.83ms
+[tornado.general] 2017-04-29 21:38:42,464 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:38:43,518 INFO __main__:35: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 21:38:43,579 INFO __main__:48: Server started
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,904 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,905 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,915 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,917 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,921 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,922 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,930 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,931 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,933 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,934 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,935 INFO log:109: BEGIN (implicit)
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,938 INFO log:109: SELECT player.id AS player_id, player.notes AS player_notes, player.name AS player_name, player.position AS player_position, player.team_name AS player_team_name, player.target_price AS player_target_price, player.rank AS player_rank, player.adp AS player_adp, player.tier AS player_tier, player.position_rank AS player_position_rank, player.likes AS player_likes, player.dislikes AS player_dislikes, player.dropoff AS player_dropoff, player.risk AS player_risk, player.points AS player_points, player.ceil AS player_ceil, player.floor AS player_floor, player.ecr AS player_ecr, player.bye AS player_bye 
+FROM player
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:38:44,939 INFO log:109: {}
+[tornado.application] 2017-04-29 21:38:44,940 ERROR web:1590: Uncaught exception GET /players (172.26.0.2)
+HTTPServerRequest(protocol='http', host='stats', method='GET', uri='/players', version='HTTP/1.1', remote_ip='172.26.0.2', headers={'Host': 'stats', 'Accept-Encoding': 'gzip', 'Connection': 'close'})
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 1182, in _execute_context
+    context)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/default.py", line 470, in do_execute
+    cursor.execute(statement, parameters)
+psycopg2.ProgrammingError: relation "player" does not exist
+LINE 2: FROM player
+             ^
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.5/site-packages/tornado/web.py", line 1509, in _execute
+    result = method(*self.path_args, **self.path_kwargs)
+  File "/app/app/handlers.py", line 31, in get
+    players = self.db.query(Player).all()
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/orm/query.py", line 2703, in all
+    return list(self)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/orm/query.py", line 2855, in __iter__
+    return self._execute_and_instances(context)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/orm/query.py", line 2878, in _execute_and_instances
+    result = conn.execute(querycontext.statement, self._params)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 945, in execute
+    return meth(self, multiparams, params)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/sql/elements.py", line 263, in _execute_on_connection
+    return connection._execute_clauseelement(self, multiparams, params)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 1053, in _execute_clauseelement
+    compiled_sql, distilled_params
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 1189, in _execute_context
+    context)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 1402, in _handle_dbapi_exception
+    exc_info
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/util/compat.py", line 203, in raise_from_cause
+    reraise(type(exception), exception, tb=exc_tb, cause=cause)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/util/compat.py", line 186, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/base.py", line 1182, in _execute_context
+    context)
+  File "/usr/local/lib/python3.5/site-packages/sqlalchemy/engine/default.py", line 470, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.ProgrammingError: (psycopg2.ProgrammingError) relation "player" does not exist
+LINE 2: FROM player
+             ^
+ [SQL: 'SELECT player.id AS player_id, player.notes AS player_notes, player.name AS player_name, player.position AS player_position, player.team_name AS player_team_name, player.target_price AS player_target_price, player.rank AS player_rank, player.adp AS player_adp, player.tier AS player_tier, player.position_rank AS player_position_rank, player.likes AS player_likes, player.dislikes AS player_dislikes, player.dropoff AS player_dropoff, player.risk AS player_risk, player.points AS player_points, player.ceil AS player_ceil, player.floor AS player_floor, player.ecr AS player_ecr, player.bye AS player_bye \nFROM player']
+[tornado.access] 2017-04-29 21:38:44,959 ERROR web:2063: 500 GET /players (172.26.0.2) 205.07ms
+[tornado.general] 2017-04-29 21:39:22,585 INFO autoreload:198: /app/app/__main__.py modified; restarting server
+[__main__] 2017-04-29 21:39:23,439 INFO __main__:35: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,513 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,515 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,519 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,521 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,524 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,525 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,527 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,528 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,530 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,531 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,533 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,534 INFO log:109: {'name': 'player'}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,557 INFO log:109: 
+CREATE TABLE player (
+	id SERIAL NOT NULL, 
+	notes TEXT, 
+	name VARCHAR(128), 
+	position VARCHAR(4), 
+	team_name VARCHAR(128), 
+	target_price INTEGER, 
+	rank INTEGER, 
+	adp INTEGER, 
+	tier INTEGER, 
+	position_rank INTEGER, 
+	likes BOOLEAN, 
+	dislikes BOOLEAN, 
+	dropoff INTEGER, 
+	risk INTEGER, 
+	points INTEGER, 
+	ceil INTEGER, 
+	floor INTEGER, 
+	ecr INTEGER, 
+	bye INTEGER, 
+	PRIMARY KEY (id)
+)
+
+
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,558 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:23,835 INFO log:109: COMMIT
+[__main__] 2017-04-29 21:39:23,863 INFO __main__:51: Server started
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:25,284 INFO log:109: BEGIN (implicit)
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:25,286 INFO log:109: SELECT player.id AS player_id, player.notes AS player_notes, player.name AS player_name, player.position AS player_position, player.team_name AS player_team_name, player.target_price AS player_target_price, player.rank AS player_rank, player.adp AS player_adp, player.tier AS player_tier, player.position_rank AS player_position_rank, player.likes AS player_likes, player.dislikes AS player_dislikes, player.dropoff AS player_dropoff, player.risk AS player_risk, player.points AS player_points, player.ceil AS player_ceil, player.floor AS player_floor, player.ecr AS player_ecr, player.bye AS player_bye 
+FROM player
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:39:25,287 INFO log:109: {}
+[tornado.access] 2017-04-29 21:39:25,297 INFO web:2063: 200 GET /players (172.26.0.2) 20.05ms
+[tornado.general] 2017-04-29 21:40:20,375 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:40:21,283 INFO __main__:35: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,482 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,484 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,493 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,498 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,503 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,505 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,506 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,507 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,508 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,509 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,518 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:21,523 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 21:40:21,545 INFO __main__:51: Server started
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:24,933 INFO log:109: BEGIN (implicit)
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:24,943 INFO log:109: SELECT player.id AS player_id, player.notes AS player_notes, player.name AS player_name, player.position AS player_position, player.team_name AS player_team_name, player.target_price AS player_target_price, player.rank AS player_rank, player.adp AS player_adp, player.tier AS player_tier, player.position_rank AS player_position_rank, player.likes AS player_likes, player.dislikes AS player_dislikes, player.dropoff AS player_dropoff, player.risk AS player_risk, player.points AS player_points, player.ceil AS player_ceil, player.floor AS player_floor, player.ecr AS player_ecr, player.bye AS player_bye 
+FROM player
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:40:24,944 INFO log:109: {}
+[tornado.access] 2017-04-29 21:40:24,955 INFO web:2063: 200 GET /players (172.26.0.2) 28.35ms
+[__main__] 2017-04-29 21:48:39,416 INFO __main__:35: Settings: {'debug': True, 'autoreload': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,524 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,526 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,543 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,544 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,549 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,552 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,558 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,559 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,560 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,561 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,563 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:48:39,564 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 21:48:39,576 INFO __main__:51: Server started
+[tornado.general] 2017-04-29 21:51:02,089 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 21:51:03,320 INFO __main__:35: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,599 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,604 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,613 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,615 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,618 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,618 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,620 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,621 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,622 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,622 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,624 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:03,625 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 21:51:03,645 INFO __main__:51: Server started
+[tornado.general] 2017-04-29 21:51:57,657 INFO autoreload:198: /app/app/__main__.py modified; restarting server
+[__main__] 2017-04-29 21:51:58,596 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,680 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,682 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,691 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,695 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,698 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,699 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,702 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,703 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,705 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,706 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,708 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:51:58,711 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 21:51:58,773 INFO __main__:52: Server started
+[__main__] 2017-04-29 21:53:05,896 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,972 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,973 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,975 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,976 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,978 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,979 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,982 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,983 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,984 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,985 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,987 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 21:53:05,988 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 21:53:05,999 INFO __main__:52: Server started
+[tornado.general] 2017-04-29 22:17:39,505 INFO autoreload:198: /app/app/models.py modified; restarting server
+[__main__] 2017-04-29 22:17:40,594 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,734 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,736 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,744 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,746 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,752 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,754 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,759 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,760 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,762 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,764 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,767 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:40,769 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 22:17:40,801 INFO __main__:52: Server started
+[tornado.general] 2017-04-29 22:17:42,318 INFO autoreload:198: /app/app/models.py modified; restarting server
+[__main__] 2017-04-29 22:17:43,330 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,434 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,435 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,438 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,439 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,445 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,446 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,449 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,451 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,456 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,459 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,461 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:17:43,462 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 22:17:43,478 INFO __main__:52: Server started
+[__main__] 2017-04-29 22:18:47,814 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,882 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,883 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,888 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,889 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,891 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,893 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,899 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,899 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,900 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,901 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,902 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:18:47,903 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 22:18:47,914 INFO __main__:52: Server started
+[tornado.general] 2017-04-29 22:30:31,430 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 22:30:32,476 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,552 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,553 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,557 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,557 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,559 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,560 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,561 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,562 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,562 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,563 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,565 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:30:32,566 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 22:30:32,580 INFO __main__:52: Server started
+[tornado.general] 2017-04-29 22:37:38,083 INFO autoreload:198: /app/app/handlers.py modified; restarting server
+[__main__] 2017-04-29 22:37:39,059 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,159 INFO log:109: select version()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,161 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,164 INFO log:109: select current_schema()
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,165 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,168 INFO log:109: SELECT CAST('test plain returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,171 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,173 INFO log:109: SELECT CAST('test unicode returns' AS VARCHAR(60)) AS anon_1
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,174 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,175 INFO log:109: show standard_conforming_strings
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,176 INFO log:109: {}
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,179 INFO log:109: select relname from pg_class c join pg_namespace n on n.oid=c.relnamespace where pg_catalog.pg_table_is_visible(c.oid) and relname=%(name)s
+[sqlalchemy.engine.base.Engine] 2017-04-29 22:37:39,180 INFO log:109: {'name': 'player'}
+[__main__] 2017-04-29 22:37:39,198 INFO __main__:52: Server started
+[__main__] 2017-04-29 23:09:56,138 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:12:10,829 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:17:49,502 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:18:08,716 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:21:28,105 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:22:41,697 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 23:23:46,703 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:27:45,684 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-29 23:30:07,134 INFO __main__:36: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-29 23:45:08,760 INFO __main__:36: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 02:11:42,646 INFO __main__:30: Settings: {'debug': True, 'autoreload': True}
+[__main__] 2017-04-30 02:13:04,044 INFO __main__:30: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-30 02:13:04,054 INFO __main__:34: Server started
+[__main__] 2017-04-30 02:27:42,375 INFO __main__:30: Settings: {'autoreload': True, 'debug': True}
+[__main__] 2017-04-30 02:27:42,378 INFO __main__:34: Server started

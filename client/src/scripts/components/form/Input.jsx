@@ -14,22 +14,22 @@ var Input = React.createClass({
     },
     componentDidMount() {
         if(this.props.autocompletes) {
-            // $(ReactDOM.findDOMNode(this)).
-            //     bind('typeahead:selected', this.typeaheadSelected).
-            //     bind('typeahead:autocompleted', this.typeaheadCompleted);
+            $(ReactDOM.findDOMNode(this)).
+                bind('typeahead:selected', this.typeaheadSelected).
+                bind('typeahead:autocompleted', this.typeaheadCompleted);
 
-            // $(ReactDOM.findDOMNode(this)).typeahead({
-            //         hint: true,
-            //         highlight: true,
-            //         minLength: 1
-            //     },
-            //     {
-            //         name: 'autocompletes',
-            //         displayKey: this.getAutocompleteDisplay,
-            //         source: this.substringMatcher,
-            //         limit: 20
-            //     }
-            // );
+            $(ReactDOM.findDOMNode(this)).typeahead({
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                },
+                {
+                    name: 'autocompletes',
+                    displayKey: this.getAutocompleteDisplay,
+                    source: this.substringMatcher,
+                    limit: 20
+                }
+            );
         }
         if(this.props.onScroll) {
             var self = this;

@@ -1,0 +1,23 @@
+FROM node:6.3.1
+
+ENV WEBAPP_DIR=/app \
+    WEBAPP_BUILD_DIR=/app/html
+
+RUN mkdir -p $WEBAPP_DIR $WEBAPP_BUILD_DIR
+
+WORKDIR $WEBAPP_DIR
+
+RUN npm install -g grunt-cli bower
+
+ADD src/ $WEBAPP_DIR/src/
+ADD bower.json $WEBAPP_DIR/
+ADD package.json $WEBAPP_DIR/
+ADD Gruntfile.js $WEBAPP_DIR/
+ADD webpack.config.js $WEBAPP_DIR/
+ADD webpack.dist.config.js $WEBAPP_DIR/
+
+RUN npm install --loglevel warn
+RUN npm rebuild node-sass
+RUN bower install --allow-root
+
+CMD ["grunt", "build"]

@@ -3,6 +3,8 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var $ = require('jquery');
+
 var Checkbox = React.createClass({
 
     getInitialState: function() {
@@ -28,7 +30,7 @@ var Checkbox = React.createClass({
     },
     onChange: function(event) {
         var checked = event.target.checked;
-        ReactDOM.findDOMNode().indeterminate = this.state.indeterminate && checked;
+        $(ReactDOM.findDOMNode()).indeterminate = this.state.indeterminate && checked;
         this.props.onChange(checked, this.props.value);
         this.setState({checked: checked});
     }

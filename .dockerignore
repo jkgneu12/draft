@@ -1,0 +1,5 @@
+.dockerignore
+*/logs
+scripts
+dump.sql
+test

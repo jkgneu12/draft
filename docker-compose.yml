@@ -1,0 +1,94 @@
+version: '2'
+services:
+  api:
+    container_name: api
+    build:
+      context: ./api-service
+      dockerfile: Dockerfile
+    links:
+     - stats
+     - drafts
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=false
+     - AUTORELOAD=false
+    ports:
+     - "80:80"
+
+  stats:
+    container_name: stats
+    build:
+      context: ./stats-service
+      dockerfile: Dockerfile
+    links:
+     - stats-db
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=false
+     - AUTORELOAD=false
+     - DB_USER=draft
+     - DB_PASSWORD=draft
+     - DB_DATABASE=app
+
+  stats-db:
+    container_name: stats-db
+    build:
+      context: ./stats-service
+      dockerfile: Dockerfile-db
+    expose:
+     - "3306"
+    environment:
+     - POSTGRES_USER=root
+     - POSTGRES_PASSWORD=root
+     - DB_USER=draft
+     - DB_PASSWORD=draft
+     - DB_DATABASE=app
+
+  drafts:
+    container_name: drafts
+    build:
+      context: ./drafts-service
+      dockerfile: Dockerfile
+    links:
+     - stats
+     - optimizer
+     - drafts-db
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=false
+     - AUTORELOAD=false
+     - DB_USER=draft
+     - DB_PASSWORD=draft
+     - DB_DATABASE=app
+
+  drafts-db:
+    container_name: drafts-db
+    build:
+      context: ./drafts-service
+      dockerfile: Dockerfile-db
+    expose:
+     - "3306"
+    environment:
+     - POSTGRES_USER=root
+     - POSTGRES_PASSWORD=root
+     - DB_USER=draft
+     - DB_PASSWORD=draft
+     - DB_DATABASE=app
+
+  optimizer:
+    container_name: optimizer
+    build:
+      context: ./optimizer-service
+      dockerfile: Dockerfile
+    environment:
+     - LOG_LEVEL=10
+     - DEBUG=false
+     - AUTORELOAD=false
+
+  webapp:
+    container_name: webapp
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile-nginx
+    ports:
+     - "8080:80"

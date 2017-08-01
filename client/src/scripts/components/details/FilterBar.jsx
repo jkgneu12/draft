@@ -49,10 +49,29 @@ var FilterBar = React.createClass({
     },
 
     onPlayerChange() {
+        var target = PlayerStore.getCurrent().get('core').get('adj_price');        
+        if(PlayerStore.getCurrent().get('max_starters_points')[0] != null) {
+            var maxList = PlayerStore.getCurrent().get('max_starters_points');
+            var rosterMaxPoints = this.state.roster.get('max_points') / Constants.WEEKS;
+
+            var closest = -1;
+            Object.keys(maxList).forEach(function(price) {                
+                var maxPoints = maxList[price] / Constants.WEEKS;
+                if(maxPoints >= rosterMaxPoints) {
+                    closest = price;
+                }
+            });
+            
+            if(closest >= 0 && PlayerStore.getValue() !== closest) {
+                PlayerStore.setValue(closest);
+            }
+        }
+
         this.setState({
-            player: PlayerStore.getCurrent(),
+            player: PlayerStore.getCurrent(),            
+            value: PlayerStore.getValue(),
             filter: PlayerStore.getCurrent().get('core').get('name') || ''
-        });
+        });        
     },
 
     onPlayersChange() {
@@ -110,6 +129,7 @@ var FilterBar = React.createClass({
 
     selectPlayer(core) {
         var player = PlayerStore.getAll().findWhere({core_id: core.get('id')});
+        PlayerStore.setValue(core.get('adj_price'));
         PlayerStore.setCurrent(player.get('id'));
         PlayerStore.refreshCurrent();
     },
@@ -125,6 +145,7 @@ var FilterBar = React.createClass({
         var leaveColumn = null;
         var startColumn = null;
         var benchColumn = null;
+        var clsName = 'filter-bar ';
 
         if(this.state.player.get('id')) {
 
@@ -133,6 +154,13 @@ var FilterBar = React.createClass({
 
             var maxStartersPoints = this.state.player.get('max_starters_points');
             var maxBenchPoints = this.state.player.get('max_bench_points');
+            
+            if (this.state.player.get('core').get('likes') == true) {
+                clsName += 'success';
+            }
+            if (this.state.player.get('core').get('dislikes') == true) {
+                clsName += 'danger';
+            }
 
             if (this.state.value > maxBid) {
                 startColumn = (
@@ -206,7 +234,7 @@ var FilterBar = React.createClass({
 
         return (
 
-            <div className="filter-bar"
+            <div className={clsName}
                  draggable="true"
                  onDragStart={this.onDrag}
                  onDragOver={this.onDragOver}

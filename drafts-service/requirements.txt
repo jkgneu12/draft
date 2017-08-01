@@ -1,0 +1,5 @@
+tornado~=4.5
+requests~=2.7
+SQLAlchemy~=1.0
+SQLAlchemy-Utils~=0.32
+psycopg2~=2.6
