@@ -16,7 +16,7 @@ var CreatePage = React.createClass({
     displayName: 'CreatePage',
     getInitialState() {
         return {
-            draft: {},
+            draft: {name:''},
             teams: [],
             teamName: "",
             drafts: DraftStore.getAll()
@@ -77,7 +77,11 @@ var CreatePage = React.createClass({
     },
 
     setOwner: function(index, checked) {
+    	console.log('setOwner');
+    	console.log(index);
+    	console.log(checked);
         this.state.teams.forEach(function(team, idx){
+        	console.log(team);
             if(checked || idx === index) {
                 team.is_owner = idx === index && checked;
             }

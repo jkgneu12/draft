@@ -1,13 +1,13 @@
 import math
 
+import constants
+
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import SignatureTranslatedAnonymousPackage
 
-import constants
-
 r_code = """
 library(Rglpk)
-optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, num_players) {
+optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, tier_1_rbs, tier_2_rbs, tier_1_wrs, tier_2_wrs, studs, num_players) {
 
     points=optimizeData$points
     playerCost=optimizeData$cost
@@ -24,7 +24,12 @@ optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, 
              as.numeric(optimizeData$pos == "TE"), # num TE
              as.numeric(optimizeData$pos == "TE"), # num TE,
              as.numeric(optimizeData$pos == "K"), # num K,
-             as.numeric(optimizeData$pos == "D"), # num D
+             as.numeric(optimizeData$pos == "D"), # num D,
+             as.numeric(optimizeData$tier == "RB1"), # num tier 1 RB,
+             as.numeric(optimizeData$tier == "RB2"), # num tier 2 RB,
+             as.numeric(optimizeData$tier == "WR1"), # num tier 1 WR,
+             as.numeric(optimizeData$tier == "WR2"), # num tier 2 WR,
+             as.numeric(optimizeData$stud == "STUD"), # num studs,
              playerCost,                           # total cost
              rep(1,num.players))                   # num of players in starting lineup
 
@@ -38,6 +43,11 @@ optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, 
            "<=",
            "==",
            "==",
+           ">=",
+           ">=",
+           ">=",
+           ">=",
+           ">=",
            "<=",
            "==")
 
@@ -51,6 +61,11 @@ optimize <- function(optimizeData, maxCost, min_qbs, max_qbs, min_rbs, max_rbs, 
          max_tes,
          ks,
          ds,
+         tier_1_rbs,
+         tier_2_rbs,
+         tier_1_wrs,
+         tier_2_wrs,
+         studs,
          maxCost,
          num_players)
 
@@ -70,33 +85,57 @@ def optimize_roster(starters, available_players, money):
     positions = []
     points = []
     costs = []
+    tiers = []
+    studs = []
 
     for player in available_players:
         names.append(player.core.name)
         positions.append(player.core.position)
-        points.append(player.core.points)
+        if player.core.dislikes == True:
+            points.append(0)
+        elif player.core.position == 'QB':
+            points.append(player.core.points / 5 / (player.core.risk + 2))
+        else:
+            points.append(player.core.points / (player.core.risk + 2))
         costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
+        tier = 3
+        stud = "NOPE"
+        if player.core.tier <= 1 and player.core.position in ['RB','WR']:
+            stud = "STUD"
+        if player.core.tier <= 2:
+            tier = 1
+        elif player.core.tier <= 4:
+            tier = 2
+        tiers.append(player.core.position + str(tier))
+        studs.append(stud)
 
     d = {
         'name': robjects.StrVector(names),
         'player': robjects.StrVector(names),
         'pos': robjects.StrVector(positions),
         'points': robjects.IntVector(points),
-        'cost': robjects.IntVector(costs)
+        'cost': robjects.IntVector(costs),
+        'tier': robjects.StrVector(tiers),
+        'stud': robjects.StrVector(studs)
 
     }
     dataf = robjects.DataFrame(d)
 
     qbs = 1
-    min_rbs = 3
-    max_rbs = 4
-    min_wrs = 3
-    max_wrs = 4
+    min_rbs = 2
+    max_rbs = 3
+    min_wrs = 2
+    max_wrs = 3
     min_tes = 1
     max_tes = 2
     ks = 1
     ds = 1
-    roster_size = 11
+    tier_1_rbs = 0
+    tier_2_rbs = 1
+    tier_1_wrs = 2
+    tier_2_wrs = 1
+    studs = 1
+    roster_size = constants.TEAM_SIZE - constants.BENCH_SIZE
 
     if starters[0] is not None:
         qbs -= 1
@@ -106,55 +145,81 @@ def optimize_roster(starters, available_players, money):
         min_rbs -= 1
         max_rbs -= 1
         roster_size -= 1
+        if starters[1].core.tier <= 1:
+            studs -= 1
+        if starters[1].core.tier <= 2:
+            tier_1_rbs -=1
+        elif starters[1].core.tier <= 4:
+            tier_2_rbs -=1
 
     if starters[2] is not None:
         min_rbs -= 1
         max_rbs -= 1
         roster_size -= 1
+        if starters[2].core.tier <= 4:
+            tier_2_rbs -= 1
 
     if starters[3] is not None:
-        min_rbs -= 1
-        max_rbs -= 1
+        min_wrs -= 1
+        max_wrs -= 1
         roster_size -= 1
+        if starters[3].core.tier <= 1:
+            studs = 0
+        if starters[3].core.tier <= 2:
+            tier_1_wrs -=1
+        elif starters[3].core.tier <= 4:
+            tier_2_wrs -=1
 
     if starters[4] is not None:
         min_wrs -= 1
         max_wrs -= 1
         roster_size -= 1
+        if starters[4].core.tier <= 2:
+            tier_1_wrs -=1
+        elif starters[4].core.tier <= 4:
+            tier_2_wrs -=1
 
     if starters[5] is not None:
-        min_wrs -= 1
-        max_wrs -= 1
-        roster_size -= 1
-
-    if starters[6] is not None:
-        min_wrs -= 1
-        max_wrs -= 1
-        roster_size -= 1
-
-    if starters[7] is not None:
         min_tes -= 1
         max_tes -= 1
         roster_size -= 1
+        if starters[5].core.tier <= 1:
+            studs = 0
+        if starters[5].core.tier <= 2:
+            tier_1_wrs -= 1
 
-    if starters[8] is not None:
+    if starters[6] is not None:
         if starters[6].core.position == 'RB':
             max_rbs -= 1
+            if starters[6].core.tier <= 2:
+                tier_1_rbs -= 1
+            elif starters[6].core.tier <= 4:
+                tier_2_rbs -= 1
         if starters[6].core.position == 'WR':
             max_wrs -= 1
+            if starters[6].core.tier <= 2:
+                tier_1_wrs -= 1
+            elif starters[6].core.tier <= 4:
+                tier_2_wrs -= 1
         if starters[6].core.position == 'TE':
             max_tes -= 1
         roster_size -= 1
 
-    if starters[9] is not None:
+    if starters[7] is not None:
         ds -= 1
         roster_size -= 1
 
-    if starters[10] is not None:
+    if starters[8] is not None:
         ks -= 1
         roster_size -= 1
 
-    res = r_code.optimize(dataf, money, qbs, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, roster_size)
+    studs = 0
+    tier_1_rbs = 0
+    tier_2_rbs = 0
+    tier_1_wrs = 0
+    tier_2_wrs = 0
+
+    res = r_code.optimize(dataf, money, qbs, qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, tier_1_rbs, tier_2_rbs, tier_1_wrs, tier_2_wrs, studs, roster_size)
 
     res = res[1]
 
@@ -167,7 +232,6 @@ def optimize_roster(starters, available_players, money):
         for i in range(int(count)):
             player = available_players[idx]
             points += player.core.points
-            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
             roster.append(player)
 
     return roster, points
@@ -179,28 +243,36 @@ def optimize_bench(bench, available_players, money):
     positions = []
     points = []
     costs = []
+    tiers = []
+    studs = []
 
     for player in available_players:
         names.append(player.core.name)
         positions.append(player.core.position)
-        pts = player.core.points
-        if player.core.position == 'QB':
-            pts /= 3
+        pts = 0
+        if player.core.likes:
+            pts += 200
+        if not player.core.dislikes:
+            pts += player.core.points
         points.append(pts)
-        costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
+        costs.append(max(1, math.floor(player.core.target_price)))
+        tiers.append(player.core.position + '5')
+        studs.append("NOPE")
 
     d = {
         'name': robjects.StrVector(names),
         'player': robjects.StrVector(names),
         'pos': robjects.StrVector(positions),
         'points': robjects.IntVector(points),
-        'cost': robjects.IntVector(costs)
+        'cost': robjects.IntVector(costs),
+        'tiers': robjects.StrVector(tiers),
+        'studs': robjects.StrVector(studs)
 
     }
     dataf = robjects.DataFrame(d)
 
     min_qbs = 0
-    max_qbs = 1
+    max_qbs = 0
     min_rbs = 0
     max_rbs = constants.BENCH_SIZE
     min_wrs = 0
@@ -212,12 +284,10 @@ def optimize_bench(bench, available_players, money):
     bench_size = constants.BENCH_SIZE - len(bench)
 
     for player in bench:
-        if player.core.position == 'QB':
-            max_qbs = 0
         if player.core.position == 'TE':
             max_tes = 0
 
-    res = r_code.optimize(dataf, money, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, bench_size)
+    res = r_code.optimize(dataf, money, min_qbs, max_qbs, min_rbs, max_rbs, min_wrs, max_wrs, min_tes, max_tes, ks, ds, 0, 0, 0, 0, 0, bench_size)
 
     res = res[1]
 
@@ -230,7 +300,8 @@ def optimize_bench(bench, available_players, money):
         for i in range(int(count)):
             player = available_players[idx]
             points += player.core.points
-            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
+            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
             bench.append(player)
+
 
     return bench, points

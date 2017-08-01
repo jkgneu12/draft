@@ -14,11 +14,11 @@ $brand-danger:          #FF753A !default;
 
 $font-family:'Roboto',arial,sans-serif;
 
-$header-height: 30px;
+$header-height: 1px;
 $header-color: $brand-primary;
 $header-text-color: $brand-danger;
 
-$footer-height: 20px;
+$footer-height: 1px;
 $footer-color: $brand-primary;
 $footer-text-color: $brand-danger;
 
@@ -35,8 +35,8 @@ $bg-color: rgba(100,100,100,.1);
 
 $filterBarHeight: 41px;
 $playerDetailsHeight: 100px;
-$playersListHeight: 25%;
-$rosterHeight: 75%;
+$playersListHeight: 50%;
+$rosterHeight: 50%;
 
 @mixin calc($property, $expression, $important:null) {
     #{$property}: -moz-calc(#{$expression}) $important;

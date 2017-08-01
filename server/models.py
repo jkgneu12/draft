@@ -70,6 +70,7 @@ class PlayerCore(BaseModel):
     tier = Column(Integer)
     position_rank = Column(Integer)
     likes = Column(Boolean)
+    dislikes = Column(Boolean)
     dropoff = Column(Integer)
     risk = Column(Integer)
     points = Column(Integer)

@@ -13,13 +13,14 @@ print(args.filename)
 file = open(args.filename, 'r')
 
 ffa_name_mappings = {
-    "Dan Herron": "Daniel Herron",
-    "LeVeon Bell": "Le'Veon Bell",
-    "Odell Beckham": "Odell Beckham Jr.",
-    "Robert Griffin" : "Robert Griffin III",
-    "Steve Smith Sr.": "Steve Smith",
+    "Will Fuller V": "Will Fuller",
+    "Terrelle Pryor Sr.": "Terrelle Pryor",
+    "Tedd Ginn Jr.": "Tedd Ginn",
+    "Odell Beckham Jr.": "Odell Beckham Jr",
+    "Wil Lutz": "Will Lutz",
 
-    "Colts": "Indianapolis Colts",
+
+    "Colts": "Indianapolis",
     "Giants": "New York Giants",
     "Buccaneers": "Tampa Bay Buccaneers",
     "Bears": "Chicago Bears",
@@ -31,7 +32,7 @@ ffa_name_mappings = {
     "Chiefs": "Kansas City Chiefs",
     "Eagles": "Philadelphia Eagles",
     "Panthers": "Carolina Panthers",
-    "Rams": "St. Louis Rams",
+    "Rams": "Los Angeles Rams",
     "Packers": "Green Bay Packers",
     "Ravens": "Baltimore Ravens",
     "Lions": "Detroit Lions",
@@ -49,7 +50,7 @@ ffa_name_mappings = {
     "Saints": "New Orleans Saints",
     "Titans": "Tennessee Titans",
     "Redskins": "Washington Redskins",
-    "Chargers": "San Diego Chargers",
+    "Chargers": "Los Angeles Chargers",
     "Raiders": "Oakland Raiders"
 
 
@@ -58,35 +59,18 @@ ffa_name_mappings = {
 for line in csv.reader(file, delimiter="\t"):
 
     if args.filename == 'espn':
-        rank_name_pos = line[0]
-
-        rank = rank_name_pos.split('.')[0]
-        name = rank_name_pos.split(',')[0][len(rank)+2:]
-
-        target_price = line[4][1:]
-        if target_price == '-' or target_price == '--':
-            target_price = 0
-
-        bye = line[2]
-        if bye == '-' or bye == '--':
-            bye = -1
-
-        position = ''.join([i for i in line[3] if not i.isdigit()])
-        if position == 'DST':
-            position = 'D'
+        name = line[1]
+        position = line[0]
+        if position == 'D':
+            name = name.replace(' D/ST', '')
+        if name in ffa_name_mappings:
+            name = ffa_name_mappings[name]
 
         player = {
-            # 'rank': rank,
             'name': name,
-            # 'team_name': line[1],
             'position': position,
-            # 'position_rank': ''.join([i for i in line[3] if i.isdigit()]),
-            'target_price': target_price,
-            'bye': bye
+            'target_price': int(line[3][1:])
         }
-
-        if player['name'] in ffa_name_mappings:
-            player['name'] = ffa_name_mappings[player['name']]
 
     elif args.filename == 'ffa':
         player = {
@@ -113,6 +97,76 @@ for line in csv.reader(file, delimiter="\t"):
         if player['position'] in ['DEF', 'DL', 'LB', 'DB', 'OLB', 'MLB', 'ILB', 'DE', 'FS', 'SS', 'DT', 'CB', 'NT', 'SAF']:
             continue
 
+    elif args.filename == 'footballers':
+        name_team_bye = line[0].split('(')
+        if len(name_team_bye) > 1:
+            bye = name_team_bye[1][:-1]
+        else:
+            bye = None
+        name_team = name_team_bye[0].strip().split(' ')
+        if line[6] == 'D':
+            team = ' '.join(name_team)
+            name = ' '.join(name_team)
+        else:
+            team = name_team[-1:]
+            name = ' '.join(name_team[:-1])
+
+        if line[6] == 'K':
+            name = name.replace(',', '')
+
+        player = {
+            'name': name,
+            'team_name': team,
+            'position': line[6],
+            'position_rank': line[1],
+            'adp': line[4],
+            'points': line[2],
+            'risk': line[3],
+            'tier': line[5].split(' ')[1],
+            'notes': line[7] if len(line) > 7 else None,
+            'bye': bye,
+            'target_price': 1
+        }
+
+    elif args.filename == 'footballers_auction':
+        name_team_bye = line[0].split('(')
+        name_team = name_team_bye[0].strip().split(' ')
+        if line[1] == 'D':
+            team = ' '.join(name_team)
+            name = ' '.join(name_team)
+        else:
+            team = name_team[-1:]
+            name = ' '.join(name_team[:-1])
+
+        player = {
+            'name': name,
+            'team_name': team,
+            'position': line[1],
+            'target_price': int(line[2])
+        }
+
+    elif args.filename == 'footballers_ranks':
+        name_team_bye = line[0].split('(')
+        name_team = name_team_bye[0].strip().split(' ')
+
+        if line[1] == 'D':
+            team = ' '.join(name_team)
+            name = ' '.join(name_team)
+        else:
+            team = name_team[-1:]
+            name = ' '.join(name_team[:-1])
+
+        if line[1] == 'K':
+            name = name.replace(',', '')
+
+        player = {
+            'name': name,
+            'team_name': team,
+            'position': line[1],
+            'rank': line[2],
+            'target_price': 1
+        }
+
     else:
         name_team = line[2].split('(')
         min_max = line[8].split('-')
@@ -126,6 +180,7 @@ for line in csv.reader(file, delimiter="\t"):
             'target_price': line[9][1:]
         }
 
+    # print(player)
     response = requests.post('http://localhost:9000/players', json=player)
     print(response.json)
 

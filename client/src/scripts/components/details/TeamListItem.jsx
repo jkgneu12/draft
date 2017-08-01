@@ -146,12 +146,10 @@ var TeamListItem = React.createClass({
         if(this.state.expanded) {
             var renderPlayer = function(player){
                 var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
-                var ceil = Math.round(player.get('core').get('ceil') / Constants.WEEKS * 10)/10;
-                var floor = Math.round(player.get('core').get('floor') / Constants.WEEKS * 10)/10;
 
                 return (
                     <tr key={player.get('id')} >
-                        <td>{floor} - {points} - {ceil}</td>
+                        <small>{points}</small>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>

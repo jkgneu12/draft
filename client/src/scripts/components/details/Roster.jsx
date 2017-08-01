@@ -40,6 +40,7 @@ var Roster = React.createClass({
     },
 
     selectPlayer(player) {
+        PlayerStore.setValue(player.get('core').get('adj_price'));
         PlayerStore.setCurrent(player.get('id'));
         PlayerStore.refreshCurrent();
     },
@@ -85,28 +86,25 @@ var Roster = React.createClass({
             }
             if(player.get('core').get('name')) {
                 var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
-                var ceil = Math.round(player.get('core').get('ceil') / Constants.WEEKS * 10)/10;
-                var floor = Math.round(player.get('core').get('floor') / Constants.WEEKS * 10)/10;
 
                 return (
                     <tr key={index} className={cls} onClick={selectPlayer}>
                         <td>{index+1+indexOffset}</td>
                         <td>{player.get('core').get('rank')}</td>
                         <td>{bench}</td>
-                        <td>{floor} - {points} - {ceil}</td>
+                        <td>{points}</td>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
+                        <td>{player.get('core').get('tier')}</td>
                         <td>{player.get('core').get('name')}</td>
                         <td>{player.get('core').get('team_name')}</td>
                         <td>{player.get('paid_price') ? "$" + player.get('paid_price') : '-'}</td>
                         <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
-                        <td>{player.get('core').get('bye')}</td>
                     </tr>
                 );
             } else {
                 return (
                     <tr key={index} className={cls}>
                         <td>{index+1+indexOffset}</td>
-                        <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
@@ -124,7 +122,7 @@ var Roster = React.createClass({
 
     render() {
         var starters = this.state.roster.get('starters').map(this.renderPlayer(0));
-        var bench = this.state.roster.get('bench').map(this.renderPlayer(11));
+        var bench = this.state.roster.get('bench').map(this.renderPlayer(9));
 
         var totalPoints = 0;
         this.state.roster.get('starters').forEach(function(player){
@@ -141,11 +139,11 @@ var Roster = React.createClass({
                                 <th>Benched</th>
                                 <th>Points</th>
                                 <th>Position</th>
+                                <th>Tier</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Paid</th>
                                 <th>Price</th>
-                                <th>Bye</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -165,12 +163,12 @@ var Roster = React.createClass({
                                 <th>Benched</th>
                                 <th>Points</th>
                                 <th>Position</th>
+                                <th>Tier</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Paid</th>
                                 <th>Price</th>
-                                <th>Bye</th>
-                            </tr>   
+                            </tr>
                         </thead>
                         <tbody></tbody>
                     </table>

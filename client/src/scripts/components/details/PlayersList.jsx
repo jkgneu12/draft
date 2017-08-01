@@ -9,6 +9,7 @@ var _ = require('underscore');
 
 var PlayerStore = require('../../stores/PlayerStore');
 var TeamStore = require('../../stores/TeamStore');
+var RosterStore = require('../../stores/RosterStore');
 
 var Checkbox = require('../form/Checkbox');
 
@@ -52,8 +53,28 @@ var PlayersList = React.createClass({
     },
 
     onPlayerChange() {
+        var filters = PlayerStore.getCurrent().get('id') == null ? {
+            QB: true,
+            RB: true,
+            WR: true,
+            TE: true,
+            D: true,
+            K: true
+        } : {
+            QB: false,
+            RB: false,
+            WR: false,
+            TE: false,
+            D: false,
+            K: false
+        };
+        if(PlayerStore.getCurrent().get('id') != null) {
+            filters[PlayerStore.getCurrent().get('core').get('position')] = true;
+        }
+
         this.setState({
-            player: PlayerStore.getCurrent()
+            player: PlayerStore.getCurrent(),
+            filters: filters
         });
         if(PlayerStore.getCurrent().get('id')) {
             var player = $(ReactDOM.findDOMNode(this)).find('#player_' + PlayerStore.getCurrent().get('id'));
@@ -79,6 +100,7 @@ var PlayersList = React.createClass({
     },
 
     selectPlayer(player) {
+        PlayerStore.setValue(player.get('core').get('adj_price'));
         PlayerStore.setCurrent(player.get('id'));
         PlayerStore.refreshCurrent();
     },
@@ -91,9 +113,26 @@ var PlayersList = React.createClass({
     },
 
     likePlayer(player) {
-        player.get('core').set('likes', !player.get('core').get('likes'));
-        this.setState({players: this.state.players});
-        player.get('core').save();
+        player.get('core').save({
+            'likes': !player.get('core').get('likes')
+        }, {
+            success: function(){
+                RosterStore.refreshCurrent();
+                PlayerStore.refreshCurrent();
+            }
+        });
+    },
+
+    dislikePlayer(player) {
+        player.get('core').save({
+            'dislikes': !player.get('core').get('dislikes')
+        }, {
+            success: function(){
+                RosterStore.refreshCurrent();
+                PlayerStore.refreshCurrent();
+            }
+        });
+
     },
 
     resize() {
@@ -116,6 +155,9 @@ var PlayersList = React.createClass({
         var players = this.state.players.filter(function(player){
             return self.state.filters[player.get('core').get('position')];
         }).sort(function(a, b){
+            if (a.get('core').get('rank') === null || b.get('core').get('rank') === null) {
+                return a.get('core').get('position_rank') - b.get('core').get('position_rank');
+            }
             return a.get('core').get('rank') - b.get('core').get('rank');
         }).map(function(player, index){
             var selectPlayer = function(){
@@ -123,12 +165,7 @@ var PlayersList = React.createClass({
             };
             var cls = '';
             if(player.get('team_id')) {
-                var ownerTeam = self.state.teams.findWhere({is_owner: true});
-                if(ownerTeam && player.get('team_id') == ownerTeam.get('id')) {
-                    cls = 'success';
-                } else {
-                    cls = 'warning';
-                }
+                return null;
             }
             else if(self.state.player.get('id') === player.get('id')) {
                 cls = 'info';
@@ -136,15 +173,26 @@ var PlayersList = React.createClass({
 
             var team = self.state.teams.findWhere({id: player.get('team_id')});
 
-            var likePlayer = function(e) {
-                self.likePlayer(player);
-                e.stopImmediatePropagation();
-                e.preventDefault();
+            var dislikePlayer = function(e) {
+                self.dislikePlayer(player);
+                e.nativeEvent.stopImmediatePropagation();
+                e.nativeEvent.preventDefault();
             };
 
-            var likeClass = 'fa fa-star';
+            var likePlayer = function(e) {
+                self.likePlayer(player);
+                e.nativeEvent.stopImmediatePropagation();
+                e.nativeEvent.preventDefault();
+            };
+
+             var dislikeClass = 'fa fa-thumbs-down';
+            if(!player.get('core').get('dislikes')) {
+                dislikeClass = 'fa fa-thumbs-o-down';
+            }
+
+            var likeClass = 'fa fa-thumbs-up';
             if(!player.get('core').get('likes')) {
-                likeClass += '-o';
+                likeClass = 'fa fa-thumbs-o-up';
             }
 
             if(player == null) {
@@ -152,22 +200,20 @@ var PlayersList = React.createClass({
             }
 
             var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
-            var ceil = Math.round(player.get('core').get('ceil') / Constants.WEEKS * 10)/10;
-            var floor = Math.round(player.get('core').get('floor') / Constants.WEEKS * 10)/10;
 
             return (
                 <tr id={"player_" + player.get('id')} key={index} className={cls} onClick={selectPlayer}>
                     <td><i className={likeClass} onClick={likePlayer} /></td>
+                    <td><i className={dislikeClass} onClick={dislikePlayer} /></td>
                     <td>{team ? team.get('name') : '-'}</td>
                     <td>{player.get('core').get('rank')}</td>
-                    <td>{player.get('core').get('ecr')}</td>
-                    <td>{floor} - {points} - {ceil}</td>
+                    <td>{points}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
+                    <td>{player.get('core').get('tier')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
                     <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
                     <td>{player.get('core').get('risk')}</td>
-                    <td>{player.get('core').get('bye')}</td>
                 </tr>
             );
         });
@@ -203,16 +249,16 @@ var PlayersList = React.createClass({
                         <thead>
                             <tr>
                                 <th>Like</th>
+                                <th>Exclude</th>
                                 <th>Owner</th>
                                 <th>Rank</th>
-                                <th>ECR</th>
                                 <th>Points</th>
                                 <th>Position</th>
+                                <th>Tier</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
                                 <th>Risk</th>
-                                <th>Bye</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -228,16 +274,16 @@ var PlayersList = React.createClass({
                         <thead>
                             <tr>
                                 <th>Like</th>
+                                <th>Exclude</th>
                                 <th>Owner</th>
                                 <th>Rank</th>
-                                <th>ECR</th>
                                 <th>Points</th>
                                 <th>Position</th>
+                                <th>Tier</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
                                 <th>Risk</th>
-                                <th>Bye</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

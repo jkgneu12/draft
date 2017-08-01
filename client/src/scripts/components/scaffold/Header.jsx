@@ -7,11 +7,7 @@ var React = require('react');
 var Header = React.createClass({
     displayName: 'Header',
     render() {
-        return (
-            <header id="header">
-                <i className='fa fa-diamond'></i>
-            </header>
-        );
+        return null;
     }
 });
 
