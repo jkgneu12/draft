@@ -99,12 +99,14 @@ var Roster = React.createClass({
                         <td>{player.get('core').get('team_name')}</td>
                         <td>{player.get('paid_price') ? "$" + player.get('paid_price') : '-'}</td>
                         <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
+                        <td>{player.get('core').get('risk')}</td>
                     </tr>
                 );
             } else {
                 return (
                     <tr key={index} className={cls}>
                         <td>{index+1+indexOffset}</td>
+                        <td>-</td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
@@ -144,6 +146,7 @@ var Roster = React.createClass({
                                 <th>Team</th>
                                 <th>Paid</th>
                                 <th>Price</th>
+                                <th>Risk</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,6 +171,7 @@ var Roster = React.createClass({
                                 <th>Team</th>
                                 <th>Paid</th>
                                 <th>Price</th>
+                                <th>Risk</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

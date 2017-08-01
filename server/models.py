@@ -83,8 +83,19 @@ class PlayerCore(BaseModel):
     def to_dict(self, deep_fields=[]):
         ret = super(PlayerCore, self).to_dict(deep_fields)
         price = self.target_price if self.target_price else 1
-        ret['adj_price'] = math.floor(price + (price * constants.PRICE_OFFSET))
+        ret['adj_price'] = self.adjusted_price()
         return ret
+
+    def adjusted_points(self):
+        if self.dislikes == True:
+            return 0
+        elif self.position == 'QB':
+            return self.points / 5 / (self.risk + 2)
+        else:
+            return self.points / (self.risk + 2)
+
+    def adjusted_price(self):
+        return max(1, math.floor(self.target_price + (self.target_price * constants.PRICE_OFFSET)))
 
 
 class Draft(BaseModel):

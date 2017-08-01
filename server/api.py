@@ -157,7 +157,7 @@ class TeamsHandler(BaseHandler):
             team['bench'] = [player.to_dict(['core']) for player in bench]
             team['points'] = 0
             for player in starters:
-                team['points'] += player.core.points if player is not None else 0
+                team['points'] += player.core.adjusted_points() if player is not None else 0
             return team
         else:
             teams = q.filter(Team.draft_id == int(draft_id)).all()
@@ -168,7 +168,7 @@ class TeamsHandler(BaseHandler):
                 team['bench'] = [player.to_dict(['core']) if player is not None else None for player in bench]
                 team['points'] = 0
                 for player in starters:
-                    team['points'] += player.core.points if player is not None else 0
+                    team['points'] += player.core.adjusted_points() if player is not None else 0
             return {'teams': teams_dict}
 
     def _create(self, args):
@@ -214,7 +214,7 @@ class PlayersHandler(BaseHandler):
                                                                                     Player.id != player.id)).order_by(PlayerCore.rank).all()
 
             min_price = 1
-            max_price = min(player.core.target_price + 21, team.money)
+            max_price = min(math.floor(player.core.adjusted_price() + 21), team.money)
             manager = Manager()
             max_starters_points = manager.dict()
             max_bench_points = manager.dict()
@@ -312,7 +312,8 @@ class CorePlayersHandler(BaseHandler):
 
 
 def wrap_optimizer(starters, available_players, money, max_points, key):
-    max_points[key] = optimizer.optimize_roster(starters, available_players, money)[1]
+    optimized = optimizer.optimize_roster(starters, available_players, money)
+    max_points[key] = optimized[1]
 
 def place_player(player, starters, bench):
     if not player.bench:
@@ -322,7 +323,7 @@ def place_player(player, starters, bench):
                 if starters[idx] is None:
                     starters[idx] = player
                     return True
-                elif starters[idx].core.points / (starters[idx].core.risk + 2) < player.core.points / (player.core.risk + 2):
+                elif starters[idx].core.adjusted_points() < player.core.adjusted_points():
                     other_player = starters[idx]
                     starters[idx] = player
                     place_player(other_player, starters, bench)
@@ -372,7 +373,7 @@ class RostersHandler(BaseHandler):
         available_bench = list(available_players)
         for p in starters:
             if p in available_bench:
-                money_spent += max(1, math.floor(p.core.target_price + (p.core.target_price * constants.PRICE_OFFSET)))
+                money_spent += p.core.adjusted_price()
                 available_bench.remove(p)
 
 

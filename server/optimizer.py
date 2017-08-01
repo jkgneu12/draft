@@ -91,13 +91,8 @@ def optimize_roster(starters, available_players, money):
     for player in available_players:
         names.append(player.core.name)
         positions.append(player.core.position)
-        if player.core.dislikes == True:
-            points.append(0)
-        elif player.core.position == 'QB':
-            points.append(player.core.points / 5 / (player.core.risk + 2))
-        else:
-            points.append(player.core.points / (player.core.risk + 2))
-        costs.append(max(1, math.floor(player.core.target_price + (player.core.target_price * constants.PRICE_OFFSET))))
+        points.append(player.core.adjusted_points() * constants.OPTIMIZER_POINTS_MULTIPLIER)
+        costs.append(player.core.adjusted_price())
         tier = 3
         stud = "NOPE"
         if player.core.tier <= 1 and player.core.position in ['RB','WR']:
@@ -227,11 +222,11 @@ def optimize_roster(starters, available_players, money):
     points = 0
     for p in starters:
         if p is not None:
-            points += p.core.points
+            points += p.core.adjusted_points()
     for idx, count in enumerate(res):
         for i in range(int(count)):
             player = available_players[idx]
-            points += player.core.points
+            points += player.core.adjusted_points()
             roster.append(player)
 
     return roster, points
@@ -253,9 +248,9 @@ def optimize_bench(bench, available_players, money):
         if player.core.likes:
             pts += 200
         if not player.core.dislikes:
-            pts += player.core.points
-        points.append(pts)
-        costs.append(max(1, math.floor(player.core.target_price)))
+            pts += player.core.adjusted_points()
+        points.append(pts * constants.OPTIMIZER_POINTS_MULTIPLIER)
+        costs.append(player.core.adjusted_price())
         tiers.append(player.core.position + '5')
         studs.append("NOPE")
 
@@ -295,12 +290,11 @@ def optimize_bench(bench, available_players, money):
     points = 0
     for p in bench:
         if p is not None:
-            points += p.core.points
+            points += p.core.adjusted_points()
     for idx, count in enumerate(res):
         for i in range(int(count)):
             player = available_players[idx]
-            points += player.core.points
-            # print("%s\t%s\t%s\t\t%s\t\t%s" % (player.core.name, math.floor(player.core.target_price + (player.core.target_price * PRICE_OFFSET)), player.core.points, player.core.rank, player.core.adp))
+            points += player.core.adjusted_points()
             bench.append(player)
 
 
