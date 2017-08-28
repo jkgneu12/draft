@@ -59,42 +59,74 @@ ffa_name_mappings = {
 for line in csv.reader(file, delimiter="\t"):
 
     if args.filename == 'espn':
-        name = line[1]
-        position = line[0]
-        if position == 'D':
-            name = name.replace(' D/ST', '')
+        name = line[0]
+
         if name in ffa_name_mappings:
             name = ffa_name_mappings[name]
 
+        team_price_bye = line[1]
+        price = team_price_bye.split(' ')[1][1:]
+
         player = {
             'name': name,
-            'position': position,
-            'target_price': int(line[3][1:])
+            'target_price': int(price)
         }
 
     elif args.filename == 'ffa':
-        player = {
-            'adp': round(float(line[15])) if line[15] != 'null' else None,
-            'rank': round(float(line[11])) if line[11] != 'null' else None,
-            'name': line[2] if line[2] != 'null' else None,
-            'team_name': line[4]if line[4] != 'null' else 'FA',
-            'position': line[3] if line[3] != 'null' else None,
-            'position_rank': line[12] if line[12] != 'null' else None,
-            'ecr': line[10] if line[10] != 'null' else None,
-            'target_price': round(float(line[18])) if line[18] != 'null' else 0,
-            'dropoff': round(float(line[14])) if line[14] != 'null' else None,
-            'risk': round(float(line[20])) if line[20] != 'null' else None,
-            'points': round(float(line[8])) if line[8] != 'null' else None,
-            'floor': round(float(line[20])) if line[20] != 'null' else None,
-            'ceil': round(float(line[19])) if line[19] != 'null' else None
-        }
+        name = line[0]
+        if name in ffa_name_mappings:
+            name = ffa_name_mappings[name]
 
-        if player['position'] == 'DST':
-            player['position'] = 'D'
+        try:
+            player = {
+                'name': name,
+                'target_price': int(line[2])
+            }
+        except:
+            continue
 
-        if player['name'] in ffa_name_mappings:
-            player['name'] = ffa_name_mappings[player['name']]
-        if player['position'] in ['DEF', 'DL', 'LB', 'DB', 'OLB', 'MLB', 'ILB', 'DE', 'FS', 'SS', 'DT', 'CB', 'NT', 'SAF']:
+    elif args.filename == 'fantasypros_points':
+        name = line[0]
+
+        if name in ffa_name_mappings:
+            name = ffa_name_mappings[name]
+
+        try:
+            player = {
+                'name': name,
+                'points': float(line[2]),
+                'target_price': 1
+            }
+        except:
+            continue
+
+    elif args.filename == 'fantasypros_adp':
+        name = line[1]
+
+        if name in ffa_name_mappings:
+            name = ffa_name_mappings[name]
+
+        try:
+            player = {
+                'name': name,
+                'adp': int(line[0]),
+                'target_price': 1
+            }
+        except:
+            continue
+
+    elif args.filename == 'fantasypros_auction':
+        name = line[1]
+
+        if name in ffa_name_mappings:
+            name = ffa_name_mappings[name]
+
+        try:
+            player = {
+                'name': name,
+                'target_price': int(line[2][1:])
+            }
+        except:
             continue
 
     elif args.filename == 'footballers':
@@ -102,7 +134,7 @@ for line in csv.reader(file, delimiter="\t"):
         if len(name_team_bye) > 1:
             bye = name_team_bye[1][:-1]
         else:
-            bye = None
+            bye = 0
         name_team = name_team_bye[0].strip().split(' ')
         if line[6] == 'D':
             team = ' '.join(name_team)
@@ -164,6 +196,16 @@ for line in csv.reader(file, delimiter="\t"):
             'team_name': team,
             'position': line[1],
             'rank': line[2],
+            'target_price': 1
+        }
+
+    elif args.filename == 'footballers_consistency':
+        name_team = line[0].split(',')
+        name = name_team[0]
+
+        player = {
+            'name': name,
+            'consistency': int(float(line[3]) * 100),
             'target_price': 1
         }
 

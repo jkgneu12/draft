@@ -14,7 +14,7 @@ Base = declarative_base()
 class BaseModel(Base):
     __abstract__ = True
 
-    def to_dict(self, deep_fields=[]):
+    def to_dict(self, deep_fields=[], **kwargs):
         ret = {c.name: getattr(self, c.name) for c in self.__table__.columns}
         for key in ret:
             if isinstance(ret[key], datetime.date):
@@ -26,10 +26,10 @@ class BaseModel(Base):
                     l = []
                     for item in val:
                         if hasattr(item, "to_dict"):
-                            l.append(item.to_dict(deep_fields))
+                            l.append(item.to_dict(deep_fields, **kwargs))
                     ret[key] = l
                 else:
-                    ret[key] = val.to_dict(deep_fields)
+                    ret[key] = val.to_dict(deep_fields, **kwargs)
         return ret
 
     def clone(self, data, deep=True):
@@ -77,25 +77,54 @@ class PlayerCore(BaseModel):
     ceil = Column(Integer)
     floor = Column(Integer)
     ecr = Column(Integer)
+    consistency = Column(Integer)
 
     bye = Column(Integer)
 
-    def to_dict(self, deep_fields=[]):
-        ret = super(PlayerCore, self).to_dict(deep_fields)
+    def to_dict(self, deep_fields=[], available_players=[], draft=None):
+        ret = super(PlayerCore, self).to_dict(deep_fields, available_players=available_players, draft=None)
         price = self.target_price if self.target_price else 1
-        ret['adj_price'] = self.adjusted_price()
+        ret['adj_price'] = self.adjusted_price(available_players)
+        ret['adj_points'] = self.adjusted_points()
+        ret['adp_round'] = self.adp_round(draft)
         return ret
 
     def adjusted_points(self):
-        if self.dislikes == True:
-            return 0
-        elif self.position == 'QB':
-            return self.points / 5 / (self.risk + 2)
-        else:
-            return self.points / (self.risk + 2)
+        base = self.points * .9
 
-    def adjusted_price(self):
-        return max(1, math.floor(self.target_price + (self.target_price * constants.PRICE_OFFSET)))
+        # if self.likes == True:
+        #     base *= 1.1
+
+        base -= self.risk * 2
+        base -= self.consistency * 3 / 100 if self.consistency else 0
+
+        if self.position == 'QB':
+            base /= 5
+
+        if self.position == 'TE':
+            base /= 1.5
+
+        # if self.dislikes == True:
+        #     base /= 1.2
+
+        return base
+
+    def adjusted_price(self, available_players=[]):
+        offset = constants.PRICE_OFFSET
+        if self.position == 'RB':
+            offset = constants.RB_PRICE_OFFSET;
+        # if self.target_price > 10:
+        #     for player in available_players:
+        #         if player.core.adp > self.adp:
+        #             break
+        #         if player.core != self and player.core.position == self.position:
+        #             offset *= .98
+
+        return max(1, math.floor(self.target_price + (self.target_price * offset)))
+
+    def adp_round(self, draft):
+        teams = len(draft.teams) if draft else 12
+        return '{}-{}'.format(math.ceil(self.adp / teams) , ((self.adp-1) % teams) + 1)
 
 
 class Draft(BaseModel):

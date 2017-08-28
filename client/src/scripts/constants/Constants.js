@@ -1,6 +1,6 @@
 'use strict';
 
 var Constants = {
-    WEEKS: 15
+    WEEKS: 16
 };
 module.exports = Constants;

@@ -130,11 +130,11 @@ var TeamListItem = React.createClass({
 
         var money = parseInt(this.state.team.get('money'));
         var moneyClass = 'label label-';
-        if(money > maxBudget * .75) {
+        if(money > maxBudget * .5) {
             moneyClass += 'success';
-        }else if(money > maxBudget * .5) {
+        }else if(money > maxBudget * .25) {
             moneyClass += 'info';
-        }else if(money > maxBudget* .25) {
+        }else if(money > maxBudget* .15) {
             moneyClass += 'warning';
         }else {
             moneyClass += 'danger';
@@ -147,8 +147,10 @@ var TeamListItem = React.createClass({
             var renderPlayer = function(player){
                 var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
 
+                var cls = ' tier-' + player.get('core').get('tier');
+
                 return (
-                    <tr key={player.get('id')} >
+                    <tr key={player.get('id')} className={cls}>
                         <small>{points}</small>
                         <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                         <td>{player.get('core').get('name')}</td>

@@ -30,7 +30,9 @@ var PlayersList = React.createClass({
                 TE: true,
                 D: true,
                 K: true
-            }
+            },
+            sort: 'tier',
+            sortDir: 1
         };
     },
 
@@ -112,6 +114,14 @@ var PlayersList = React.createClass({
         });
     },
 
+    sort: function(key, dir) {
+        var self = this;
+        return function() {
+            console.log({'sort': key, 'sortDir': dir});
+            self.setState({'sort': key, 'sortDir': dir});
+        }
+    },
+
     likePlayer(player) {
         player.get('core').save({
             'likes': !player.get('core').get('likes')
@@ -151,14 +161,22 @@ var PlayersList = React.createClass({
     },
 
     render() {
+        var previousTier = 1;
         var self = this;
         var players = this.state.players.filter(function(player){
             return self.state.filters[player.get('core').get('position')];
         }).sort(function(a, b){
-            if (a.get('core').get('rank') === null || b.get('core').get('rank') === null) {
-                return a.get('core').get('position_rank') - b.get('core').get('position_rank');
+            if (a.get('core').get(self.state.sort) === b.get('core').get(self.state.sort)) {
+                if (a.get('core').get('tier') === b.get('core').get('tier')) {
+                    return b.get('core').get('adj_points') - a.get('core').get('adj_points');
+                }
+                return b.get('core').get('tier') - a.get('core').get('tier');
             }
-            return a.get('core').get('rank') - b.get('core').get('rank');
+            if(a.get('core').get(self.state.sort) > b.get('core').get(self.state.sort)){
+                return self.state.sortDir;
+            } else {
+                return -1 * self.state.sortDir;
+            }
         }).map(function(player, index){
             var selectPlayer = function(){
                 self.selectPlayer(player);
@@ -170,6 +188,11 @@ var PlayersList = React.createClass({
             else if(self.state.player.get('id') === player.get('id')) {
                 cls = 'info';
             }
+            if(self.state.sort == 'tier' && player.get('core').get('tier') > previousTier) {
+                previousTier = player.get('core').get('tier');
+                cls += ' tier-top';
+            }
+            cls += ' tier-' + player.get('core').get('tier');
 
             var team = self.state.teams.findWhere({id: player.get('team_id')});
 
@@ -200,20 +223,22 @@ var PlayersList = React.createClass({
             }
 
             var points = Math.round(player.get('core').get('points') / Constants.WEEKS * 10)/10;
+            var adjPoints = Math.round(player.get('core').get('adj_points') / Constants.WEEKS * 10)/10;
 
             return (
                 <tr id={"player_" + player.get('id')} key={index} className={cls} onClick={selectPlayer}>
                     <td><i className={likeClass} onClick={likePlayer} /></td>
                     <td><i className={dislikeClass} onClick={dislikePlayer} /></td>
-                    <td>{team ? team.get('name') : '-'}</td>
-                    <td>{player.get('core').get('rank')}</td>
+                    <td>{player.get('core').get('adp_round')}</td>
                     <td>{points}</td>
+                    <td>{adjPoints}</td>
                     <td>{player.get('core').get('position') + player.get('core').get('position_rank')}</td>
                     <td>{player.get('core').get('tier')}</td>
                     <td>{player.get('core').get('name')}</td>
                     <td>{player.get('core').get('team_name')}</td>
                     <td>${player.get('core').get('target_price')} ({player.get('core').get('adj_price')})</td>
                     <td>{player.get('core').get('risk')}</td>
+                    <td>{player.get('core').get('consistency') / 100}</td>
                 </tr>
             );
         });
@@ -250,15 +275,16 @@ var PlayersList = React.createClass({
                             <tr>
                                 <th>Like</th>
                                 <th>Exclude</th>
-                                <th>Owner</th>
-                                <th>Rank</th>
+                                <th>ADP</th>
                                 <th>Points</th>
+                                <th>Adj. Points</th>
                                 <th>Position</th>
                                 <th>Tier</th>
                                 <th>Name</th>
                                 <th>Team</th>
                                 <th>Price</th>
                                 <th>Risk</th>
+                                <th>Consist</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -273,17 +299,18 @@ var PlayersList = React.createClass({
                     <table className="table table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th>Like</th>
-                                <th>Exclude</th>
-                                <th>Owner</th>
-                                <th>Rank</th>
-                                <th>Points</th>
-                                <th>Position</th>
-                                <th>Tier</th>
-                                <th>Name</th>
-                                <th>Team</th>
-                                <th>Price</th>
-                                <th>Risk</th>
+                                <th onClick={this.sort('likes', -1)} className={this.state.sort == 'like' ? 'active-sort' : ''}>Like</th>
+                                <th onClick={this.sort('dislikes', -1)} className={this.state.sort == 'dislikes' ? 'active-sort' : ''}>Exclude</th>
+                                <th onClick={this.sort('adp', 1)} className={this.state.sort == 'adp' ? 'active-sort' : ''}>ADP</th>
+                                <th onClick={this.sort('points', -1)} className={this.state.sort == 'points' ? 'active-sort' : ''}>Points</th>
+                                <th onClick={this.sort('adj_points', -1)} className={this.state.sort == 'adj_points' ? 'active-sort' : ''}>Adj. Points</th>
+                                <th onClick={this.sort('position', 1)} className={this.state.sort == 'position' ? 'active-sort' : ''}>Position</th>
+                                <th onClick={this.sort('tier', 1)} className={this.state.sort == 'tier' ? 'active-sort' : ''}>Tier</th>
+                                <th onClick={this.sort('name', 1)} className={this.state.sort == 'name' ? 'active-sort' : ''}>Name</th>
+                                <th onClick={this.sort('team_name', 1)} className={this.state.sort == 'team_name' ? 'active-sort' : ''}>Team</th>
+                                <th onClick={this.sort('adj_price', -1)} className={this.state.sort == 'adj_price' ? 'active-sort' : ''}>Price</th>
+                                <th onClick={this.sort('risk', 1)} className={this.state.sort == 'risk' ? 'active-sort' : ''}>Risk</th>
+                                <th onClick={this.sort('consistency', 1)} className={this.state.sort == 'consistency' ? 'active-sort' : ''}>Consist</th>
                             </tr>
                         </thead>
                         <tbody></tbody>

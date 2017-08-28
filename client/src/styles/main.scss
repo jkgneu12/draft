@@ -30,6 +30,14 @@ td, th {
     padding: 2px !important;
     text-align: center !important;
 }
+th {
+    font-weight: normal;
+    font-size: 8px;
+}
+th.active-sort {
+    font-weight: bold;
+    text-decoration: underline;
+}
 
 input {
     background-color: rgba(100,100,100,.9) !important;
@@ -37,6 +45,9 @@ input {
 }
 .label {
     font-weight: normal;
+}
+.label-warning {
+    color: black;
 }
 
 #content {
@@ -221,7 +232,7 @@ input {
         color: $brand-success;
     }
     .fa-thumbs-down {
-        color: $brand-danger;
+        color: #8b0000;
     }
     .table-head {
         top: 19px;
@@ -243,6 +254,13 @@ input {
     .table-body {
         height: 100%;
     }
+    tr {
+        color: rgba(0,0,0,.5);
+    }
+    .rostered {
+        color: rgba(0,0,0,1);
+    }
+
 }
 
 
@@ -262,6 +280,33 @@ input {
     }
 }
 
+.tier-top {
+    border-top: 2px #666 solid;
+}
+.tier-1 {
+    background: #90ee90;
+}
+.tier-2 {
+    background: #87cefa;
+}
+.tier-3 {
+    background: #e0ffff;
+}
+.tier-4 {
+    background: #ffffe0;
+}
+.tier-5 {
+    background: #ffb6c1;
+}
+.tier-6 {
+    background: #ffa07a;
+}
+.tier-7 {
+    background: #cd5c5c;
+}
+.tier-8, .tier-9 {
+    background: rgba(255,0,0,.7);
+}
 
 .twitter-typeahead {
     width: 100%;
